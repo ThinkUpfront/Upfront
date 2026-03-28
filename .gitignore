@@ -19,5 +19,7 @@ upfront
 # Upfront local data
 .upfront/
 
-# Claude
-.claude/
+# Claude (keep commands, ignore session data)
+.claude/settings.*
+.claude/statsig/
+.claude/projects/
