@@ -25,8 +25,8 @@
 **Estimated size:** ~200 lines
 
 **Automated verification:**
-- [ ] `cd upfront && go test ./internal/hook/...`
-- [ ] Tests cover: 4 phases found, 1 phase found, 0 phases found, malformed stdin, empty tool_response
+- [x] `cd upfront && go test ./internal/hook/...`
+- [x] Tests cover: 4 phases found, 1 phase found, 0 phases found, malformed stdin, empty tool_response
 
 **Manual verification:**
 - [ ] Review regex pattern against actual `/feature` output format in `specs/upfront-audit-hooks-conversation.md`

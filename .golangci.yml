@@ -120,6 +120,7 @@ linters:
           - gocyclo
           - gocognit
           - funlen
+          - goconst
 
 formatters:
   enable:
