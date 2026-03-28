@@ -52,6 +52,18 @@
 - Internal loadConfig(projectPath, userPath) pattern avoids HOME mocking in tests
 - NewSender(nil) creates a no-op sender for local-only mode — Phase 5 can always create a sender
 
+## Phase 5: CLI + main entrypoint — COMPLETE
+
+**What changed:** `cmd/upfront/main.go`, `cmd/upfront/main_test.go`
+**TDD cycles:** 7 (status exits 0, hook empty JSON, log empty queue, hook with feature input, hook queues to file, status shows info, unknown subcommand)
+**Review findings:** 12 lint issues fixed (gofumpt, gocritic rangeValCopy, errorlint, gosec, noctx, gocognit — extracted tryRemoteFlush to reduce complexity). No architectural issues.
+**Surprises:** None
+**Learnings for future phases:**
+- run() accepts io.Reader/io.Writer for testability but tests use subprocess execution for E2E coverage
+- tryRemoteFlush is best-effort — re-queues events on send failure
+- TTL defaults to 90 days when config omits ttl_days
+- flush subcommand checks cfg==nil (not just endpoint) since LoadConfig returns nil when no file exists
+
 ## Learnings
 
 (see per-phase learnings above)

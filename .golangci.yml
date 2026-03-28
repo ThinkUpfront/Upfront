@@ -121,6 +121,8 @@ linters:
           - gocognit
           - funlen
           - goconst
+          - gosec
+          - nonamedreturns
 
 formatters:
   enable:

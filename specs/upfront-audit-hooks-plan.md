@@ -73,9 +73,9 @@
 **Estimated size:** ~200 lines
 
 **Automated verification:**
-- [ ] `cd upfront && go build -o upfront ./cmd/upfront/`
-- [ ] `./upfront status` exits 0
-- [ ] `echo '{}' | ./upfront hook` handles gracefully (no crash)
+- [x] `cd upfront && go build -o upfront ./cmd/upfront/`
+- [x] `./upfront status` exits 0
+- [x] `echo '{}' | ./upfront hook` handles gracefully (no crash)
 
 **Manual verification:**
 - [ ] `./upfront log` displays formatted output

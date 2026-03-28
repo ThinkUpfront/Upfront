@@ -1,5 +1,5 @@
-# Go
-upfront
+# Go binary
+/upfront
 *.exe
 *.dll
 *.so
