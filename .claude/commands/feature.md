@@ -16,6 +16,14 @@ If the user wants to proceed, continue — but note in the Design Conversation p
 
 If `specs/ARCHITECTURE.md` exists, read it silently for context. Also read `specs/DECISIONS.md` and `specs/LEARNINGS.md` if they exist.
 
+## Ideation check
+
+When the user answers "What problem does this solve?" in Phase 1, evaluate their first response. If their answer is vague, uncertain, or exploratory — signals like "I don't know", "I'm not sure", "maybe something like...", "I was thinking maybe...", describing a solution without a clear problem, or struggling to articulate what's actually wrong — suggest:
+
+"It sounds like you're still exploring what to build. Want to run `/ideate` first to brainstorm, then come back to `/feature` when you have a clearer problem?"
+
+Do NOT auto-redirect. Some people think by talking and will sharpen up after one push-back. If they want to keep going, proceed normally with the Phase 1 challenge process — push back on their vague answer and see if they can sharpen it. Only suggest `/ideate` once.
+
 ## Global Rules
 
 - Do NOT skip phases or rush through them
