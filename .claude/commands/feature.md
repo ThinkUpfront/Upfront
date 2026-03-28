@@ -14,7 +14,7 @@ Before starting Phase 1, check if `specs/ARCHITECTURE.md` exists. If it doesn't,
 
 If the user wants to proceed, continue — but note in the Design Conversation phase that your codebase understanding may be incomplete.
 
-If `specs/ARCHITECTURE.md` exists, read it silently for context. Also read `specs/DECISIONS.md` and `specs/LEARNINGS.md` if they exist.
+If `specs/ARCHITECTURE.md` exists, read it silently for context. Also read `specs/DECISIONS.md`, `specs/LEARNINGS.md`, and `specs/TODO.md` if they exist. If `TODO.md` contains an `IDEATE:` entry (from `/ideate`), use it as starting context for Phase 1 — the user has already converged on a problem statement.
 
 ## Ideation check
 

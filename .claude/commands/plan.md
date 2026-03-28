@@ -27,7 +27,7 @@ Read the entire spec file. Understand:
 
 Before proposing any phases, investigate the actual code. Use subagents for parallel research where possible.
 
-For each model anchor listed in the spec:
+For each file, module, or component referenced in the spec (especially in the Design Approach and Implementation Design sections):
 - Read the referenced files
 - Understand the existing patterns, conventions, and architecture
 
@@ -59,7 +59,7 @@ Before starting the deep-dive, check if `specs/ARCHITECTURE.md` exists.
 
 **If less than 30 days old OR no commits since:**
 - Note: "Architecture reviewed [date], [N] commits since — appears current."
-- Proceed normally.
+- Skip the full 3-level deep-dive below. Instead, do a quick delta check: read the areas of the codebase this feature will touch and verify they match what ARCHITECTURE.md says. If they match, proceed directly to "Persisting the architecture." If there is drift in the feature-relevant areas, update those sections and proceed.
 
 **If `specs/ARCHITECTURE.md` doesn't exist:**
 - Note that it doesn't exist and proceed — the deep-dive below will create it.

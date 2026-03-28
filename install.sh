@@ -33,10 +33,11 @@ info "Building upfront binary..."
 mkdir -p "$INSTALL_DIR"
 cp "$SCRIPT_DIR/upfront" "$INSTALL_DIR/upfront"
 chmod +x "$INSTALL_DIR/upfront"
+rm -f "$SCRIPT_DIR/upfront"  # clean up build artifact from source tree
 info "Installed binary to $INSTALL_DIR/upfront"
 
 # Check if INSTALL_DIR is on PATH
-if ! echo "$PATH" | tr ':' '\n' | grep -qx "$INSTALL_DIR"; then
+if ! echo "$PATH" | tr ':' '\n' | grep -qxF "$INSTALL_DIR"; then
   warn "$INSTALL_DIR is not on your PATH."
   warn "Add this to your shell profile:  export PATH=\"$INSTALL_DIR:\$PATH\""
 fi

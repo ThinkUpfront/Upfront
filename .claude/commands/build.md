@@ -50,6 +50,31 @@ This file is the memory between phases. Each sub-agent reads it. You update it a
 - Do not skip verification steps.
 - Do not proceed to the next phase without human confirmation.
 
+### Stuck loop detection
+
+Any operation that can fail and retry has a hard limit. **Do NOT retry the same approach more than 3 times.** If attempt 2 fails the same way as attempt 1, attempt 3 will almost certainly fail too.
+
+Track retry counts for:
+- TDD rejection → re-spawn (limit: 3)
+- Verification failure → fix → re-verify (limit: 3)
+- MUST FIX → fix → re-review (limit: 3)
+- Integration sweep → fix → re-sweep (limit: 2)
+
+When any retry hits its limit, **STOP** and present:
+
+```
+Stuck: [operation] has failed [N] times.
+Pattern: [what keeps going wrong — same error, oscillating fixes, etc.]
+Last failure: [error/issue summary]
+
+Options:
+  a) I try a fundamentally different approach (describe what you'd change)
+  b) Skip this check and proceed with known risk
+  c) You take over manually
+```
+
+The key signal is *same or similar failure*. If each attempt fails differently (making progress), the loop is not stuck — continue. If the error message or failure pattern repeats, stop immediately.
+
 ## Process
 
 ### Pre-flight: Verify and harden guardrails
@@ -120,6 +145,7 @@ For each ecosystem, check for the following categories and **strongly recommend*
 
 **Any ecosystem:**
 - [ ] `gitleaks` or `trufflehog` — secret detection (catches API keys, passwords, tokens committed to repo)
+- [ ] `sloppy-joe` — slopsquatting protection (detects hallucinated/typosquatted package names before they're installed). See https://github.com/brennhill/sloppy-joe
 - [ ] Pre-commit hooks or git hooks — run checks before commit, not just in CI
 - [ ] CI pipeline running all of the above — tools that don't run automatically don't exist
 
@@ -161,6 +187,55 @@ Starting Phase 1...
 ```
 
 **If there are failures or critical gaps:** Report and wait for the user before proceeding.
+
+### Worktree isolation
+
+After pre-flight passes (or on resume if worktree already exists), create an isolated worktree so the main working tree stays clean and rollback is trivial.
+
+#### Setup
+
+1. Record the base: `BASE_BRANCH=$(git rev-parse --abbrev-ref HEAD)` and `BASE_DIR=$(pwd)`
+2. Choose a worktree path: `../<repo-name>-build-<feature-name>` (sibling of the current repo). Store this as `WORKTREE_DIR` (absolute path).
+3. Create it: `git worktree add <WORKTREE_DIR> -b build/<feature-name>`
+   - If this fails because the branch already exists (orphaned from a previous build), check whether it has diverged: `git log --oneline build/<feature-name> ^HEAD`. If it has commits ahead of HEAD, ask the user: "Branch `build/<feature-name>` already exists with [N] commits. (a) Reuse it (resume previous build), (b) Delete and start fresh (`git branch -D build/<feature-name>`)." If it's at HEAD (no divergence), silently reuse: `git worktree add <WORKTREE_DIR> build/<feature-name>` (without `-b`)
+
+Tell the user:
+```
+Worktree created: <WORKTREE_DIR>
+Branch: build/<feature-name> (based on <BASE_BRANCH>)
+Your main working tree is untouched.
+
+To abort and clean up at any time:
+  git worktree remove <WORKTREE_DIR> && git branch -D build/<feature-name>
+```
+
+**Working directory:** The Bash tool does not persist `cd` between calls. All commands that operate on the worktree must use absolute paths or prefix with `cd <WORKTREE_DIR> &&`. When spawning sub-agents, include the worktree path in their instructions: "Work in directory `<WORKTREE_DIR>`. All file paths are relative to that directory."
+
+All sub-agents, commits, verification, and reviews happen in the worktree directory. The progress file and spec are in the worktree's `specs/` directory.
+
+#### Merge back (after red team + learnings)
+
+After all phases are complete and the red team pass is done:
+
+1. Run merge from the base directory: `cd <BASE_DIR> && git merge build/<feature-name>`
+   - If there are conflicts (someone committed to the base branch during the build), present them to the user. Do not auto-resolve.
+2. Clean up: `git worktree remove <WORKTREE_DIR>` and `git branch -d build/<feature-name>`
+
+Tell the user: "Feature merged to `<BASE_BRANCH>`. Worktree cleaned up."
+
+#### Abort / crash
+
+If the user aborts mid-build or the session crashes, the worktree and branch survive for inspection:
+
+```
+Build stopped. Your work is preserved:
+  Worktree: <worktree-path>
+  Branch: build/<feature-name>
+  Commits: [list phase commits on that branch]
+
+To resume: run /build — it will detect the existing worktree
+To discard: git worktree remove <worktree-path> && git branch -D build/<feature-name>
+```
 
 ### For each phase:
 
@@ -225,7 +300,7 @@ When the sub-agent completes, review:
 - Did automated verification pass?
 - Did it report any mismatches or surprises?
 
-**If TDD was not followed:** Reject the work. Tell the user, re-spawn the sub-agent with stronger TDD emphasis. Do not accept implementation-first code.
+**If TDD was not followed:** Reject the work. Tell the user, re-spawn the sub-agent with stronger TDD emphasis. Do not accept implementation-first code. **After 3 TDD rejections for the same phase,** stop and ask the user: "This phase has failed TDD enforcement 3 times. Options: (a) I implement this phase directly with TDD in the current context, (b) skip TDD for this specific phase and proceed, (c) restructure the phase to make TDD more natural."
 
 If the sub-agent hit an issue and stopped, present it to the user:
 ```
@@ -242,9 +317,7 @@ Do not trust the sub-agent's self-report alone. Run every automated verification
 
 #### 5. Post-phase code review
 
-After automated verification passes, spawn a **review agent** to audit the phase. The review agent can optionally use a stronger model than the implementing agent (e.g., implement with Sonnet, review with Opus). The review context is small (spec + diff), so the cost of a stronger reviewer is low relative to the value.
-
-To use a different model for review, set `model` when spawning the review agent.
+After automated verification passes, spawn a **review agent** to audit the phase.
 
 ```
 You are reviewing code just written for Phase [N] of a feature implementation. Your job is to find problems, not praise.
@@ -254,7 +327,7 @@ Read:
 - Plan: specs/[feature-name]-plan.md (Phase [N] scope)
 - Progress: specs/[feature-name]-progress.md (context from prior phases)
 - Architecture: specs/ARCHITECTURE.md (if it exists — invariants, patterns, conventions)
-- All files changed in this phase (git diff HEAD~1)
+- All files changed in this phase (use `git diff` against the commit before the phase started, not just HEAD~1 — the phase may span multiple commits)
 
 ## Review checklist
 
@@ -364,7 +437,7 @@ If the sweep finds issues, fix them (spawn another sub-agent if needed) and re-r
 
 ### After integration sweep: Red team
 
-Spawn a **red team agent** with clean context and, if available, the strongest model. This agent's job is to break things. It is adversarial — it assumes the code is wrong until proven otherwise.
+Spawn a **red team agent** with clean context. This agent's job is to break things. It is adversarial — it assumes the code is wrong until proven otherwise.
 
 ```
 You are a hostile code reviewer. Your job is to find every problem in this implementation. Assume the code is broken, insecure, and wrong until you prove otherwise. You are not here to praise or summarize — you are here to attack.
@@ -455,6 +528,26 @@ Then tell the user:
 ## Resuming
 
 If the user re-runs `/build` on a plan with some phases already completed, follow this crash recovery protocol before continuing.
+
+### Step 0: Detect existing worktree
+
+Check if a worktree already exists for this feature:
+```
+git worktree list | grep build/<feature-name>
+```
+
+If found:
+- Set `WORKTREE_DIR` to the existing worktree path (use absolute paths for all subsequent commands).
+- Note: "Found existing build worktree at `<WORKTREE_DIR>`. Resuming there."
+- Continue to Step 1 below.
+
+If not found but the branch `build/<feature-name>` exists (orphaned — worktree removed, branch kept):
+- Create worktree reusing the branch: `git worktree add <WORKTREE_DIR> build/<feature-name>` (without `-b`)
+- Continue to Step 1 below.
+
+If neither found:
+- Create a new worktree as described in "Worktree isolation" above.
+- Continue to Step 1 below.
 
 ### Step 1: Detect uncommitted changes
 

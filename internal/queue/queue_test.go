@@ -168,7 +168,7 @@ func TestReadAll_MissingFile(t *testing.T) {
 	}
 }
 
-func TestFlush_ReturnsEventsAndEmptiesQueue(t *testing.T) {
+func TestFlush_ReturnsEventsAndStagesFlushing(t *testing.T) {
 	q := newTestQueue(t)
 
 	appendOrFail(t, q, testEvent("s1", 1, "Intent"))
@@ -185,15 +185,115 @@ func TestFlush_ReturnsEventsAndEmptiesQueue(t *testing.T) {
 		t.Errorf("events[0].PhaseName = %q, want Intent", events[0].PhaseName)
 	}
 
-	// Original file should be gone
+	// Original file should be gone.
 	if _, err := os.Stat(q.path); !errors.Is(err, os.ErrNotExist) {
 		t.Errorf("expected queue file to be removed, got err=%v", err)
 	}
 
-	// Flushing file should also be gone
-	if _, err := os.Stat(q.path + ".flushing"); !errors.Is(err, os.ErrNotExist) {
-		t.Errorf("expected .flushing file to be removed, got err=%v", err)
+	// .flushing should exist (crash recovery) until AckFlush is called.
+	if _, err := os.Stat(q.path + ".flushing"); err != nil {
+		t.Errorf("expected .flushing file to exist for crash recovery, got err=%v", err)
 	}
+
+	// AckFlush cleans up the .flushing file.
+	q.AckFlush()
+	if _, err := os.Stat(q.path + ".flushing"); !errors.Is(err, os.ErrNotExist) {
+		t.Errorf("expected .flushing file to be removed after AckFlush, got err=%v", err)
+	}
+}
+
+func TestFlush_SecondFlushBlockedByLock(t *testing.T) {
+	q := newTestQueue(t)
+
+	appendOrFail(t, q, testEvent("s1", 1, "Intent"))
+	appendOrFail(t, q, testEvent("s1", 2, "Behavioral Spec"))
+
+	events1, err := q.Flush()
+	if err != nil {
+		t.Fatalf("Flush 1: %v", err)
+	}
+	if len(events1) != 2 {
+		t.Fatalf("expected 2 events from first flush, got %d", len(events1))
+	}
+
+	// Second flush should return nil (lock held by first flush).
+	events2, err := q.Flush()
+	if err != nil {
+		t.Fatalf("Flush 2: %v", err)
+	}
+	if len(events2) != 0 {
+		t.Fatalf("expected 0 events from second flush (lock held), got %d", len(events2))
+	}
+
+	q.AckFlush()
+}
+
+func TestFlush_FailedSendRetainsEventsForRetry(t *testing.T) {
+	q := newTestQueue(t)
+
+	appendOrFail(t, q, testEvent("s1", 1, "Intent"))
+
+	// First flush: simulate a failed send (don't call AckFlush).
+	events1, err := q.Flush()
+	if err != nil {
+		t.Fatalf("Flush 1: %v", err)
+	}
+	if len(events1) != 1 {
+		t.Fatalf("expected 1 event, got %d", len(events1))
+	}
+
+	// Release lock without acking (simulates failed send).
+	_ = os.Remove(q.path + ".lock")
+
+	// Add another event while .flushing still exists.
+	appendOrFail(t, q, testEvent("s2", 2, "Behavioral Spec"))
+
+	// Second flush should recover events from .flushing plus new queue events.
+	events2, err := q.Flush()
+	if err != nil {
+		t.Fatalf("Flush 2: %v", err)
+	}
+	if len(events2) != 2 {
+		t.Fatalf("expected 2 events (1 recovered + 1 new), got %d", len(events2))
+	}
+
+	q.AckFlush()
+
+	// After ack, .flushing should be gone.
+	if _, err := os.Stat(q.path + ".flushing"); !errors.Is(err, os.ErrNotExist) {
+		t.Errorf("expected .flushing removed after AckFlush")
+	}
+}
+
+func TestFlush_DrainFileRecovery(t *testing.T) {
+	q := newTestQueue(t)
+
+	// Simulate a crash that left a .drain file (rename succeeded, append didn't).
+	drainPath := q.path + ".drain"
+	e := testEvent("s-drain", 1, "Intent")
+	data, _ := json.Marshal(e)
+	data = append(data, '\n')
+	if err := os.WriteFile(drainPath, data, 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+
+	events, err := q.Flush()
+	if err != nil {
+		t.Fatalf("Flush: %v", err)
+	}
+	if len(events) != 1 {
+		t.Fatalf("expected 1 recovered event, got %d", len(events))
+	}
+	if events[0].SessionID != "s-drain" {
+		t.Errorf("expected s-drain, got %q", events[0].SessionID)
+	}
+
+	// .drain should be cleaned up.
+	if _, err := os.Stat(drainPath); !errors.Is(err, os.ErrNotExist) {
+		t.Errorf("expected .drain file removed after recovery")
+	}
+
+	q.AckFlush()
 }
 
 func TestFlush_MissingFile(t *testing.T) {

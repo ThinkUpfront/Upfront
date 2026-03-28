@@ -18,7 +18,7 @@ Argument: $ARGUMENTS
 Read and display the current contents of `specs/TODO.md`. If the file doesn't exist, say "No TODOs yet."
 
 ### `done N` (e.g., `done 3`)
-Find the Nth checkbox item (`- [ ]` or `- [x]`) in `specs/TODO.md` and change `- [ ]` to `- [x]`. Confirm which item was marked done.
+Find the Nth **unchecked** checkbox item (`- [ ]`) in `specs/TODO.md` and change it to `- [x]`. N counts only unchecked items — `done 1` marks the first open item, regardless of how many checked items precede it. Confirm which item was marked done.
 
 ### `clear`
 Remove all lines matching `- [x]` from `specs/TODO.md`. Confirm how many items were cleared.

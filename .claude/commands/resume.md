@@ -72,20 +72,29 @@ Notes from last session:
 - [user notes]
 ```
 
-## Step 5: Handle /build resumption
+## Step 5: Check for stashed work
+
+If the handoff's "Git state" section mentions a stash (from `/pause` or `/quick`), remind the user:
+
+> "There's a stash from the previous session. Run `git stash pop` to restore your changes before continuing."
+
+This applies regardless of which command was running — `/build`, `/quick`, `/feature`, or freeform.
+
+## Step 6: Check for branch mismatch
+
+If the current branch differs from the handoff's recorded branch:
+
+- **If the handoff records a worktree** (e.g., "Worktree: ../repo-build-feature"): The mismatch is expected — the user's terminal is on the base branch while the build work lives in the worktree. Do NOT warn about this. Verify the worktree still exists by running `git worktree list` and checking for the recorded path. If it exists, note: "Build worktree at `[worktree path]` on branch `[worktree branch]`. `/build` will resume there." If it's gone, note: "The worktree at `[path]` no longer exists. `/build` will recreate it when you resume."
+- **Otherwise:** Warn explicitly: "You're on branch `[current]` but the handoff was created on `[handoff branch]`. Switch back with `git checkout [handoff branch]` before continuing, or confirm you want to work on this branch instead." Wait for the user to resolve before proceeding.
+
+## Step 7: Handle /build resumption
 
 If the handoff says `/build` was running:
 
 1. Present the briefing above first.
-2. After user confirms, follow `/build`'s crash recovery protocol:
-   - Check for uncommitted changes and present options (keep/stash/discard)
-   - Reconcile the progress file with git history
-   - Pick up from the first unverified phase
-3. Do not re-run the pre-flight audit.
+2. After user confirms, tell them: "Run `/build [plan-file-path]` to resume. It will detect completed phases and pick up where you left off." **Do not attempt to continue the build yourself** — `/build` has its own crash recovery protocol that handles uncommitted changes, progress reconciliation, and phase resumption. Your job is the context bridge, not the build executor.
 
-This integrates with `/build`'s existing resume logic — you are just providing the context bridge between sessions.
-
-## Step 6: Wait
+## Step 8: Wait
 
 After presenting the briefing, ask:
 

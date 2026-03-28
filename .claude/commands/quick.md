@@ -15,8 +15,9 @@ You are executing a small, well-scoped change. No spec, no plan, no phases. This
 Silently read these files if they exist:
 - `specs/ARCHITECTURE.md`
 - `specs/DECISIONS.md`
+- `specs/LEARNINGS.md`
 
-These give you the project's conventions, patterns, and prior decisions. Follow them.
+These give you the project's conventions, patterns, prior decisions, and known gotchas. Follow them.
 
 ### 2. Scope check
 
@@ -68,7 +69,9 @@ Now that you have made the change, check: did it stay under ~50 lines of non-tes
 
 If it grew beyond that, stop and say:
 
-> "This turned out to be bigger than expected (~[N] lines). The change is partially done. You should run `/feature` to define this properly, then `/plan` and `/build` to finish it."
+> "This turned out to be bigger than expected (~[N] lines). The change is partially done. You should run `/feature` to define this properly, then `/plan` and `/build` to finish it. I'll stash the work-in-progress so you can pick it up later: `git stash push -m 'quick: partial [description]'`"
+
+Stash the partial work before stopping. Do not leave uncommitted half-done code in the working tree.
 
 ### Step 5: Quick review
 

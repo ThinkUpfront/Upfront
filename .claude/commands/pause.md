@@ -16,7 +16,7 @@ Silently read whatever exists:
 - `specs/LEARNINGS.md`
 - Any `specs/*-progress.md` file (if `/build` was running)
 
-Run `git status` and `git log --oneline -5` to capture current git state.
+Run `git status`, `git log --oneline -5`, and `git worktree list` to capture current git state (including any active build worktrees).
 
 Do not ask the user questions. Extract everything from the conversation history and the files above.
 
@@ -72,6 +72,7 @@ Create `specs/HANDOFF.md` (overwrite if it exists):
 ## Git state
 
 - **Branch:** [branch name]
+- **Worktree:** [path if /build created a worktree, or "none"]
 - **Uncommitted changes:** [list of modified/new files, or "clean"]
 - **Recent commits:**
   - [hash] [message]
@@ -89,11 +90,24 @@ Create `specs/HANDOFF.md` (overwrite if it exists):
 [Anything the user said to remember, or "none"]
 ```
 
-## Step 4: Append user notes
+## Step 4: Protect uncommitted work
+
+If `git status` shows uncommitted changes (modified or new files), offer to stash them:
+
+```
+You have uncommitted changes. Want me to stash them for safety?
+  git stash push -m "pause: [brief description of current work]"
+
+This protects the work if the terminal closes or the branch changes. /resume will remind you to pop the stash.
+```
+
+If the user agrees, run the stash and note the stash ref in the handoff under "Git state." If they decline, note "User declined stash — uncommitted changes at risk" in the handoff.
+
+## Step 5: Append user notes
 
 If the user provided $ARGUMENTS (e.g., "Also remember that the webhook endpoint changes next sprint"), append those under "User notes" in the handoff.
 
-## Step 5: Confirm
+## Step 6: Confirm
 
 Tell the user:
 

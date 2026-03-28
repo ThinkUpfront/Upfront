@@ -20,7 +20,7 @@ Read the entire spec, including all thinking records.
 
 ### 1. Find the agenda
 
-Scan the spec for `//` comments. These are inline corrections the user added directly to the file.
+Scan the spec for `//` comments at the **start of a line** (after optional whitespace). These are inline corrections the user added directly to the file. Ignore `//` that appears mid-line (e.g., inside URLs like `https://...` or code examples).
 
 Example:
 ```markdown
@@ -29,7 +29,7 @@ Rework rate drops by 20% for spec'd features.
 // too specific — we don't have a baseline yet
 ```
 
-Collect all `//` comments with their surrounding context. These are the starting points for discussion — not instructions to execute blindly.
+Collect all start-of-line `//` comments with their surrounding context. These are the starting points for discussion — not instructions to execute blindly.
 
 If there are no `//` comments, ask: "What do you want to change?"
 

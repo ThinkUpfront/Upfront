@@ -73,3 +73,9 @@ When they have a clear problem, confirm it:
 "Here's what you've landed on: [problem in one sentence]. It matters because [why]. Solved looks like [end state]."
 
 Then: "You've got a problem worth solving. Run `/feature` to define it properly."
+
+Finally, write the converged problem statement to `specs/TODO.md` as a note (using `/note` format) so it survives context resets:
+
+```
+- [ ] [YYYY-MM-DD] IDEATE: [problem in one sentence] — ready for /feature
+```
