@@ -158,7 +158,9 @@ Do not trust the sub-agent's self-report alone. Run every automated verification
 
 #### 5. Post-phase code review
 
-After automated verification passes, spawn a **review agent** to audit the phase:
+After automated verification passes, spawn a **review agent** to audit the phase. The review agent can optionally use a stronger model than the implementing agent (e.g., implement with Sonnet, review with Opus). The review context is small (spec + diff), so the cost of a stronger reviewer is low relative to the value.
+
+To use a different model for review, set `model` when spawning the review agent.
 
 ```
 You are reviewing code just written for Phase [N] of a feature implementation. Your job is to find problems, not praise.
@@ -167,9 +169,16 @@ Read:
 - Spec: specs/[feature-name].md (constraints, blind spots, "what must NOT happen")
 - Plan: specs/[feature-name]-plan.md (Phase [N] scope)
 - Progress: specs/[feature-name]-progress.md (context from prior phases)
+- Architecture: specs/ARCHITECTURE.md (if it exists — invariants, patterns, conventions)
 - All files changed in this phase (git diff HEAD~1)
 
 ## Review checklist
+
+### Spec compliance
+- Does anything violate the spec's "what must NOT happen" section?
+- Does the code stay within scope boundaries?
+- Are the spec's constraints and non-negotiables respected?
+- Trace the spec's intent ("how will we know it worked?") through the implementation — does the code actually deliver what was promised, or does it just not crash?
 
 ### Correctness
 - Does the code do what the spec says? Not what seems reasonable — what the spec actually requires.
@@ -177,22 +186,19 @@ Read:
 - Do the tests actually test the right behavior, or do they test implementation details?
 - Are there untested code paths?
 - Could any test pass with a broken implementation? (Tests that are too loose.)
+- If the spec identified concurrency concerns, are they addressed? Not "there's a mutex" but "the mutex protects the right thing and the lock ordering is consistent."
 
 ### Architecture
-- Does the code follow existing patterns and conventions in the codebase?
+- Does the code follow existing patterns and conventions in the codebase? Check against ARCHITECTURE.md if it exists.
+- Are the invariants from ARCHITECTURE.md preserved? If this phase touches shared state, does it maintain the documented guarantees?
 - Are responsibilities in the right place? (No logic in the wrong layer.)
 - Is the code structured for the phases that come after it? (Check the plan — will Phase N+1 be able to build on this cleanly?)
 - Are interfaces clean? Will they need to change for future phases?
 - Any unnecessary abstractions, premature generalization, or over-engineering?
 
-### Spec compliance
-- Does anything violate the spec's "what must NOT happen" section?
-- Does the code stay within scope boundaries?
-- Are the spec's constraints and non-negotiables respected?
-
 ### Issues to flag
 For each issue found, categorize:
-- **MUST FIX** — incorrect behavior, spec violation, missing edge case, security issue
+- **MUST FIX** — incorrect behavior, spec violation, invariant violation, missing edge case, security issue
 - **SHOULD FIX** — architecture concern that will cause problems in later phases
 - **NOTE** — observation for awareness, no action needed now
 
@@ -272,10 +278,94 @@ Then:
 
 If the sweep finds issues, fix them (spawn another sub-agent if needed) and re-run.
 
+### After integration sweep: Red team
+
+Spawn a **red team agent** with clean context and, if available, the strongest model. This agent's job is to break things. It is adversarial — it assumes the code is wrong until proven otherwise.
+
+```
+You are a hostile code reviewer. Your job is to find every problem in this implementation. Assume the code is broken, insecure, and wrong until you prove otherwise. You are not here to praise or summarize — you are here to attack.
+
+Read:
+- Spec: specs/[feature-name].md (especially "what must NOT happen", constraints, blind spots)
+- Architecture: specs/ARCHITECTURE.md (invariants — does the code actually preserve them?)
+- All implementation code (read every file changed in this feature)
+- All tests (are they actually testing the right things, or are they giving false confidence?)
+
+## Attack vectors
+
+### Try to break correctness
+- Read every conditional. What input makes it take the wrong branch?
+- Read every loop. What makes it infinite? What makes it skip?
+- Read every error path. What happens if you hit them all in sequence?
+- Find every assumption in the code. Is it documented? Is it enforced? What breaks if the assumption is wrong?
+- Look for off-by-one errors, nil/null dereferences, integer overflow, string encoding issues.
+
+### Try to break concurrency
+- Find every piece of shared mutable state. Is it protected? Is the protection correct?
+- Can two goroutines/threads/requests hit the same resource simultaneously? What happens?
+- Are lock orderings consistent? Can you construct a deadlock?
+- Is there a time-of-check-to-time-of-use (TOCTOU) race anywhere?
+- If an operation is supposed to be atomic, is it actually atomic?
+
+### Try to break the boundaries
+- What happens at every interface boundary with unexpected input? (nil, empty, max-size, wrong type, malformed)
+- What happens when external dependencies return unexpected responses? (wrong format, partial data, extra fields)
+- What happens when the file system is full, permissions are wrong, or the network is partitioned?
+
+### Try to break the tests
+- For each test: could this test pass with a completely broken implementation? If yes, the test is worthless.
+- Are there code paths with no test coverage?
+- Do the tests test behavior or implementation details? (Tests that break on refactor are bad tests.)
+- Are there tests that always pass regardless of the code? (Tautological tests.)
+
+### Try to break security
+- Is there any user input that reaches a shell command, SQL query, file path, or eval?
+- Are auth checks on every entry point, or can you bypass them by calling an internal function directly?
+- Are secrets, tokens, or credentials anywhere they shouldn't be? (Logs, error messages, config files in the repo)
+- Can you escalate privileges or access data you shouldn't?
+
+## What to do with findings
+
+For each issue found:
+- **FIX IT** if the fix is obvious and unambiguous (missing nil check, unclosed resource, missing error return). Make the fix, run tests, verify.
+- **ASK** if the fix requires a judgment call (tradeoff between approaches, architectural decision, spec ambiguity). Present the issue clearly with options. Do not guess.
+- **FLAG** if it's a design concern that can't be fixed without rethinking the approach. Present it as a risk the user needs to know about.
+
+After fixing obvious issues, run the full test suite. If any test fails from your fixes, you broke something — investigate before proceeding.
+
+Report:
+1. Issues fixed (with what you changed and why)
+2. Issues requiring judgment (with options)
+3. Risks flagged (design concerns)
+4. What you tried to break but couldn't (this is useful — it's evidence of robustness)
+```
+
+If the red team finds issues requiring judgment, present them to the user. Wait for decisions before proceeding.
+
+After the red team pass, commit any fixes:
+```
+fix([feature-name]): red team fixes
+
+Issues found and fixed by adversarial review.
+```
+
+### After red team: Capture learnings
+
+Append to `specs/LEARNINGS.md` (create if it doesn't exist):
+
+```markdown
+## [date] — [feature name]
+**What surprised us:** [anything unexpected during implementation]
+**What the agent got wrong:** [patterns of AI mistakes — useful for future /plan and /build]
+**What the red team found:** [categories of issues found — helps calibrate future reviews]
+**Process notes:** [what worked well, what was wasteful, what to change next time]
+```
+
 Then tell the user:
 - All phases are complete
 - Integration sweep results
-- Any issues encountered during implementation
+- Red team results (issues fixed, judgments made, risks flagged)
+- Learnings captured
 - The feature is ready for final review
 
 ## Resuming
