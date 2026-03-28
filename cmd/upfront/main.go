@@ -83,7 +83,8 @@ func loadCfg(stderr io.Writer) *remote.Config {
 }
 
 func cmdHook(stdin io.Reader, stdout, stderr io.Writer) int {
-	data, err := io.ReadAll(stdin)
+	const maxStdinBytes = 10 << 20 // 10MB
+	data, err := io.ReadAll(io.LimitReader(stdin, maxStdinBytes+1))
 	if err != nil {
 		fmt.Fprintf(stderr, "error reading stdin: %v\n", err)
 		return 1
@@ -91,6 +92,11 @@ func cmdHook(stdin io.Reader, stdout, stderr io.Writer) int {
 
 	// Gracefully handle empty input.
 	if len(data) == 0 {
+		return 0
+	}
+
+	if len(data) > maxStdinBytes {
+		fmt.Fprintf(stderr, "warning: stdin exceeds %dMB, skipping\n", maxStdinBytes>>20)
 		return 0
 	}
 
@@ -142,13 +148,11 @@ func tryRemoteFlush(q *queue.Queue, stderr io.Writer) {
 		return
 	}
 	if err := sender.Send(flushed); err != nil {
-		fmt.Fprintf(stderr, "warning: remote send failed: %v\n", err)
-		for i := range flushed {
-			if appendErr := q.Append(&flushed[i]); appendErr != nil {
-				fmt.Fprintf(stderr, "error: failed to re-queue event: %v\n", appendErr)
-			}
-		}
+		fmt.Fprintf(stderr, "warning: remote send failed, events staged in .flushing for retry: %v\n", err)
+		q.NackFlush()
+		return
 	}
+	q.AckFlush()
 }
 
 func cmdFlush(stdout, stderr io.Writer) int {
@@ -172,14 +176,11 @@ func cmdFlush(stdout, stderr io.Writer) int {
 	}
 
 	if err := sender.Send(events); err != nil {
-		fmt.Fprintf(stderr, "error sending events: %v\n", err)
-		for i := range events {
-			if appendErr := q.Append(&events[i]); appendErr != nil {
-				fmt.Fprintf(stderr, "error: failed to re-queue event: %v\n", appendErr)
-			}
-		}
+		fmt.Fprintf(stderr, "error sending events, events staged in .flushing for retry: %v\n", err)
+		q.NackFlush()
 		return 1
 	}
+	q.AckFlush()
 
 	fmt.Fprintf(stdout, "flushed %d events\n", len(events))
 	return 0

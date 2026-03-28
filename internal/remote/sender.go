@@ -5,7 +5,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"time"
@@ -73,6 +75,14 @@ func (s *Sender) Send(events []format.Event) error {
 		return fmt.Errorf("marshal events: %w", err)
 	}
 
+	u, err := url.Parse(s.config.Endpoint)
+	if err != nil {
+		return fmt.Errorf("invalid endpoint URL: %w", err)
+	}
+	if u.Scheme != "https" && u.Scheme != "http" {
+		return fmt.Errorf("endpoint must use http or https scheme, got %q", u.Scheme)
+	}
+
 	req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, s.config.Endpoint, bytes.NewReader(body))
 	if err != nil {
 		return fmt.Errorf("create request: %w", err)
@@ -86,7 +96,10 @@ func (s *Sender) Send(events []format.Event) error {
 	if err != nil {
 		return fmt.Errorf("send events: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_, _ = io.Copy(io.Discard, resp.Body)
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return fmt.Errorf("remote returned status %d", resp.StatusCode)

@@ -28,6 +28,7 @@ func (q *Queue) EnsureDir() error {
 
 // Append JSON-encodes the event and appends it as a single line to the queue file.
 // Uses O_APPEND for concurrent write safety on POSIX systems.
+// Calls fsync to ensure durability before returning.
 func (q *Queue) Append(e *format.Event) error {
 	f, err := os.OpenFile(q.path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
 	if err != nil {
@@ -41,8 +42,10 @@ func (q *Queue) Append(e *format.Event) error {
 	}
 	data = append(data, '\n')
 
-	_, err = f.Write(data)
-	return err
+	if _, err = f.Write(data); err != nil {
+		return err
+	}
+	return f.Sync()
 }
 
 // ReadAll reads and parses all events from the queue file.
@@ -83,48 +86,137 @@ func readEventsFromFile(path string) ([]format.Event, error) {
 	return events, nil
 }
 
-// Flush atomically drains the queue using rename-and-swap:
-// 1. Recover any pre-existing .flushing file from a prior crash
-// 2. Rename audit.jsonl to audit.jsonl.flushing
-// 3. Read all events from the .flushing file
-// 4. Delete the .flushing file
-// Returns the events for the caller to send to a remote endpoint.
-// If the file is missing or empty, returns an empty slice with no error.
-func (q *Queue) Flush() ([]format.Event, error) {
-	flushPath := q.path + ".flushing"
-
-	// Recover events from a pre-existing .flushing file left by a prior crash.
-	// Remove it after reading so the rename below doesn't overwrite it.
-	prior, err := readEventsFromFile(flushPath)
+// appendEventsToFile appends JSON-encoded events to the given path with fsync.
+func appendEventsToFile(path string, events []format.Event) error {
+	f, err := os.OpenFile(filepath.Clean(path), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	if len(prior) > 0 {
-		_ = os.Remove(flushPath)
-	}
+	defer f.Close()
 
-	if err := os.Rename(q.path, flushPath); err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			return prior, nil
+	for i := range events {
+		data, err := json.Marshal(&events[i])
+		if err != nil {
+			return err
 		}
+		data = append(data, '\n')
+		if _, err := f.Write(data); err != nil {
+			return err
+		}
+	}
+	return f.Sync()
+}
+
+const staleLockAge = 60 * time.Second
+
+// tryLockFlush acquires an exclusive flush lock using O_CREATE|O_EXCL.
+// Returns an unlock function and true on success, or nil and false if
+// another flush is in progress. Stale locks (older than 60s) are broken.
+func (q *Queue) tryLockFlush() (func(), bool) {
+	lockPath := filepath.Clean(q.path + ".lock")
+	f, err := os.OpenFile(lockPath, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0o600)
+	if err != nil {
+		// Check for stale lock from a crashed process.
+		info, statErr := os.Stat(lockPath)
+		if statErr != nil || time.Since(info.ModTime()) < staleLockAge {
+			return nil, false
+		}
+		_ = os.Remove(lockPath)
+		f, err = os.OpenFile(lockPath, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0o600) //nolint:gosec // lockPath derived from q.path
+		if err != nil {
+			return nil, false
+		}
+	}
+	_ = f.Close()
+	return func() { _ = os.Remove(lockPath) }, true
+}
+
+// Flush atomically drains the queue and stages events for remote send:
+//  1. Acquire exclusive flush lock (returns nil if another flush is in progress)
+//  2. Recover any .drain file from a prior crash (rename interrupted)
+//  3. Rename audit.jsonl -> .drain (atomic grab of new events)
+//  4. Read .drain and append to .flushing (consolidate for crash recovery)
+//  5. Remove .drain
+//
+// The .flushing file persists until AckFlush is called after successful send.
+// If the process crashes between Flush and AckFlush, the next Flush recovers
+// all events from .flushing.
+func (q *Queue) Flush() ([]format.Event, error) {
+	unlock, ok := q.tryLockFlush()
+	if !ok {
+		return nil, nil // Another flush in progress.
+	}
+
+	flushPath := q.path + ".flushing"
+	drainPath := q.path + ".drain"
+
+	// Helper to unlock on error paths (AckFlush handles the success path).
+	fail := func(err error) ([]format.Event, error) {
+		unlock()
 		return nil, err
 	}
 
+	// Recover .drain from prior crash (rename succeeded but append didn't).
+	// Only remove .drain after a successful append to .flushing.
+	if drained, _ := readEventsFromFile(drainPath); len(drained) > 0 {
+		if err := appendEventsToFile(flushPath, drained); err != nil {
+			return fail(err)
+		}
+		_ = os.Remove(drainPath)
+	}
+
+	// Atomically grab new events from the queue.
+	if err := q.drainToFlushFile(drainPath, flushPath); err != nil {
+		return fail(err)
+	}
+
+	// Read the consolidated .flushing file.
 	events, err := readEventsFromFile(flushPath)
 	if err != nil {
-		return nil, err
+		return fail(err)
 	}
-
-	// Combine any prior crash-recovered events with the current batch.
-	if len(prior) > 0 {
-		events = append(prior, events...)
+	if len(events) == 0 {
+		unlock()
 	}
-
-	if err := os.Remove(flushPath); err != nil {
-		return events, err
-	}
-
 	return events, nil
+}
+
+// drainToFlushFile renames audit.jsonl to drainPath, reads it, appends events
+// to flushPath, and removes drainPath. No-op if audit.jsonl doesn't exist.
+func (q *Queue) drainToFlushFile(drainPath, flushPath string) error {
+	if err := os.Rename(q.path, drainPath); err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil // No queue file — nothing to drain.
+		}
+		return err
+	}
+
+	newEvents, err := readEventsFromFile(drainPath)
+	if err != nil {
+		_ = os.Rename(drainPath, q.path)
+		return err
+	}
+	if len(newEvents) > 0 {
+		if err := appendEventsToFile(flushPath, newEvents); err != nil {
+			_ = os.Rename(drainPath, q.path)
+			return err
+		}
+	}
+	_ = os.Remove(drainPath)
+	return nil
+}
+
+// AckFlush removes the .flushing file and releases the flush lock after events
+// have been successfully sent to the remote endpoint.
+func (q *Queue) AckFlush() {
+	_ = os.Remove(q.path + ".flushing")
+	_ = os.Remove(q.path + ".lock")
+}
+
+// NackFlush releases the flush lock but keeps the .flushing file for
+// recovery on the next flush attempt. Use when remote send fails.
+func (q *Queue) NackFlush() {
+	_ = os.Remove(q.path + ".lock")
 }
 
 // Purge rewrites the queue file keeping only events newer than the given TTL.
@@ -161,16 +253,15 @@ func (q *Queue) Purge(ttl time.Duration) error {
 		}
 	}
 
-	_ = os.Remove(purgePath)
-
-	// Append kept events to audit.jsonl using O_APPEND. If a concurrent
-	// Append created a new file while we held the rename, both sets of
-	// events end up in the same file. Order may not be chronological but
-	// no events are lost.
-	for i := range kept {
-		if err := q.Append(&kept[i]); err != nil {
+	// Append kept events in a single batch BEFORE removing .purging. If the
+	// process crashes during write, the .purging file still has all events.
+	// If a concurrent Append created a new queue file while we held the rename,
+	// both sets of events end up in the same file via O_APPEND.
+	if len(kept) > 0 {
+		if err := appendEventsToFile(q.path, kept); err != nil {
 			return err
 		}
 	}
+	_ = os.Remove(purgePath)
 	return nil
 }
