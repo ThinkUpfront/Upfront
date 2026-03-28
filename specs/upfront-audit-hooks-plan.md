@@ -57,11 +57,11 @@
 **Estimated size:** ~130 lines
 
 **Automated verification:**
-- [ ] `cd upfront && go test ./internal/remote/...`
-- [ ] Tests cover: successful POST, server error, timeout, no config (graceful skip)
+- [x] `cd upfront && go test ./internal/remote/...`
+- [x] Tests cover: successful POST, server error, timeout, no config (graceful skip)
 
 **Manual verification:**
-- [ ] Config file format documented and matches example
+- [x] Config file format documented and matches example
 
 **Post-phase:** Run code review, fix all issues before proceeding.
 

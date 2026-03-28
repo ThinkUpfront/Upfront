@@ -41,6 +41,17 @@
 - Scanner buffer set to 1MB max line to handle large thinking summaries
 - No filter API on queue — Phase 5 CLI should filter after ReadAll()
 
+## Phase 4: Remote sender + config — COMPLETE
+
+**What changed:** `internal/remote/sender.go`, `internal/remote/sender_test.go`
+**TDD cycles:** 9 (config project-level, user-level fallback, neither exists, malformed JSON, POST success, server error, timeout, nil config no-op, no auth header)
+**Review findings:** 10 lint issues fixed (gosec permissions, noctx, unused params). No architectural issues.
+**Surprises:** None
+**Learnings for future phases:**
+- TTLDays defaults to 0 when omitted from config — Phase 5 CLI should apply 90-day default if cfg.TTLDays == 0
+- Internal loadConfig(projectPath, userPath) pattern avoids HOME mocking in tests
+- NewSender(nil) creates a no-op sender for local-only mode — Phase 5 can always create a sender
+
 ## Learnings
 
 (see per-phase learnings above)
