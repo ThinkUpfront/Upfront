@@ -91,12 +91,12 @@
 **Estimated size:** ~150 lines
 
 **Automated verification:**
-- [ ] `shellcheck upfront/install.sh`
-- [ ] `cd upfront && go build ./...`
+- [x] `shellcheck upfront/install.sh`
+- [x] `cd upfront && go build ./...`
 
 **Manual verification:**
-- [ ] install.sh adds hook correctly to test settings.json
-- [ ] README is self-sufficient for setup
-- [ ] Sample JSONL matches event format
+- [x] install.sh adds hook correctly to test settings.json
+- [x] README is self-sufficient for setup
+- [x] Sample JSONL matches event format
 
 **Post-phase:** Run code review, fix all issues before proceeding.
