@@ -6,6 +6,16 @@ description: Define a new feature through intent, behavioral spec, design, and i
 
 You are helping the user define a new feature before implementation begins. This is a four-phase conversation that moves from WHY to WHAT to HOW. Your job changes across phases — read the instructions for each carefully.
 
+## Pre-check
+
+Before starting Phase 1, check if `specs/ARCHITECTURE.md` exists. If it doesn't, and this is a brownfield project (substantial existing code), suggest:
+
+"This project doesn't have an architecture doc yet. Running `/explore` first will give me the context I need to ask better questions in Phases 3 and 4 (design and implementation). Want to run `/explore` first, or proceed without it?"
+
+If the user wants to proceed, continue — but note in the Design Conversation phase that your codebase understanding may be incomplete.
+
+If `specs/ARCHITECTURE.md` exists, read it silently for context. Also read `specs/DECISIONS.md` and `specs/LEARNINGS.md` if they exist.
+
 ## Global Rules
 
 - Do NOT skip phases or rush through them
@@ -362,8 +372,18 @@ Write the complete spec to disk. Populate every section from the conversation �
 
 Save the file to the working directory as `specs/[feature-name].md` (create the `specs/` directory if it doesn't exist).
 
+Also append a summary entry to `specs/DECISIONS.md` (create it if it doesn't exist):
+
+```markdown
+## [date] — [feature name]
+**Decision:** [one-line summary of what was decided]
+**Key choices:** [2-3 bullet points of the most important design decisions and why]
+**Rejected alternatives:** [what was considered and dropped]
+**Risks accepted:** [known risks we're proceeding with]
+```
+
 Then tell the user:
-- Where the file is
+- Where the spec file is
 - To review it before proceeding
 - That they can edit it directly or ask you to update it
 

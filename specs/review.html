@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upfront — Setup Review</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --new-bg: rgba(63, 185, 80, 0.08);
+    --new-border: rgba(63, 185, 80, 0.4);
+    --changed-bg: rgba(210, 153, 34, 0.08);
+    --changed-border: rgba(210, 153, 34, 0.4);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 2rem; margin-bottom: 0.25rem; }
+  h2 { font-size: 1.4rem; margin: 2rem 0 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  h3 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+  .subtitle { color: var(--text-muted); margin-bottom: 2rem; }
+  .mermaid { background: var(--surface); border-radius: 8px; padding: 1.5rem; margin: 1rem 0; border: 1px solid var(--border); }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 0.75rem 0;
+  }
+  .card.new {
+    background: var(--new-bg);
+    border-color: var(--new-border);
+  }
+  .card.changed {
+    background: var(--changed-bg);
+    border-color: var(--changed-border);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+  .badge.new { background: var(--green); color: #000; }
+  .badge.changed { background: var(--yellow); color: #000; }
+  .badge.existing { background: var(--border); color: var(--text-muted); }
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.85rem;
+    background: rgba(110, 118, 129, 0.15);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+  }
+  .path { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem; }
+  .detail { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem; }
+  .detail ul { margin-left: 1.25rem; margin-top: 0.25rem; }
+  .detail li { margin: 0.15rem 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    margin: 1rem 0 2rem;
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+  .legend-swatch {
+    width: 12px; height: 12px; border-radius: 3px; border: 2px solid;
+  }
+  .legend-swatch.new { background: var(--new-bg); border-color: var(--new-border); }
+  .legend-swatch.changed { background: var(--changed-bg); border-color: var(--changed-border); }
+  .legend-swatch.existing { background: var(--surface); border-color: var(--border); }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+  th { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .confirm-section {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+  }
+  .confirm-section h2 { border: none; margin-top: 0; padding-bottom: 0; }
+  .checklist { list-style: none; margin: 1rem 0; }
+  .checklist li {
+    padding: 0.4rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    color: var(--text-muted);
+  }
+  .checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border);
+    border-radius: 3px;
+  }
+  .checklist li.checked { color: var(--green); }
+  .checklist li.checked::before {
+    border-color: var(--green);
+    background: var(--green);
+  }
+  .checklist li.checked::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 0.65rem;
+    width: 8px;
+    height: 5px;
+    border-left: 2px solid #000;
+    border-bottom: 2px solid #000;
+    transform: rotate(-45deg);
+  }
+</style>
+</head>
+<body>
+
+<h1>Upfront</h1>
+<p class="subtitle">Audit trail for AI-assisted feature definition workflows</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-swatch new"></div> New</div>
+  <div class="legend-item"><div class="legend-swatch changed"></div> Changed</div>
+  <div class="legend-item"><div class="legend-swatch existing"></div> Existing</div>
+</div>
+
+<h2>Workflow</h2>
+
+<div class="mermaid">
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#1f6feb', 'primaryTextColor': '#c9d1d9', 'primaryBorderColor': '#388bfd', 'lineColor': '#8b949e', 'secondaryColor': '#161b22', 'tertiaryColor': '#161b22', 'fontSize': '14px' }}}%%
+flowchart LR
+  F["/feature\n5-level funnel"]
+  S["specs/\nfeature-name.md"]
+  P["/plan\n3-level arch review"]
+  A["specs/\nARCHITECTURE.md"]
+  PL["specs/\nfeature-plan.md"]
+  B["/build\nTDD + review"]
+  PR["specs/\nprogress.md"]
+  C["Committed\ncode"]
+
+  F -->|"writes"| S
+  S -->|"input"| P
+  P -->|"creates/updates"| A
+  P -->|"writes"| PL
+  A -.->|"referenced by"| PL
+  PL -->|"input"| B
+  S -->|"referenced by"| B
+  A -->|"referenced by"| B
+  B -->|"updates"| PR
+  B -->|"per phase"| C
+
+  style F fill:#1f6feb,stroke:#388bfd,color:#fff
+  style P fill:#1f6feb,stroke:#388bfd,color:#fff
+  style B fill:#1f6feb,stroke:#388bfd,color:#fff
+  style S fill:#238636,stroke:#3fb950,color:#fff
+  style A fill:#238636,stroke:#3fb950,color:#fff
+  style PL fill:#238636,stroke:#3fb950,color:#fff
+  style PR fill:#238636,stroke:#3fb950,color:#fff
+  style C fill:#161b22,stroke:#30363d,color:#c9d1d9
+</div>
+
+<h2>Commands</h2>
+
+<div class="card changed">
+  <h3><code>/feature</code> <span class="badge changed">changed</span></h3>
+  <p class="path">~/.claude/commands/feature.md</p>
+  <div class="detail">
+    Define a feature through intent, behavioral spec, design, and implementation design.
+    <ul>
+      <li>Phase 1: Intent (5 forcing-function questions with pushback)</li>
+      <li>Phase 2: Behavioral Spec (5-level funnel)
+        <ul>
+          <li>Stories, Mechanism, States</li>
+          <li><strong style="color: var(--yellow);">NEW: Level 4 — Concurrency and shared state</strong> (races, read-modify-write, partial completion, retry/idempotency, lock ordering, cache invalidation)</li>
+          <li>Error cases and edges</li>
+        </ul>
+      </li>
+      <li>Phase 3: Design Conversation (codebase research, options, tradeoffs)</li>
+      <li>Phase 4: Implementation Design (placement, architecture, blind spots)</li>
+      <li>Thinking records at every phase transition</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card changed">
+  <h3><code>/plan</code> <span class="badge changed">changed</span></h3>
+  <p class="path">~/.claude/commands/plan.md</p>
+  <div class="detail">
+    Break a spec into ~400 LOC implementation phases by researching the codebase.
+    <ul>
+      <li>Read spec, research codebase</li>
+      <li><strong style="color: var(--yellow);">NEW: 3-level architectural deep-dive</strong>
+        <ul>
+          <li>Level 1: System architecture (components, communication, invariants)</li>
+          <li>Level 2: Subsystem architecture (modules, boundaries, data models)</li>
+          <li>Level 3: Design patterns and connections (interfaces, edge behaviors, error propagation)</li>
+          <li>Each level confirmed by user before proceeding</li>
+          <li>Challenges assumptions, pushes for well-understood behaviors</li>
+        </ul>
+      </li>
+      <li><strong style="color: var(--yellow);">NEW: Architecture persisted to <code>specs/ARCHITECTURE.md</code></strong> — shared across features, reviewed every /plan run</li>
+      <li>Propose phases with verification criteria</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card new">
+  <h3><code>/build</code> <span class="badge new">new</span></h3>
+  <p class="path">~/.claude/commands/build.md</p>
+  <div class="detail">
+    Execute implementation plan phase by phase with strict TDD and post-phase review.
+    <ul>
+      <li><strong style="color: var(--green);">Fresh sub-agent per phase</strong> (RALPH pattern — prevents context degradation)</li>
+      <li><strong style="color: var(--green);">Strict TDD enforced</strong> — Red/Green/Refactor cycle required. Work rejected if TDD skipped.</li>
+      <li><strong style="color: var(--green);">Post-phase code review</strong> — separate review agent checks correctness, architecture, spec compliance</li>
+      <li><strong style="color: var(--green);">MUST FIX / SHOULD FIX / NOTE</strong> — MUST FIX blocks proceeding, SHOULD FIX presented to user</li>
+      <li>Progress file tracks learnings between phases</li>
+      <li>Sequential commits per phase (easy to revert individually)</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Audit Trail Architecture</h2>
+
+<div class="mermaid">
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#1f6feb', 'primaryTextColor': '#c9d1d9', 'primaryBorderColor': '#388bfd', 'lineColor': '#8b949e', 'secondaryColor': '#161b22', 'tertiaryColor': '#161b22', 'fontSize': '14px' }}}%%
+flowchart TB
+  CC["Claude Code\nPostToolUse hook"]
+  UP["upfront hook\n(Go binary)"]
+  PARSE["Parse thinking records\nfrom tool_response"]
+  Q[".upfront/audit.jsonl\n(local disk queue)"]
+  R["Remote endpoint\n(Langfuse / Arize / webhook)"]
+  MGR["Manager\ntriage view"]
+
+  CC -->|"stdin JSON"| UP
+  UP --> PARSE
+  PARSE -->|"O_APPEND"| Q
+  Q -->|"flush\n(rename-and-swap)"| R
+  Q -->|"upfront log"| MGR
+  R -->|"dashboard"| MGR
+
+  style CC fill:#161b22,stroke:#30363d,color:#c9d1d9
+  style UP fill:#238636,stroke:#3fb950,color:#fff
+  style PARSE fill:#238636,stroke:#3fb950,color:#fff
+  style Q fill:#238636,stroke:#3fb950,color:#fff
+  style R fill:#1f6feb,stroke:#388bfd,color:#fff
+  style MGR fill:#161b22,stroke:#30363d,color:#c9d1d9
+</div>
+
+<div class="card new">
+  <h3>Event Format <span class="badge new">new</span></h3>
+  <div class="detail">
+    Extends the Delivery-Gap-Toolkit agent-monitoring trace schema. Compatible with Langfuse, Arize Phoenix, Helicone, Portkey.
+    <pre style="background: var(--bg); padding: 1rem; border-radius: 6px; margin-top: 0.5rem; overflow-x: auto; font-size: 0.8rem; color: var(--text-muted);">{
+  "session_id": "claude-session-uuid",
+  "timestamp": "ISO-8601",
+  "agent_id": "upfront",
+  "action_type": "upfront_phase_complete",
+  "action_detail": "Phase 1: Intent",
+  "target": "specs/feature-name.md",
+  "feature_name": "feature-name",
+  "phase": 1,
+  "phase_name": "intent",
+  "phases_total": 4,
+  "thinking_summary": "Solving checkout timeouts...",
+  "skipped_questions": [],
+  "result": "success"
+}</pre>
+  </div>
+</div>
+
+<h2>Installation Locations</h2>
+
+<table>
+  <thead>
+    <tr><th>Location</th><th>Commands</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>~/.claude/commands/</code></td>
+      <td>/feature, /plan, /build</td>
+      <td><span class="badge new">installed</span></td>
+    </tr>
+    <tr>
+      <td><code>~/dev/upfront/.claude/commands/</code></td>
+      <td>/feature, /plan, /build</td>
+      <td><span class="badge new">installed</span></td>
+    </tr>
+    <tr>
+      <td><code>Delivery-Gap-Toolkit/.claude/commands/</code></td>
+      <td>/feature, /plan, /build</td>
+      <td><span class="badge changed">updated</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Metrics This Enables</h2>
+
+<div class="grid">
+  <div class="card new">
+    <h3>Adoption Rate</h3>
+    <div class="detail">% of merged PRs with a corresponding /feature spec</div>
+  </div>
+  <div class="card new">
+    <h3>Effectiveness</h3>
+    <div class="detail">Rework rate difference: spec'd vs unspec'd features</div>
+  </div>
+  <div class="card new">
+    <h3>Depth</h3>
+    <div class="detail">Features completing all 4 phases vs bailing early</div>
+  </div>
+  <div class="card existing">
+    <h3>Rework Rate</h3>
+    <div class="detail">Existing metric — now comparable across spec'd/unspec'd</div>
+  </div>
+</div>
+
+<h2>Implementation Plan</h2>
+
+<div class="mermaid">
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#1f6feb', 'primaryTextColor': '#c9d1d9', 'primaryBorderColor': '#388bfd', 'lineColor': '#8b949e', 'secondaryColor': '#161b22', 'tertiaryColor': '#161b22', 'fontSize': '14px' }}}%%
+flowchart LR
+  P1["Phase 1\nData model\n~120 LOC"]
+  P2["Phase 2\nHook parser\n~200 LOC"]
+  P3["Phase 3\nJSONL queue\n~180 LOC"]
+  P4["Phase 4\nRemote sender\n~130 LOC"]
+  P5["Phase 5\nCLI\n~200 LOC"]
+  P6["Phase 6\nInstall + docs\n~150 LOC"]
+
+  P1 --> P2
+  P2 --> P3
+  P3 --> P4
+  P4 --> P5
+  P5 --> P6
+
+  style P1 fill:#238636,stroke:#3fb950,color:#fff
+  style P2 fill:#238636,stroke:#3fb950,color:#fff
+  style P3 fill:#238636,stroke:#3fb950,color:#fff
+  style P4 fill:#238636,stroke:#3fb950,color:#fff
+  style P5 fill:#238636,stroke:#3fb950,color:#fff
+  style P6 fill:#238636,stroke:#3fb950,color:#fff
+</div>
+
+<div class="confirm-section">
+  <h2>Setup Confirmation</h2>
+  <ul class="checklist">
+    <li class="checked"><code>/feature</code> installed globally with concurrency level</li>
+    <li class="checked"><code>/plan</code> installed globally with 3-level architecture review</li>
+    <li class="checked"><code>/build</code> installed globally with strict TDD + post-phase review</li>
+    <li class="checked">Specs copied to <code>~/dev/upfront/specs/</code></li>
+    <li class="checked">Go module initialized (<code>github.com/brennhill/upfront</code>)</li>
+    <li class="checked">Directory scaffolding created</li>
+    <li class="checked">Toolkit committed and pushed</li>
+    <li>Upfront GitHub repo created and pushed</li>
+    <li>Phase 1 implementation started (<code>/build specs/upfront-audit-hooks-plan.md</code>)</li>
+  </ul>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    flowchart: { curve: 'basis', padding: 20 },
+    themeVariables: {
+      darkMode: true,
+      background: '#161b22',
+      primaryColor: '#1f6feb',
+      primaryTextColor: '#c9d1d9',
+      primaryBorderColor: '#388bfd',
+      lineColor: '#8b949e',
+      fontSize: '14px'
+    }
+  });
+</script>
+
+</body>
+</html>

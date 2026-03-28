@@ -52,6 +52,32 @@ This file is the memory between phases. Each sub-agent reads it. You update it a
 
 ## Process
 
+### Pre-flight: Verify guardrails
+
+Before starting Phase 1 (skip this on resume), verify the project's architectural guardrails are in place and passing. Run the checks — do not assume they work.
+
+1. **Build:** Does the project compile/build cleanly? Run the build command. If it fails, stop — do not build on a broken foundation.
+2. **Tests:** Do existing tests pass? Run the test suite. If tests fail before you've changed anything, stop.
+3. **Linting:** Is the linter configured and passing? Run it. If it's not configured, note it in the progress file.
+4. **Formatting:** Is the formatter configured? Run it. If it produces changes on the existing code, note it — the codebase has formatting drift.
+5. **Type checking:** For typed languages, does the type checker pass?
+
+**If anything fails:** Report it to the user before proceeding.
+```
+Pre-flight check failed:
+- [what failed]
+- [what the error is]
+This must be fixed before Phase 1. Should I fix it, or do you want to handle it?
+```
+
+If the plan includes a Phase 0 (guardrails setup from `/plan`), run that first, then re-run pre-flight.
+
+**If everything passes:** Report briefly and proceed.
+```
+Pre-flight passed: build ✓ tests ✓ lint ✓ format ✓
+Starting Phase 1...
+```
+
 ### For each phase:
 
 #### 1. Announce the phase

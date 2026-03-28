@@ -128,7 +128,37 @@ Architecture is project knowledge, not per-feature knowledge. After all three le
 
 The plan file references the architecture doc rather than duplicating it.
 
-### 4. Propose phases
+### 4. Audit architectural guardrails
+
+Before proposing any implementation phases, check whether the project has tooling that enforces the architecture discussed in step 3. The architecture review is worthless if nothing prevents the code from violating it.
+
+**Check for each category:**
+
+- **Type safety:** Is there a type checker / compiler configured and running? (Go compiler, TypeScript strict mode, mypy, etc.) If not, the AI will produce code with type errors that won't be caught until runtime.
+- **Linting:** Is there a linter configured? Does it enforce the patterns from the architecture review? (import boundaries, naming conventions, forbidden patterns) If the architecture says "no cross-module imports" but nothing enforces it, it will be violated by Phase 2.
+- **Test infrastructure:** Does the test runner work? Are there existing tests that pass? If `go test ./...` or `npm test` fails before you start, you cannot do TDD.
+- **Formatting:** Is there an auto-formatter? If not, every phase will introduce formatting inconsistencies that pollute diffs.
+- **Build:** Does the project build cleanly right now? If it's already broken, you're building on a broken foundation.
+
+**For each gap found, present it:**
+
+"The architecture review says [X pattern], but there's no tooling that enforces it. Options:
+1. Add [specific tool/config] as Phase 0 before the feature work
+2. Accept the risk and rely on code review to catch violations
+3. This doesn't matter for this feature — here's why"
+
+Let the user decide. If they choose option 1, add a Phase 0 to the plan that installs and configures the guardrail. Phase 0 must pass before any feature code is written.
+
+**What to look for specifically:**
+
+- Go: `go vet`, `staticcheck` or `golangci-lint`, `go test` passing, `gofmt`/`goimports`
+- TypeScript: `tsc --strict`, ESLint with import rules, `npm test` passing, Prettier
+- Python: `mypy` or `pyright`, `ruff` or `flake8`, `pytest` passing, `black` or `ruff format`
+- Any language: CI pipeline configured, pre-commit hooks, build scripts
+
+Do not silently assume guardrails exist. Check. If the project is brand new with no tooling, say so — "This project has zero guardrails. I recommend adding [X, Y, Z] as Phase 0."
+
+### 5. Propose phases
 
 Break the work into phases. Each phase should be:
 - **~400 lines or less** — based on your estimate of actual change size, not a guess
@@ -136,12 +166,14 @@ Break the work into phases. Each phase should be:
 - **Independently committable** — the codebase compiles, tests pass, and nothing is broken after this phase alone
 - **Ordered by dependency** — schema before logic, logic before API, API before UI
 
+If Phase 0 (guardrails) was agreed upon, it comes first. No feature code until the tooling is in place.
+
 For each phase, define:
 1. **What changes** — specific files and what happens to them
 2. **Automated verification** — exact commands to run (e.g., `make test`, `npm run typecheck`, specific test files)
 3. **Manual verification** — what a human checks before the next phase begins
 
-### 5. Present for review
+### 6. Present for review
 
 Present the plan to the user. For each phase, explain:
 - What it does and why it's in this order
@@ -152,7 +184,7 @@ Ask: "Does this phasing make sense? Should I adjust the order, split any phase f
 
 Iterate based on feedback.
 
-### 6. Write to disk
+### 7. Write to disk
 
 Once approved, write the plan as a separate file at `specs/[feature-name]-plan.md`:
 
