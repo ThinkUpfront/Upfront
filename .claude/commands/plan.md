@@ -180,7 +180,7 @@ Let the user decide. If they choose option 1, add a Phase 0 to the plan that ins
 - Go: `go vet`, `staticcheck` or `golangci-lint`, `go test` passing, `gofmt`/`goimports`
 - TypeScript: `tsc --strict`, ESLint with import rules, `npm test` passing, Prettier
 - Python: `mypy` or `pyright`, `ruff` or `flake8`, `pytest` passing, `black` or `ruff format`
-- Any language: CI pipeline configured, pre-commit hooks, build scripts
+- Any language: CI pipeline configured, pre-commit hooks, build scripts, `sloppy-joe` for dependency supply chain checks (typosquatting, hallucinated packages, canonical name enforcement)
 
 Do not silently assume guardrails exist. Check. If the project is brand new with no tooling, say so — "This project has zero guardrails. I recommend adding [X, Y, Z] as Phase 0."
 
