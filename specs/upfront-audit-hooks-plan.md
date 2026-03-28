@@ -9,11 +9,11 @@
 **Estimated size:** ~120 lines
 
 **Automated verification:**
-- [ ] `cd upfront && go build ./...`
-- [ ] `cd upfront && go test ./internal/format/...`
+- [x] `cd upfront && go build ./...`
+- [x] `cd upfront && go test ./internal/format/...`
 
 **Manual verification:**
-- [ ] Event JSON output matches agent-monitoring trace format from `quality-correctness-gates/agent-monitoring/README.md`
+- [x] Event JSON output matches agent-monitoring trace format from `quality-correctness-gates/agent-monitoring/README.md`
 
 **Post-phase:** Run code review, fix all issues before proceeding.
 

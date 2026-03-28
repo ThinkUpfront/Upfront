@@ -1,0 +1,130 @@
+version: "2"
+
+run:
+  timeout: 3m
+
+linters:
+  enable:
+    # correctness
+    - errcheck
+    - govet
+    - staticcheck
+    - ineffassign
+    - nilerr
+    - nilnesserr
+    - bodyclose
+    - errorlint
+    - contextcheck
+    - noctx
+    - rowserrcheck
+    - sqlclosecheck
+    - musttag
+    - reassign
+    - wastedassign
+    - exhaustive
+
+    # security
+    - gosec
+
+    # unused / dead code
+    - unused
+    - unparam
+    - unconvert
+
+    # style
+    - misspell
+    - errname
+    - revive
+    - predeclared
+    - dupword
+    - copyloopvar
+    - recvcheck
+    - nakedret
+    - nonamedreturns
+    - whitespace
+
+    # performance
+    - gocritic
+    - prealloc
+    - perfsprint
+
+    # complexity
+    - gocognit
+    - gocyclo
+    - nestif
+    - funlen
+
+    # modern go
+    - modernize
+    - intrange
+    - usestdlibvars
+    - fatcontext
+
+    # misc
+    - goconst
+    - godot
+    - forcetypeassert
+    - nosprintfhostport
+    - bidichk
+    - asciicheck
+    - durationcheck
+    - makezero
+    - thelper
+    - tparallel
+    - usetesting
+
+  settings:
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
+        - performance
+    gocognit:
+      min-complexity: 20
+    gocyclo:
+      min-complexity: 15
+    nestif:
+      min-complexity: 5
+    funlen:
+      lines: 80
+      statements: 50
+    nakedret:
+      max-func-lines: 20
+    goconst:
+      min-len: 3
+      min-occurrences: 3
+    revive:
+      rules:
+        - name: blank-imports
+        - name: context-as-argument
+        - name: dot-imports
+        - name: error-return
+        - name: error-strings
+        - name: error-naming
+        - name: exported
+        - name: increment-decrement
+        - name: var-naming
+        - name: range
+        - name: receiver-naming
+        - name: indent-error-flow
+        - name: superfluous-else
+        - name: unreachable-code
+        - name: unused-parameter
+
+  exclusions:
+    presets:
+      - std-error-handling
+    rules:
+      - path: _test\.go
+        linters:
+          - gocyclo
+          - gocognit
+          - funlen
+
+formatters:
+  enable:
+    - gofumpt
+    - goimports
+  settings:
+    gofumpt:
+      extra-rules: true
