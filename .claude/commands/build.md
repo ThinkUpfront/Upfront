@@ -52,31 +52,115 @@ This file is the memory between phases. Each sub-agent reads it. You update it a
 
 ## Process
 
-### Pre-flight: Verify guardrails
+### Pre-flight: Verify and harden guardrails
 
-Before starting Phase 1 (skip this on resume), verify the project's architectural guardrails are in place and passing. Run the checks — do not assume they work.
+Before starting Phase 1 (skip this on resume), audit the project's tooling and verify everything works. This is two steps: check what's installed, then strongly recommend what's missing.
 
-1. **Build:** Does the project compile/build cleanly? Run the build command. If it fails, stop — do not build on a broken foundation.
-2. **Tests:** Do existing tests pass? Run the test suite. If tests fail before you've changed anything, stop.
-3. **Linting:** Is the linter configured and passing? Run it. If it's not configured, note it in the progress file.
-4. **Formatting:** Is the formatter configured? Run it. If it produces changes on the existing code, note it — the codebase has formatting drift.
+#### Step 1: Detect the ecosystem
+
+Read the project root to identify what's in play:
+- `go.mod` → Go
+- `package.json` → Node/TypeScript
+- `pyproject.toml` / `setup.py` / `requirements.txt` → Python
+- `Cargo.toml` → Rust
+- `pom.xml` / `build.gradle` → JVM
+- `.github/workflows/` → CI pipeline
+- `.pre-commit-config.yaml` / `.husky/` → Git hooks
+- `Makefile` / `Justfile` / `Taskfile` → Build automation
+
+Note everything found. Multiple ecosystems in one repo (e.g., Go backend + TypeScript frontend) each need their own guardrails.
+
+#### Step 2: Verify existing tools
+
+For each ecosystem detected, run the existing tools:
+
+1. **Build:** Does it compile/build cleanly? Run it. If it fails, stop.
+2. **Tests:** Do existing tests pass? Run the suite. If tests fail before you've changed anything, stop.
+3. **Linting:** Is a linter configured and passing? Run it.
+4. **Formatting:** Is a formatter configured? Run it. If it produces changes, the codebase has drift.
 5. **Type checking:** For typed languages, does the type checker pass?
 
-**If anything fails:** Report it to the user before proceeding.
+#### Step 3: Audit for missing tools
+
+For each ecosystem, check for the following categories and **strongly recommend** anything missing. Do not silently skip this. Present every gap.
+
+**Go:**
+- [ ] `go vet` — built-in, no excuse not to run it
+- [ ] `staticcheck` or `golangci-lint` — catches bugs `go vet` misses (dead code, ineffective assignments, incorrect format strings, unused parameters)
+- [ ] `govulncheck` — known vulnerability detection in dependencies
+- [ ] `gofmt` or `goimports` — formatting
+- [ ] `go test -race` — race detector (must be in CI, not optional for concurrent code)
+
+**TypeScript/JavaScript:**
+- [ ] `tsc --strict` (TypeScript) — strict type checking
+- [ ] ESLint with `@typescript-eslint` — linting with type-aware rules
+- [ ] `eslint-plugin-security` — security-focused lint rules
+- [ ] Prettier — formatting
+- [ ] `npm audit` or `pnpm audit` — dependency vulnerability scan
+- [ ] `knip` or `ts-prune` — dead code / unused exports detection
+
+**Python:**
+- [ ] `mypy --strict` or `pyright` — type checking
+- [ ] `ruff` (replaces flake8, isort, pyflakes, and many more) — linting + formatting
+- [ ] `bandit` — security-focused static analysis
+- [ ] `pip-audit` or `safety` — dependency vulnerability scan
+- [ ] `vulture` — dead code detection
+
+**Rust:**
+- [ ] `cargo clippy` — linting (much more than the compiler catches)
+- [ ] `cargo audit` — dependency vulnerability scan
+- [ ] `cargo fmt` — formatting
+- [ ] `cargo deny` — license and advisory checks
+
+**JVM (Java/Kotlin):**
+- [ ] SpotBugs or Error Prone — bug detection
+- [ ] Checkstyle or ktlint — style enforcement
+- [ ] OWASP Dependency-Check — vulnerability scan
+- [ ] Spotless — formatting
+
+**Any ecosystem:**
+- [ ] `gitleaks` or `trufflehog` — secret detection (catches API keys, passwords, tokens committed to repo)
+- [ ] Pre-commit hooks or git hooks — run checks before commit, not just in CI
+- [ ] CI pipeline running all of the above — tools that don't run automatically don't exist
+
+#### Step 4: Present the audit
+
 ```
-Pre-flight check failed:
-- [what failed]
-- [what the error is]
-This must be fixed before Phase 1. Should I fix it, or do you want to handle it?
+Pre-flight audit:
+
+Ecosystems detected: [Go, TypeScript, etc.]
+
+Existing tools (passing):
+  ✓ go build
+  ✓ go test
+  ✓ gofmt
+
+Existing tools (FAILING):
+  ✗ golangci-lint — [error message]
+
+Missing tools (strongly recommended):
+  ⚠ govulncheck — dependency vulnerability scanning (install: go install golang.org/x/vuln/cmd/govulncheck@latest)
+  ⚠ go test -race — race detector not in test command (critical for concurrent code)
+  ⚠ gitleaks — no secret detection configured
+
+Should I install the missing tools before we start building? This takes 5 minutes now vs debugging a preventable issue later.
 ```
 
-If the plan includes a Phase 0 (guardrails setup from `/plan`), run that first, then re-run pre-flight.
+**Push hard.** Do not present missing tools as optional nice-to-haves. Frame them as "this will catch bugs that your tests won't." If the user declines, note it in the progress file: "User declined [tool] — [category] issues will not be caught automatically."
 
-**If everything passes:** Report briefly and proceed.
+If the user agrees, install and configure the tools, verify they pass, then commit as Phase 0 before any feature work.
+
+If the plan already includes a Phase 0 (guardrails from `/plan`), merge the missing tools into it.
+
+#### Step 5: Confirm and proceed
+
+**If everything passes and no critical gaps:**
 ```
-Pre-flight passed: build ✓ tests ✓ lint ✓ format ✓
+Pre-flight passed: build ✓ tests ✓ lint ✓ format ✓ security ✓
 Starting Phase 1...
 ```
+
+**If there are failures or critical gaps:** Report and wait for the user before proceeding.
 
 ### For each phase:
 
@@ -370,11 +454,64 @@ Then tell the user:
 
 ## Resuming
 
-If the user re-runs `/build` on a plan with some phases already completed:
-- Read `specs/[feature-name]-progress.md` to understand what's done
-- Trust that completed phases are done (they're committed)
-- Pick up from the first unchecked phase
-- The progress file gives the new context everything it needs — no conversation history required
+If the user re-runs `/build` on a plan with some phases already completed, follow this crash recovery protocol before continuing.
+
+### Step 1: Detect uncommitted changes
+
+Before reading the progress file, run `git status` to check for uncommitted changes (modified, added, or untracked files within the feature's scope).
+
+If there are uncommitted changes:
+
+```
+Found uncommitted changes from a previous session (likely a crash mid-Phase [N]):
+
+  modified: src/queue/writer.go
+  modified: src/queue/writer_test.go
+  new file: src/queue/buffer.go
+
+Options:
+  a) Keep these changes and continue Phase [N] from where it left off
+  b) Stash these changes and restart Phase [N] clean (git stash with message "build: stash Phase [N] crash recovery")
+  c) Discard these changes and restart Phase [N] (WARNING: destructive — will ask for confirmation)
+```
+
+Wait for the user to choose before proceeding. If they choose (c), confirm explicitly: "This will discard all uncommitted changes. Are you sure?" Do not run `git checkout` on tracked files or remove untracked files without explicit confirmation.
+
+### Step 2: Reconcile progress file with git history
+
+After handling any uncommitted changes, reconcile the two sources of truth:
+
+1. Read `specs/[feature-name]-progress.md` to see which phases are marked complete.
+2. Check `git log --oneline` for commits matching the pattern `feat([feature-name]): [N]/` to verify each completed phase has a corresponding commit.
+
+For each phase marked complete in the progress file, verify a commit exists:
+- If the progress file says Phase N is complete AND a commit exists: confirmed complete.
+- If the progress file says Phase N is complete BUT no commit exists: flag it.
+
+```
+WARNING: Progress file says Phase 3 is complete, but I can't find the commit.
+The session may have crashed after updating progress but before committing.
+Phase 3 will need to be re-run.
+```
+
+Pick up from the first phase that does not have BOTH a progress entry AND a matching commit.
+
+### Step 3: Present the resumption summary
+
+Before starting work, present a structured handoff note:
+
+```
+Resuming build for [feature-name]:
+
+Completed: Phase 1 (committed), Phase 2 (committed)
+Unverified: Phase 3 (progress file says complete, no commit found — will re-run)
+Next: Phase 3
+
+Learnings from prior phases:
+- [key learnings from the progress file that affect upcoming work]
+```
+
+Wait for user confirmation, then proceed with the next phase. Skip the pre-flight audit on resume (it was already done before Phase 1).
 
 ## Why fresh context per phase
 

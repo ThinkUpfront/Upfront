@@ -40,6 +40,32 @@ Then answer:
 
 ### 3. Architectural deep-dive
 
+#### Staleness check
+
+Before starting the deep-dive, check if `specs/ARCHITECTURE.md` exists.
+
+**If it exists:**
+1. Read it fully.
+2. Find the "Last reviewed" (or "Last explored") date in the file.
+3. Run `git log --oneline --since="[that date]" | wc -l` to count commits since that date.
+4. Calculate how many days have elapsed since that date.
+
+**If more than 30 days old AND there have been commits since:**
+- Present: "ARCHITECTURE.md was last reviewed [date]. There have been [N] commits since then. This document may be stale — using it as-is risks building on wrong assumptions."
+- Do NOT ask the user "is this still right?" — that invites "yes" rubber-stamping.
+- Instead, actively read the codebase and COMPARE what you find to what ARCHITECTURE.md says. Walk through each section of the document and verify it against the actual code. Present specific drifts: "ARCHITECTURE.md says X, but I found Y."
+- Strongly push for a full re-review: "I need to verify this is still accurate before planning. Let me walk through the architecture to check for drift."
+- If major drift is found, update ARCHITECTURE.md with corrections before proceeding to phases. Present the changes to the user for confirmation.
+
+**If less than 30 days old OR no commits since:**
+- Note: "Architecture reviewed [date], [N] commits since — appears current."
+- Proceed normally.
+
+**If `specs/ARCHITECTURE.md` doesn't exist:**
+- Note that it doesn't exist and proceed — the deep-dive below will create it.
+
+---
+
 Before proposing phases, walk through the architecture at three levels. Each level must be confirmed by the user before proceeding to the next. Wrong assumptions at any level will poison every phase.
 
 **This is a conversation, not a presentation.** Ask questions, challenge answers, push for specifics. Do not accept vague descriptions — if the user says "it's a standard REST API," ask what "standard" means in this codebase. Do they use middleware? How is auth handled? What's the error response shape? Is there a router or is it handler-per-file?
