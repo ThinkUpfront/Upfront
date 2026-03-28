@@ -1,0 +1,23 @@
+# Go
+upfront
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+
+# Upfront local data
+.upfront/
+
+# Claude
+.claude/
