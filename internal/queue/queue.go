@@ -94,17 +94,17 @@ func (q *Queue) Flush() ([]format.Event, error) {
 	flushPath := q.path + ".flushing"
 
 	// Recover events from a pre-existing .flushing file left by a prior crash.
+	// Remove it after reading so the rename below doesn't overwrite it.
 	prior, err := readEventsFromFile(flushPath)
 	if err != nil {
 		return nil, err
 	}
+	if len(prior) > 0 {
+		_ = os.Remove(flushPath)
+	}
 
 	if err := os.Rename(q.path, flushPath); err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			// No new events, but may have recovered prior ones.
-			if len(prior) > 0 {
-				_ = os.Remove(flushPath)
-			}
 			return prior, nil
 		}
 		return nil, err
@@ -161,44 +161,16 @@ func (q *Queue) Purge(ttl time.Duration) error {
 		}
 	}
 
-	// Write kept events back. New events from concurrent Append go to the
-	// fresh audit.jsonl created after our rename, so they are not lost.
-	tmpPath := q.path + ".purge-tmp"
-	f, err := os.OpenFile(filepath.Clean(tmpPath), os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o600)
-	if err != nil {
-		_ = os.Rename(purgePath, q.path)
-		return err
-	}
-	for i := range kept {
-		data, err := json.Marshal(kept[i])
-		if err != nil {
-			_ = f.Close()
-			_ = os.Remove(tmpPath)
-			_ = os.Rename(purgePath, q.path)
-			return err
-		}
-		data = append(data, '\n')
-		if _, err := f.Write(data); err != nil {
-			_ = f.Close()
-			_ = os.Remove(tmpPath)
-			_ = os.Rename(purgePath, q.path)
-			return err
-		}
-	}
-	if err := f.Close(); err != nil {
-		_ = os.Remove(tmpPath)
-		_ = os.Rename(purgePath, q.path)
-		return err
-	}
-
-	// Replace the purging file with the filtered version.
 	_ = os.Remove(purgePath)
-	// If a new audit.jsonl was created by concurrent Append, we need to
-	// prepend our kept events. For simplicity, just rename and any concurrent
-	// events stay in the new file — they'll be picked up on next ReadAll.
-	if len(kept) > 0 {
-		return os.Rename(tmpPath, q.path)
+
+	// Append kept events to audit.jsonl using O_APPEND. If a concurrent
+	// Append created a new file while we held the rename, both sets of
+	// events end up in the same file. Order may not be chronological but
+	// no events are lost.
+	for i := range kept {
+		if err := q.Append(&kept[i]); err != nil {
+			return err
+		}
 	}
-	_ = os.Remove(tmpPath)
 	return nil
 }

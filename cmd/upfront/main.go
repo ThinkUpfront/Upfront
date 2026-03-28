@@ -216,7 +216,7 @@ func cmdLog(args []string, stdout, stderr io.Writer) int {
 
 	for i := range filtered {
 		e := &filtered[i]
-		fmt.Fprintf(stdout, "%s  %-20s  phase %d/%-2d  %s  %s\n",
+		fmt.Fprintf(stdout, "%s  %-20s  phase %d/%d  %s  %s\n",
 			e.Timestamp, e.FeatureName, e.Phase, e.PhasesTotal, e.PhaseName, truncate(e.ThinkingSummary, 60))
 	}
 	return 0
