@@ -41,11 +41,11 @@
 **Estimated size:** ~180 lines
 
 **Automated verification:**
-- [ ] `cd upfront && go test ./internal/queue/... -race`
-- [ ] Race detector passes on concurrent write test
+- [x] `cd upfront && go test ./internal/queue/... -race`
+- [x] Race detector passes on concurrent write test
 
 **Manual verification:**
-- [ ] Inspect generated JSONL — one valid JSON object per line
+- [x] Inspect generated JSONL — one valid JSON object per line
 
 **Post-phase:** Run code review, fix all issues before proceeding.
 
