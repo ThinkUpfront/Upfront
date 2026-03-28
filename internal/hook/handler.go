@@ -56,6 +56,9 @@ func ExtractEvents(h *Input) []format.Event {
 	if h.ToolName != "Skill" {
 		return nil
 	}
+	if h.ToolInput.SkillName != "feature" {
+		return nil
+	}
 	if h.ToolResponse == "" {
 		return nil
 	}

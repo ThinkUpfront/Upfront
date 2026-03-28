@@ -64,6 +64,21 @@ func TestExtractEvents_NonSkillTool(t *testing.T) {
 	}
 }
 
+func TestExtractEvents_NonFeatureSkill(t *testing.T) {
+	h := Input{
+		SessionID:    "sess-nf",
+		Cwd:          "/tmp",
+		ToolName:     "Skill",
+		ToolInput:    ToolInput{SkillName: "build"},
+		ToolResponse: "### Thinking Record: Intent\nsome text\n---",
+	}
+
+	events := ExtractEvents(&h)
+	if len(events) != 0 {
+		t.Errorf("expected 0 events for non-feature skill, got %d", len(events))
+	}
+}
+
 func TestExtractEvents_EmptyToolResponse(t *testing.T) {
 	h := Input{
 		SessionID:    "sess-2",

@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/brennhill/upfront/internal/format"
@@ -40,6 +41,9 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	}
 
 	switch args[0] {
+	case "help", "--help", "-h":
+		fmt.Fprint(stdout, usage)
+		return 0
 	case "hook":
 		return cmdHook(stdin, stdout, stderr)
 	case "flush":
@@ -65,12 +69,16 @@ func queuePath() string {
 	return filepath.Join(cwd, ".upfront", "audit.jsonl")
 }
 
-func loadCfg() *remote.Config {
+func loadCfg(stderr io.Writer) *remote.Config {
 	cwd, err := os.Getwd()
 	if err != nil {
 		cwd = "."
 	}
-	cfg, _ := remote.LoadConfig(cwd)
+	cfg, err := remote.LoadConfig(cwd)
+	if err != nil {
+		fmt.Fprintf(stderr, "warning: config error: %v\n", err)
+		return nil
+	}
 	return cfg
 }
 
@@ -120,7 +128,7 @@ func cmdHook(stdin io.Reader, stdout, stderr io.Writer) int {
 }
 
 func tryRemoteFlush(q *queue.Queue, stderr io.Writer) {
-	cfg := loadCfg()
+	cfg := loadCfg(stderr)
 	if cfg == nil || cfg.Endpoint == "" {
 		return
 	}
@@ -134,17 +142,18 @@ func tryRemoteFlush(q *queue.Queue, stderr io.Writer) {
 		return
 	}
 	if err := sender.Send(flushed); err != nil {
-		// Re-queue events that failed to send.
-		for i := range flushed {
-			_ = q.Append(&flushed[i])
-		}
 		fmt.Fprintf(stderr, "warning: remote send failed: %v\n", err)
+		for i := range flushed {
+			if appendErr := q.Append(&flushed[i]); appendErr != nil {
+				fmt.Fprintf(stderr, "error: failed to re-queue event: %v\n", appendErr)
+			}
+		}
 	}
 }
 
 func cmdFlush(stdout, stderr io.Writer) int {
-	cfg := loadCfg()
-	if cfg == nil {
+	cfg := loadCfg(stderr)
+	if cfg == nil || cfg.Endpoint == "" {
 		fmt.Fprintln(stdout, "no remote endpoint configured; nothing to flush")
 		return 0
 	}
@@ -163,11 +172,12 @@ func cmdFlush(stdout, stderr io.Writer) int {
 	}
 
 	if err := sender.Send(events); err != nil {
-		// Re-queue events on failure.
-		for i := range events {
-			_ = q.Append(&events[i])
-		}
 		fmt.Fprintf(stderr, "error sending events: %v\n", err)
+		for i := range events {
+			if appendErr := q.Append(&events[i]); appendErr != nil {
+				fmt.Fprintf(stderr, "error: failed to re-queue event: %v\n", appendErr)
+			}
+		}
 		return 1
 	}
 
@@ -230,14 +240,16 @@ func filterEvents(events []format.Event, feature string, phase int) []format.Eve
 }
 
 func truncate(s string, n int) string {
-	if len(s) <= n {
+	s = strings.ReplaceAll(s, "\n", " ")
+	runes := []rune(s)
+	if len(runes) <= n {
 		return s
 	}
-	return s[:n] + "..."
+	return string(runes[:n]) + "..."
 }
 
 func cmdPurge(stdout, stderr io.Writer) int {
-	cfg := loadCfg()
+	cfg := loadCfg(stderr)
 	ttlDays := defaultTTLDays
 	if cfg != nil && cfg.TTLDays > 0 {
 		ttlDays = cfg.TTLDays
@@ -275,9 +287,12 @@ func cmdStatus(stdout, stderr io.Writer) int {
 		fmt.Fprintln(stdout, "Last event:  (none)")
 	}
 
-	cfg := loadCfg()
+	cfg := loadCfg(stderr)
 	if cfg != nil && cfg.Endpoint != "" {
 		fmt.Fprintf(stdout, "Remote:      %s\n", cfg.Endpoint)
+		if cfg.ProjectName != "" {
+			fmt.Fprintf(stdout, "Project:     %s\n", cfg.ProjectName)
+		}
 	} else {
 		fmt.Fprintln(stdout, "Remote:      (not configured)")
 	}
