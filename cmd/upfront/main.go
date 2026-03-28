@@ -147,9 +147,9 @@ func tryRemoteFlush(q *queue.Queue, stderr io.Writer) {
 	if len(flushed) == 0 {
 		return
 	}
+	defer q.NackFlush() // default: keep .flushing, release lock
 	if err := sender.Send(flushed); err != nil {
 		fmt.Fprintf(stderr, "warning: remote send failed, events staged in .flushing for retry: %v\n", err)
-		q.NackFlush()
 		return
 	}
 	q.AckFlush()
@@ -174,10 +174,10 @@ func cmdFlush(stdout, stderr io.Writer) int {
 		fmt.Fprintln(stdout, "no events to flush")
 		return 0
 	}
+	defer q.NackFlush() // default: keep .flushing, release lock
 
 	if err := sender.Send(events); err != nil {
 		fmt.Fprintf(stderr, "error sending events, events staged in .flushing for retry: %v\n", err)
-		q.NackFlush()
 		return 1
 	}
 	q.AckFlush()

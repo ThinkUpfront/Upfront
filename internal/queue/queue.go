@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"time"
@@ -157,8 +158,11 @@ func (q *Queue) Flush() ([]format.Event, error) {
 	}
 
 	// Recover .drain from prior crash (rename succeeded but append didn't).
-	// Only remove .drain after a successful append to .flushing.
-	if drained, _ := readEventsFromFile(drainPath); len(drained) > 0 {
+	drained, drainErr := readEventsFromFile(drainPath)
+	if drainErr != nil {
+		return fail(fmt.Errorf("recover .drain: %w", drainErr))
+	}
+	if len(drained) > 0 {
 		if err := appendEventsToFile(flushPath, drained); err != nil {
 			return fail(err)
 		}
