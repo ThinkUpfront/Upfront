@@ -259,7 +259,9 @@ The spec is not the point. The thinking the spec forces is the point.
 
 ## License
 
-Apache 2.0. See [LICENSE](LICENSE).
+AGPL-3.0. See [LICENSE](LICENSE).
+
+For commercial licensing (proprietary use, SaaS embedding, or redistribution without AGPL obligations), contact [brenn@thedeliverygap.com](mailto:brenn@thedeliverygap.com).
 
 ## Related
 
