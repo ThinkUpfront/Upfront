@@ -9,8 +9,28 @@ export default defineConfig({
 		starlight({
 			title: 'Upfront',
 			tagline: 'Force thinking before code.',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/brennhill/upfront' }],
+			social: [
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/brennhill/upfront' },
+				{ icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/in/brennhill/' },
+			],
 			customCss: ['./src/styles/custom.css'],
+			head: [
+				{
+					tag: 'link',
+					attrs: {
+						rel: 'preconnect',
+						href: 'https://fonts.googleapis.com',
+					},
+				},
+				{
+					tag: 'link',
+					attrs: {
+						rel: 'preconnect',
+						href: 'https://fonts.gstatic.com',
+						crossorigin: '',
+					},
+				},
+			],
 			sidebar: [
 				{ label: 'Why Upfront', slug: 'why' },
 				{ label: 'Human-First Development', slug: 'human-first' },
@@ -33,7 +53,7 @@ export default defineConfig({
 					],
 				},
 				{
-					label: 'Support Commands',
+					label: 'Support',
 					items: [
 						{ label: '/note', slug: 'commands/note' },
 						{ label: '/pause & /resume', slug: 'commands/pause-resume' },

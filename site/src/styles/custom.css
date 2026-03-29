@@ -1,12 +1,146 @@
+/* ── Upfront Brand — Starlight Override ── */
+
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ── Light mode (default) ── */
 :root {
-	--sl-color-accent-low: #1a1a2e;
-	--sl-color-accent: #e94560;
-	--sl-color-accent-high: #ffd6de;
-	--sl-font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+	--sl-color-accent-low: #fff3eb;
+	--sl-color-accent: #b84a18;
+	--sl-color-accent-high: #3a1505;
+	--sl-color-white: #1a1816;
+	--sl-color-gray-1: #252220;
+	--sl-color-gray-2: #4a4640;
+	--sl-color-gray-3: #6b6560;
+	--sl-color-gray-4: #9a9590;
+	--sl-color-gray-5: #d0ccc4;
+	--sl-color-gray-6: #f2efe8;
+	--sl-color-black: #faf7f2;
+
+	--sl-color-bg-nav: rgba(250, 247, 242, 0.88);
+	--sl-color-bg-sidebar: #f5f2ec;
+	--sl-color-hairline-light: #e0dcd4;
+	--sl-color-hairline-shade: #d0ccc4;
 }
 
-:root[data-theme='light'] {
-	--sl-color-accent-low: #fff0f3;
-	--sl-color-accent: #c4152a;
-	--sl-color-accent-high: #4a0010;
+/* ── Dark mode ── */
+:root[data-theme='dark'] {
+	--sl-color-accent-low: #1e1208;
+	--sl-color-accent: #d4622b;
+	--sl-color-accent-high: #ffdcc8;
+	--sl-color-white: #e0dcd4;
+	--sl-color-gray-1: #e0dcd4;
+	--sl-color-gray-2: #b5b0a8;
+	--sl-color-gray-3: #8a8580;
+	--sl-color-gray-4: #5a5650;
+	--sl-color-gray-5: #302c28;
+	--sl-color-gray-6: #1a1816;
+	--sl-color-black: #0a0908;
+
+	--sl-color-bg-nav: rgba(10, 9, 8, 0.88);
+	--sl-color-bg-sidebar: #0f0e0c;
+	--sl-color-hairline-light: #252220;
+	--sl-color-hairline-shade: #131210;
+}
+
+/* ── Typography ── */
+:root {
+	--sl-font: 'Outfit', system-ui, sans-serif;
+	--sl-font-system-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Headings use editorial serif */
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3 {
+	font-family: 'Newsreader', Georgia, serif;
+	letter-spacing: -0.02em;
+}
+
+.sl-markdown-content h1 {
+	font-size: 2.4rem;
+	font-weight: 700;
+	line-height: 1.15;
+	margin-top: 0;
+}
+
+.sl-markdown-content h2 {
+	font-size: 1.6rem;
+	font-weight: 600;
+	margin-top: 3rem;
+	padding-top: 1.5rem;
+	border-top: 1px solid var(--sl-color-hairline-light);
+}
+
+.sl-markdown-content h3 {
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+/* ── Sidebar ── */
+nav.sidebar .top-level > li > details > summary,
+nav.sidebar .top-level > li > a {
+	font-family: 'JetBrains Mono', monospace;
+	font-size: 0.78rem;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+}
+
+/* ── Code blocks ── */
+.sl-markdown-content pre {
+	border: 1px solid var(--sl-color-hairline-light);
+	border-radius: 6px;
+}
+
+.sl-markdown-content code:not(pre code) {
+	background: var(--sl-color-gray-6);
+	border: 1px solid var(--sl-color-hairline-light);
+	padding: 0.15em 0.4em;
+	border-radius: 3px;
+	font-size: 0.85em;
+}
+
+/* ── Tables ── */
+.sl-markdown-content table {
+	border: 1px solid var(--sl-color-hairline-light);
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.sl-markdown-content th {
+	font-family: 'JetBrains Mono', monospace;
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	background: var(--sl-color-gray-6);
+}
+
+/* ── Blockquotes as callouts ── */
+.sl-markdown-content blockquote {
+	border-left: 3px solid var(--sl-color-accent);
+	background: var(--sl-color-accent-low);
+	padding: 1rem 1.25rem;
+	border-radius: 0 4px 4px 0;
+	font-style: italic;
+}
+
+/* ── Bold text accent ── */
+.sl-markdown-content strong {
+	color: var(--sl-color-white);
+}
+
+/* ── Smooth transitions ── */
+a, button, summary { transition: all 0.2s ease; }
+
+/* ── Better list spacing ── */
+.sl-markdown-content li + li {
+	margin-top: 0.35em;
+}
+
+/* ── Refine link styles in content ── */
+.sl-markdown-content a {
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
+}
+.sl-markdown-content a:hover {
+	text-decoration-thickness: 2px;
 }
