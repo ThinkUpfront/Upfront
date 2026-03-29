@@ -147,3 +147,27 @@ func TestUnknownSubcommand(t *testing.T) {
 		t.Errorf("expected 'unknown subcommand' in stderr, got: %s", stderr)
 	}
 }
+
+func TestVersionCommand(t *testing.T) {
+	for _, arg := range []string{"version", "--version", "-v"} {
+		stdout, _, code := runCmd(t, "", arg)
+		if code != 0 {
+			t.Errorf("%s: expected exit 0, got %d", arg, code)
+		}
+		if !strings.Contains(stdout, "upfront") {
+			t.Errorf("%s: expected 'upfront' in output, got: %s", arg, stdout)
+		}
+	}
+}
+
+func TestHelpCommand(t *testing.T) {
+	for _, arg := range []string{"help", "--help", "-h"} {
+		stdout, _, code := runCmd(t, "", arg)
+		if code != 0 {
+			t.Errorf("%s: expected exit 0, got %d", arg, code)
+		}
+		if !strings.Contains(stdout, "Usage:") {
+			t.Errorf("%s: expected 'Usage:' in output, got: %s", arg, stdout)
+		}
+	}
+}

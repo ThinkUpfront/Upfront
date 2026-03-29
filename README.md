@@ -225,7 +225,7 @@ go build -o upfront ./cmd/upfront/
 ./install.sh
 ```
 
-All installers build the binary, place it on your PATH, and register the PostToolUse hook in Claude Code automatically. Run `upfront status` to verify.
+All installers place the binary on your PATH and register the PostToolUse hook in Claude Code automatically. Run `upfront status` to verify.
 
 ### Commands only (no audit trail)
 

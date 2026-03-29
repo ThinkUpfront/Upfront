@@ -426,3 +426,41 @@ func TestReadAll_SkipsCorruptLines(t *testing.T) {
 		t.Errorf("events[1].SessionID = %q, want s2", events[1].SessionID)
 	}
 }
+
+func TestNackFlush_KeepsFlushingFile(t *testing.T) {
+	q := newTestQueue(t)
+	appendOrFail(t, q, testEvent("s1", 1, "Intent"))
+
+	events, err := q.Flush()
+	if err != nil {
+		t.Fatalf("Flush: %v", err)
+	}
+	if len(events) != 1 {
+		t.Fatalf("expected 1 event, got %d", len(events))
+	}
+
+	// NackFlush should release lock but keep .flushing.
+	q.NackFlush()
+
+	flushPath := q.path + ".flushing"
+	if _, err := os.Stat(flushPath); err != nil {
+		t.Errorf(".flushing file should exist after NackFlush, got: %v", err)
+	}
+	lockPath := q.path + ".lock"
+	if _, err := os.Stat(lockPath); !errors.Is(err, os.ErrNotExist) {
+		t.Errorf(".lock file should be removed after NackFlush, got: %v", err)
+	}
+
+	// Next flush should recover the .flushing events.
+	recovered, err := q.Flush()
+	if err != nil {
+		t.Fatalf("second Flush: %v", err)
+	}
+	if len(recovered) != 1 {
+		t.Fatalf("expected 1 recovered event, got %d", len(recovered))
+	}
+	if recovered[0].SessionID != "s1" {
+		t.Errorf("recovered SessionID = %q, want s1", recovered[0].SessionID)
+	}
+	q.AckFlush()
+}

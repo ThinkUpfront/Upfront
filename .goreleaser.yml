@@ -49,7 +49,7 @@ brews:
       name: homebrew-tap
     homepage: "https://github.com/brennhill/upfront"
     description: "Audit trail for AI-assisted feature definition"
-    license: "MIT"
+    license: "AGPL-3.0"
     install: |
       bin.install "upfront"
     test: |

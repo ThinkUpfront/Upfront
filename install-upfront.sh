@@ -69,7 +69,7 @@ download_and_install() {
 }
 
 verify_installation() {
-  if ! echo "$PATH" | tr ':' '\n' | grep -qx "$INSTALL_DIR"; then
+  if ! echo "$PATH" | tr ':' '\n' | grep -qxF "$INSTALL_DIR"; then
     warn "$INSTALL_DIR is not on your PATH"
     warn "Add this to your shell profile:"
     warn "  export PATH=\"$INSTALL_DIR:\$PATH\""

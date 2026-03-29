@@ -17,8 +17,11 @@ $Release = Invoke-RestMethod "https://api.github.com/repos/$Repo/releases/latest
 $Version = $Release.tag_name -replace '^v', ''
 Write-Info "Latest version: v$Version"
 
+# Detect architecture
+$Arch = if ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture -eq [System.Runtime.InteropServices.Architecture]::Arm64) { "arm64" } else { "amd64" }
+
 # Download
-$Archive = "upfront_${Version}_windows_amd64.zip"
+$Archive = "upfront_${Version}_windows_${Arch}.zip"
 $Url = "https://github.com/$Repo/releases/download/v${Version}/$Archive"
 $TmpDir = Join-Path $env:TEMP "upfront-install"
 
