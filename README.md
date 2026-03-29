@@ -259,6 +259,63 @@ The commands are markdown files that Claude Code reads as instructions — no de
 
 ---
 
+## Audit binary and team pipelines
+
+The plugin gives you the skills and hooks. The `upfront` binary adds the audit trail — a durable JSONL log of every thinking record produced during `/feature` runs. This is what turns individual discipline into team-wide visibility.
+
+### How it works
+
+Every time `/feature` produces a thinking record, the PostToolUse hook captures it and writes a structured event to `.upfront/audit.jsonl`. Events are stored locally first (durable — survives network failures), then optionally flushed to a remote endpoint.
+
+### CLI commands
+
+```bash
+upfront status                          # Queue depth, last event, config
+upfront log                             # View audit events (last 50)
+upfront log --feature checkout --phase 1  # Filter by feature/phase
+upfront flush                           # Push queued events to remote
+upfront purge                           # Delete events older than TTL
+```
+
+### Remote integration
+
+Configure `.upfront/config.json` (project-level) or `~/.upfront/config.json` (user-level) to flush events to your observability stack:
+
+```json
+{
+  "endpoint": "https://your-langfuse.example.com/api/public/ingestion",
+  "auth_header": "Bearer pk-lf-...",
+  "ttl_days": 90,
+  "project_name": "my-project"
+}
+```
+
+**Important:** Config files may contain API tokens. Add `.upfront/config.json` to your `.gitignore`.
+
+### Compatible tools
+
+Upfront events are structured JSON, compatible with any tool that accepts HTTP POST of JSON payloads:
+
+- **[Langfuse](https://langfuse.com/)** — open-source LLM observability with trace visualization and team views
+- **[Arize Phoenix](https://phoenix.arize.com/)** — LLM tracing and evaluation
+- **[Helicone](https://helicone.ai/)** — LLM monitoring and analytics
+- **[Portkey](https://portkey.ai/)** — AI gateway with observability
+- **Custom webhooks** — any endpoint that accepts `POST` with `Content-Type: application/json`
+
+The event format extends the agent-monitoring trace schema from the [Delivery-Gap-Toolkit](https://github.com/brennhill/ai-augmented-dev), which aligns with OpenTelemetry span conventions. Each event contains session, timestamp, phase, feature name, and the full thinking record summary.
+
+### What managers see
+
+Three metrics without reading a single spec:
+
+1. **Adoption** — percentage of features that went through `/feature` vs built ad-hoc
+2. **Depth** — how many phases were completed (all 4 = thorough thinking, 1-2 = bailed early)
+3. **Effectiveness** — rework rate difference between spec'd and unspec'd features
+
+The audit trail is the triage layer. 30 seconds to decide whether to read the spec or send it back.
+
+---
+
 ## Backed by research
 
 Upfront's design is grounded in empirical research on AI-assisted software development:
