@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#1E293B"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" rx="16" fill="url(#g1)"/>
+  <!-- Four phase dots connected by lines -->
+  <line x1="200" y1="200" x2="600" y2="200" stroke="#334155" stroke-width="2"/>
+  <circle cx="200" cy="200" r="24" fill="#3B82F6"/>
+  <circle cx="333" cy="200" r="24" fill="#3B82F6"/>
+  <circle cx="467" cy="200" r="24" fill="#3B82F6"/>
+  <circle cx="600" cy="200" r="24" fill="#3B82F6"/>
+  <!-- Phase numbers -->
+  <text x="200" y="207" text-anchor="middle" fill="white" font-family="system-ui" font-size="18" font-weight="700">1</text>
+  <text x="333" y="207" text-anchor="middle" fill="white" font-family="system-ui" font-size="18" font-weight="700">2</text>
+  <text x="467" y="207" text-anchor="middle" fill="white" font-family="system-ui" font-size="18" font-weight="700">3</text>
+  <text x="600" y="207" text-anchor="middle" fill="white" font-family="system-ui" font-size="18" font-weight="700">4</text>
+  <!-- Checkmarks inside completed phases -->
+  <text x="200" y="160" text-anchor="middle" fill="#22C55E" font-size="20">&#x2713;</text>
+  <text x="333" y="160" text-anchor="middle" fill="#22C55E" font-size="20">&#x2713;</text>
+  <text x="467" y="160" text-anchor="middle" fill="#22C55E" font-size="20">&#x2713;</text>
+  <text x="600" y="160" text-anchor="middle" fill="#64748B" font-size="20">&#x25CB;</text>
+  <!-- Brand -->
+  <text x="400" y="310" text-anchor="middle" fill="white" font-family="system-ui" font-size="48" font-weight="800" letter-spacing="-1">upfront</text>
+  <text x="400" y="345" text-anchor="middle" fill="#64748B" font-family="system-ui" font-size="16" letter-spacing="2">THINK BEFORE YOU CODE</text>
+</svg>

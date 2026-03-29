@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/hero.svg" alt="Upfront — think before you code" width="600">
+</p>
+
 # Upfront
 
 **Force thinking before code.**
