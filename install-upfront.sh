@@ -127,7 +127,7 @@ main() {
   info "Done! Run 'upfront status' to verify."
   echo ""
   echo "  Docs:  https://github.com/$REPO"
-  echo "  Book:  https://upfront.dev/book"
+  echo "  Book:  https://leanpub.com/thedeliverygap"
   echo ""
 }
 
