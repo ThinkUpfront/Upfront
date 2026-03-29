@@ -1,0 +1,15 @@
+{
+  "name": "upfront",
+  "description": "Force thinking before code. Skills for structured AI-assisted development.",
+  "owner": {
+    "name": "Brenn Hill",
+    "url": "https://brennhill.substack.com"
+  },
+  "plugins": [
+    {
+      "name": "upfront",
+      "source": ".",
+      "description": "Full toolkit: /feature, /plan, /build, /explore, and 12 more skills for spec-first development with audit trail."
+    }
+  ]
+}

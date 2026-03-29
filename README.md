@@ -198,26 +198,41 @@ These files accumulate project knowledge across features and sessions:
 
 ## Install
 
-### Homebrew (macOS / Linux)
+### Claude Code plugin (recommended)
+
+Install the skills, hooks, and audit trail as a Claude Code plugin:
+
+```
+/plugin marketplace add brennhill/Upfront
+/plugin install upfront@upfront
+```
+
+This gives you all 16 slash commands and the PostToolUse audit hook. If you also want the audit binary for `upfront log`, `upfront status`, etc.:
 
 ```bash
 brew install brennhill/tap/upfront
 ```
 
-### Quick install (macOS / Linux)
+### Audit binary only
 
+If you manage skills separately and just want the audit binary:
+
+**Homebrew (macOS / Linux):**
+```bash
+brew install brennhill/tap/upfront
+```
+
+**Quick install (macOS / Linux):**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.sh | bash
 ```
 
-### Windows (PowerShell)
-
+**Windows (PowerShell):**
 ```powershell
 irm https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.ps1 | iex
 ```
 
-### From source
-
+**From source:**
 ```bash
 git clone https://github.com/brennhill/upfront.git
 cd upfront
@@ -225,13 +240,12 @@ go build -o upfront ./cmd/upfront/
 ./install.sh
 ```
 
-All installers place the binary on your PATH and register the PostToolUse hook in Claude Code automatically. Run `upfront status` to verify.
+### Manual install (no plugin system)
 
-### Commands only (no audit trail)
-
-If you just want the slash commands without the audit binary:
+Copy the skills directly into any project:
 
 ```bash
+git clone https://github.com/brennhill/upfront.git
 cp -r upfront/.claude/commands/ your-project/.claude/commands/
 ```
 

@@ -1,0 +1,19 @@
+{
+  "name": "upfront",
+  "version": "0.1.0",
+  "description": "Force thinking before code. Structured feature definition, planning, and auditable AI-assisted development.",
+  "author": {
+    "name": "Brenn Hill",
+    "url": "https://brennhill.substack.com"
+  },
+  "homepage": "https://github.com/brennhill/Upfront",
+  "license": "AGPL-3.0",
+  "keywords": [
+    "feature-definition",
+    "spec-first",
+    "audit-trail",
+    "tdd",
+    "code-review",
+    "ai-development"
+  ]
+}
