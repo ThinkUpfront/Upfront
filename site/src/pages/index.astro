@@ -187,9 +187,19 @@
 			</div>
 		</div>
 		<div class="footer-bottom">
-			<p>AGPL-3.0 &middot; <a href="mailto:brenn@thedeliverygap.com">Commercial licensing</a></p>
+			<p>AGPL-3.0 &middot; <a href="#" class="email-protect" data-user="comms" data-domain="thinkupfront.dev">Commercial licensing</a></p>
 		</div>
 	</footer>
+<script>
+	document.querySelectorAll('.email-protect').forEach(el => {
+		el.addEventListener('click', e => {
+			e.preventDefault();
+			const u = el.dataset.user;
+			const d = el.dataset.domain;
+			window.location.href = 'mail' + 'to:' + u + '@' + d;
+		});
+	});
+</script>
 </body>
 </html>
 
