@@ -16,14 +16,14 @@ If no path is provided, check the `specs/` directory for recent specs and ask wh
 
 ## Process
 
-### 1. Read the spec and constitution
+### 1. Read the spec and architecture
 
 Read the entire spec file. Understand:
 - The intent (what problem, what metric, what's out of scope, what must not happen)
 - The constraint surface (scope boundaries, acceptance criteria)
 - The blind spots flagged
 
-Also read `specs/CONSTITUTION.md` if it exists. Constitutional principles are hard constraints — every proposed phase must comply. If a phase would require violating a constitutional principle, flag it before proposing the plan.
+Also read `specs/ARCHITECTURE.md` if it exists — its invariants section contains hard constraints that every proposed phase must comply with. If a phase would require violating an architectural invariant, flag it before proposing the plan.
 
 ### 2. Research the codebase
 
@@ -126,29 +126,7 @@ Wait for confirmation before proceeding.
 
 Architecture is project knowledge, not per-feature knowledge. After all three levels are confirmed, write or update `specs/ARCHITECTURE.md`:
 
-```markdown
-# Architecture
-
-> Last reviewed: [date] during `/plan` for [feature-name]
-
-## System Context
-[major components, communication protocols, system-level invariants, deployment boundaries]
-
-## Subsystem Map
-[modules and boundaries, data models and relationships, subsystem invariants, interface quality]
-
-## Design Patterns and Connections
-[conventions to follow, connection points with concrete interfaces, edge behaviors, error propagation]
-
-## Concurrency Model
-[shared mutable state, synchronization mechanisms, ordering guarantees — or "N/A: no shared mutable state"]
-
-## Test Strategy
-[unit/integration/e2e split, existing test patterns, mock vs real dependencies]
-
-## Risk Areas
-[weakest integration points, fragile existing code, inconsistent patterns, where AI will get it wrong]
-```
+Use the same structure as `/explore` produces (see `specs/ARCHITECTURE.md` template in explore.md): Codebase Overview, Internal Architecture (with Module Map, Data Models, Communication Patterns, Invariants, Error Handling subsections), External Connections, Ecosystem Context, Operational Context, Known Debt and Pain Points, Risk Areas. Update the "Last reviewed" date.
 
 **If `specs/ARCHITECTURE.md` already exists:** Read it first. Review it against the current codebase — does it still match reality? Update anything that has drifted. Add new subsystems or patterns this feature revealed. Update the "Last reviewed" date. Present changes to the user for confirmation.
 
@@ -182,63 +160,30 @@ Let the user decide. If they choose option 1, add a Phase 0 to the plan that ins
 - Go: `go vet`, `staticcheck` or `golangci-lint`, `go test` passing, `gofmt`/`goimports`
 - TypeScript: `tsc --strict`, ESLint with import rules, `npm test` passing, Prettier
 - Python: `mypy` or `pyright`, `ruff` or `flake8`, `pytest` passing, `black` or `ruff format`
-- Any language: CI pipeline configured, pre-commit hooks, build scripts, `sloppy-joe` for dependency supply chain checks (typosquatting, hallucinated packages, canonical name enforcement)
+- Any language: CI pipeline configured, pre-commit hooks, build scripts, [`sloppy-joe`](https://github.com/brennhill/sloppy-joe) for dependency supply chain checks (typosquatting, hallucinated packages, canonical name enforcement)
 
 Do not silently assume guardrails exist. Check. If the project is brand new with no tooling, say so — "This project has zero guardrails. I recommend adding [X, Y, Z] as Phase 0."
 
-### 5. Clarity debt
+### 5. Propose phases
 
-Review the research and architecture phases above. For every question you had to ask (the user or yourself) to understand existing code, that's a signal the code is unclear. Code that confused you will confuse the next developer — human or AI.
+Break the work into phases. Each phase must be **reviewable** — a human must be able to read the diff and actually catch problems. ~400 lines is a proxy, but the real constraint is cognitive load.
 
-Create a clarity debt list:
-- Unclear variable/function names you had to reason about
-- Missing comments on non-obvious design decisions
-- Implicit conventions that aren't documented anywhere
-- Code paths where the "why" is invisible without the conversation you just had
-
-These become sub-tasks within the appropriate implementation phases:
-- Rename unclear identifiers
-- Add comments explaining *why* (not *what*) on non-obvious design choices
-- Document implicit conventions in ARCHITECTURE.md or code comments
-
-**Do not create a separate "documentation phase."** Clarity fixes go into the phase that touches that code — if Phase 3 modifies `queue.go` and you had to ask why `Flush` uses rename-and-swap, add a sub-task to Phase 3 that adds a comment explaining it. The fix travels with the code it clarifies.
-
-If no questions were needed during research, skip this step. But be honest — if the code was genuinely clear, say so. If you're skipping because it's tedious, don't.
-
-### 6. Strategize before phasing
-
-Before proposing phases, formulate 2-3 distinct implementation approaches. Do not jump straight to "break it into phases" — the phasing depends on which approach you take, and the first approach you think of is rarely the best.
-
-**Vary approaches along these dimensions:**
-
-- **Invasion depth:** How much existing code do you modify vs extend vs wrap? Modifying is clean but risky (regression surface). Wrapping is safe but adds indirection. Extending is the middle ground.
-- **Dependency direction:** Does the new code adapt to existing structures, or does it introduce abstractions that existing code is refactored to use? Adapting is faster. Introducing abstractions is cleaner long-term but more work now.
-- **Change scope:** Minimal surgical fix that solves exactly this problem, vs addressing the underlying structural issue that created the need? Surgical is scoped and shippable. Structural prevents the next three bugs but is harder to bound.
-- **Reversibility:** If this approach turns out to be wrong at Phase 3, how hard is it to back out? A new package is easy to delete. A refactor that touches 20 call sites is not.
-- **Testability:** Which approach produces code that's easiest to verify? Sometimes the architecturally "correct" design is harder to test than the pragmatic one.
-- **Incremental value:** Can you ship useful behavior after Phase 1, or is it all-or-nothing until the final phase?
-
-**Present as a table**, not paragraphs:
-
-```
-| Approach | Invasion | Reversibility | Phases | Risk |
-|----------|----------|---------------|--------|------|
-| A: Wrap existing PaymentService | Low | Easy to remove wrapper | 3 | Gateway adapter may not cover all edge cases |
-| B: Refactor PaymentService to use circuit breaker interface | High | Hard — 12 call sites change | 5 | Cleaner long-term, but scope creep risk |
-| C: New CheckoutPayment module delegating to PaymentService | Medium | Delete one package | 4 | Parallel path until cutover, then remove old |
-```
-
-**Challenge your own ideas.** For each approach, name the biggest risk. Do not present a "clearly correct" option — if one approach is obviously best, you haven't thought hard enough about the others.
-
-Let the user choose or discuss. The chosen approach determines the phasing.
-
-### 7. Propose phases
-
-Break the work into phases. Each phase should be:
+Each phase should be:
 - **~400 lines or less** — based on your estimate of actual change size, not a guess
+- **Single concern** — one logical thing changes per phase. If a phase touches auth AND queue AND API, split it regardless of line count.
 - **Independently verifiable** — has its own automated and manual success criteria
 - **Independently committable** — the codebase compiles, tests pass, and nothing is broken after this phase alone
 - **Ordered by dependency** — schema before logic, logic before API, API before UI
+
+**Reviewability check per phase:** Before finalizing, evaluate each phase against:
+- **Concern count:** Does this phase change more than 2 distinct things? Split it.
+- **Blast radius:** Does this phase affect many callers? Flag it for careful review.
+- **Novelty:** Does this phase introduce a new pattern? Keep it small — new patterns need more review attention.
+- **State complexity:** Does this phase touch shared mutable state? Keep it very small — concurrency changes are 10x harder to review.
+
+If a phase scores high on 2+ dimensions, split it further even if it's under 400 lines. A 200-line phase that changes concurrency logic across 3 files is harder to review than a 500-line phase that adds straightforward CRUD handlers.
+
+**The test:** "Could a reviewer find a bug in this diff in under 15 minutes?" If no, the phase is too big or too complex.
 
 If Phase 0 (guardrails) was agreed upon, it comes first. No feature code until the tooling is in place.
 
@@ -271,7 +216,7 @@ The user confirms which phases are human-writes. Mark them in the plan file:
 
 `/build` reads these markers and switches to human-writes mode for flagged phases.
 
-### 8. Present for review
+### 6. Present for review
 
 Present the plan to the user. For each phase, explain:
 - What it does and why it's in this order
@@ -282,7 +227,7 @@ Ask: "Does this phasing make sense? Should I adjust the order, split any phase f
 
 Iterate based on feedback.
 
-### 9. Write to disk
+### 7. Write to disk
 
 Once approved, write the plan as a separate file at `specs/[feature-name]-plan.md`:
 
@@ -303,21 +248,15 @@ See `specs/ARCHITECTURE.md` (reviewed [date]).
 
 ### Phase 1: [descriptive name]
 **Files:** [list of files that change]
-**Changes:** [what happens in this phase — detailed enough to execute without the original conversation. Include specific function names, patterns to follow, and constraints. This must survive context compaction.]
+**Changes:** [what happens in this phase]
 **Estimated size:** [lines]
 
-**Verification** (ranked — use the highest applicable):
-1. TDD: [test file and what tests to write BEFORE implementation]
-2. Agentic: [commands the agent runs to confirm behavior, including edge cases]
-3. Manual: [what a human checks — specific commands, URLs, expected output]
+**Automated verification:**
+- [ ] [exact command]
+- [ ] [exact command]
 
-**Review checklist:**
-- [ ] Security: [input validation, auth, injection relevant to this phase — or "N/A"]
-- [ ] Performance: [queries, loops, data volume concerns — or "N/A"]
-- [ ] Error handling: [what can fail and how it's handled]
-- [ ] Pattern consistency: [which existing patterns this must match]
-
-**Clarity debt:** [identifiers to rename, comments to add, or "none"]
+**Manual verification:**
+- [ ] [what to check]
 
 ---
 
@@ -339,4 +278,3 @@ Then tell the user:
 - Each phase's verification criteria should trace back to the spec's acceptance criteria and blind spots. The plan is how you deliver the spec, not a separate document.
 - If the spec's Implementation Design section flags structural issues (slop, inconsistent patterns, cleanup needed), include refactoring as the first phase(s) — prerequisite work before building the feature on top. Do not build on a shaky foundation.
 - If the spec is missing information you need to plan (e.g., no implementation design, unclear architecture), say what's missing and ask the user to update the spec before proceeding.
-- **Plans must survive context compaction.** The implementing agent may have no memory of the planning conversation. Every phase must contain enough detail to execute from the plan file alone — specific function names, patterns to follow, file paths, constraints. If the agent needs the original conversation to understand a phase, the plan is incomplete.

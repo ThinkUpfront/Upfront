@@ -28,9 +28,10 @@ Evaluate the requested change. If ANY of these are true, stop immediately:
 - The change requires new data models, new API endpoints, or new modules
 - The change has unclear requirements that need a design conversation
 
-If you hit any of these, say:
+If you hit any of these, escalate:
 
-> "This is bigger than a /quick change. Run `/feature` instead to define the intent and constraints properly."
+- If it's a single feature: "This is bigger than a /quick change. Run `/feature` instead to define the intent and constraints properly."
+- If it spans multiple concerns, subsystems, or would take multiple features to do right: "This isn't quick — it's increment 1 of something bigger. Consider `/vision` to capture what you're really after, or at minimum `/feature` to define one piece properly."
 
 Do not proceed. Do not try to be helpful by doing it anyway.
 

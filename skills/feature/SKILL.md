@@ -14,9 +14,33 @@ Before starting Phase 1, check if `specs/ARCHITECTURE.md` exists. If it doesn't,
 
 If the user wants to proceed, continue — but note in the Design Conversation phase that your codebase understanding may be incomplete.
 
-If `specs/ARCHITECTURE.md` exists, read it silently for context. Also read `specs/DECISIONS.md`, `specs/LEARNINGS.md`, `specs/CONSTITUTION.md`, and `specs/TODO.md` if they exist. If `TODO.md` contains an `IDEATE:` entry (from `/ideate`), use it as starting context for Phase 1 — the user has already converged on a problem statement.
+If `specs/ARCHITECTURE.md` exists, read it silently for context. Also read `specs/DECISIONS.md`, `specs/LEARNINGS.md`, and `specs/TODO.md` if they exist. If `TODO.md` contains an `IDEATE:` entry (from `/ideate`), use it as starting context for Phase 1 — the user has already converged on a problem statement.
 
-If `specs/CONSTITUTION.md` exists, every design decision in Phases 3-4 must be checked against it. If a proposed design would violate a constitutional principle, flag it explicitly: "This approach conflicts with constitutional principle: [principle]. Options: (a) change the approach, (b) amend the constitution (requires explicit user approval)."
+If `specs/ARCHITECTURE.md` exists, every design decision in Phases 3-4 must be checked against its invariants section and the spec's "what must NOT happen" section. If a proposed design would violate an invariant, flag it explicitly: "This approach conflicts with architectural invariant: [invariant]. Options: (a) change the approach, (b) update the invariant (requires explicit user approval)."
+
+## Reviewability check
+
+After the user describes what they want to build, evaluate the scope against these five dimensions:
+
+| Dimension | Low (reviewable) | High (hard to review) |
+|---|---|---|
+| Concern count | 1-2 distinct things change | 3+ unrelated concerns in one change |
+| Blast radius | Localized, few callers affected | Many dependents, cross-cutting |
+| Novelty | Extending existing patterns | New patterns, abstractions, or subsystems |
+| State complexity | Stateless or single-owner | Shared mutable state, concurrency |
+| Reversibility | Clean revert possible | Entangled, hard to undo |
+
+**If 3+ dimensions score high**, this is bigger than a single feature. The AI should push back:
+
+"This is ambitious — I count [N] distinct concerns ([list them]), it introduces [new patterns/subsystems], and it affects [blast radius]. If we build this as one feature, no human can meaningfully review it. You'll either rubber-stamp it or spend days reviewing it, and both are bad.
+
+I'd recommend `/vision` to capture the full ambition and break it into reviewable increments. Each increment ships real value and you can steer between them.
+
+Or if you want to proceed as a single feature, I'll do it — but I want you to know the review risk."
+
+If the user wants to proceed anyway, continue with `/feature` as normal. Note in the spec's thinking record: "Reviewability gate flagged [N] high-risk dimensions. User chose to proceed as single feature." This is information for the reviewer, not a judgment.
+
+If the user has a vision file and this feature is part of an increment, skip the reviewability check — the vision already handled scoping.
 
 ## Ideation check
 
@@ -234,17 +258,18 @@ Once placement is decided, propose specifics:
 - Interfaces and integration points
 - How this connects to existing systems
 
-### Step 4: Pressure-test blind spots
+### Step 4: AI implementation risks
+
+Phase 2 covered behavioral correctness (will it work?). This step covers implementation risks (will the AI get it wrong?).
 
 Ask: "What will the AI get wrong when it builds this? Where will it make confident mistakes?"
 
 Wait for the user's answer. Let them think about it. Then fill gaps from this list — but only the ones they missed:
 - **Edge cases**: boundary values, empty/null/max-size inputs, off-by-one
-- **Concurrency**: race conditions, concurrent writes, optimistic locking
-- **Error handling**: what happens when each dependency is down or slow?
 - **Security**: auth on every endpoint, input validation, no secrets in logs
 - **Non-prompted concerns**: rate limiting, pagination, logging, audit trails, idempotency
 - **Hallucination risk**: are all referenced packages, APIs, and imports real?
+- Concurrency and error handling were covered in Phase 2 — focus here on risks specific to AI implementation.
 
 Do not accept "N/A" on all of them. Every feature has at least one blind spot.
 

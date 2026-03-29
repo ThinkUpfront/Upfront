@@ -18,6 +18,30 @@ If `specs/ARCHITECTURE.md` exists, read it silently for context. Also read `spec
 
 If `specs/ARCHITECTURE.md` exists, every design decision in Phases 3-4 must be checked against its invariants section and the spec's "what must NOT happen" section. If a proposed design would violate an invariant, flag it explicitly: "This approach conflicts with architectural invariant: [invariant]. Options: (a) change the approach, (b) update the invariant (requires explicit user approval)."
 
+## Reviewability check
+
+After the user describes what they want to build, evaluate the scope against these five dimensions:
+
+| Dimension | Low (reviewable) | High (hard to review) |
+|---|---|---|
+| Concern count | 1-2 distinct things change | 3+ unrelated concerns in one change |
+| Blast radius | Localized, few callers affected | Many dependents, cross-cutting |
+| Novelty | Extending existing patterns | New patterns, abstractions, or subsystems |
+| State complexity | Stateless or single-owner | Shared mutable state, concurrency |
+| Reversibility | Clean revert possible | Entangled, hard to undo |
+
+**If 3+ dimensions score high**, this is bigger than a single feature. The AI should push back:
+
+"This is ambitious — I count [N] distinct concerns ([list them]), it introduces [new patterns/subsystems], and it affects [blast radius]. If we build this as one feature, no human can meaningfully review it. You'll either rubber-stamp it or spend days reviewing it, and both are bad.
+
+I'd recommend `/vision` to capture the full ambition and break it into reviewable increments. Each increment ships real value and you can steer between them.
+
+Or if you want to proceed as a single feature, I'll do it — but I want you to know the review risk."
+
+If the user wants to proceed anyway, continue with `/feature` as normal. Note in the spec's thinking record: "Reviewability gate flagged [N] high-risk dimensions. User chose to proceed as single feature." This is information for the reviewer, not a judgment.
+
+If the user has a vision file and this feature is part of an increment, skip the reviewability check — the vision already handled scoping.
+
 ## Ideation check
 
 When the user answers "What problem does this solve?" in Phase 1, evaluate their first response. If their answer is vague, uncertain, or exploratory — signals like "I don't know", "I'm not sure", "maybe something like...", "I was thinking maybe...", describing a solution without a clear problem, or struggling to articulate what's actually wrong — suggest:

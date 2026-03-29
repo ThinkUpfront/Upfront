@@ -17,7 +17,9 @@ If `$ARGUMENTS` is empty or blank:
 - Otherwise, ask: "What are you trying to do?" and show this brief menu:
 
 ```
+Something big          →  /vision (strategy + increments)
 Build something new    →  /feature or /ideate
+Increment retro        →  /increment (reflect + steer)
 Fix a bug              →  /debug
 Small change           →  /quick
 Fix a GitHub issue     →  /patch
@@ -41,6 +43,8 @@ If `$ARGUMENTS` is provided, proceed to routing.
 ## Step 3: Route by intent
 
 Read the user's intent and match it to the right command. Think about what they MEAN, not just keywords.
+
+**Something big / multi-feature / app / product / initiative**: "build me an app", "I want to build a system that...", "big project", describes something with many features or subsystems → route to `/vision`. If they seem to already have a vision and are between increments, route to `/increment`.
 
 **Building something new**: If vague ("I want to add something", "new feature but not sure what"), route to `/ideate`. If they have a clear problem or feature in mind, route to `/feature`.
 

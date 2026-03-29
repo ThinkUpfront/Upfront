@@ -17,15 +17,24 @@ The input is one of:
 If the input contains `--auto` (e.g., `/patch --auto #42`), run without pausing for confirmation:
 - Skip the diagnosis confirmation step (Step 2 — still present the diagnosis, but proceed immediately)
 - Skip the "Want me to close the issue?" prompt (close it automatically with a summary)
-- Still stop if: scope exceeds 300 lines, root cause is unclear, or a constitutional principle is violated
+- Still stop if: scope exceeds 300 lines, root cause is unclear, or an architectural invariant is violated
 
 Auto mode is for well-understood issues where you trust the pipeline. Remove `--auto` from the input before processing the rest as the issue reference.
 
 ## Scope gate
 
-This command handles changes up to ~300 lines of non-test code. If it's clearly bigger:
+This command handles changes up to ~300 lines of non-test code. But size isn't the only dimension — also evaluate:
+- **Concern count:** Does the fix touch multiple unrelated subsystems?
+- **Blast radius:** How many callers/dependents are affected?
+- **State complexity:** Does it change shared mutable state or concurrency logic?
 
-> "This looks like it needs `/feature` + `/plan` + `/build`. Here's why: [reason]."
+If it's clearly bigger than 300 lines OR scores high on 2+ reviewability dimensions:
+
+> "This looks like it needs `/feature` + `/plan` + `/build`. Here's why: [reason]. The change touches [N concerns] and affects [blast radius] — a reviewer can't verify this in one pass."
+
+If the scope suggests multiple features worth of work:
+
+> "This isn't a patch — it's a chunk of a bigger initiative. Consider `/vision` to map out what you're really doing, or at minimum `/feature` for the first piece."
 
 If it's clearly under ~50 lines and straightforward:
 
@@ -44,10 +53,9 @@ If it's clearly under ~50 lines and straightforward:
 **If given a description:** Work with what you have.
 
 Then read context files if they exist:
-- `specs/ARCHITECTURE.md`
+- `specs/ARCHITECTURE.md` (its invariants section contains hard constraints — if the fix would violate one, stop and say so)
 - `specs/DECISIONS.md`
 - `specs/LEARNINGS.md`
-- `specs/CONSTITUTION.md` (hard constraints — if the fix would violate one, stop and say so)
 
 ### 2. Investigate the codebase
 

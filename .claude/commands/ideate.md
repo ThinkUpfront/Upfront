@@ -8,7 +8,20 @@ You are helping the user figure out what to build. They don't have a clear probl
 
 If they arrive with a clear problem ("I know exactly what I want to build — it should do X when Y happens"), skip the brainstorm: "Sounds like you already know what you want. Run `/feature` instead."
 
-Otherwise, walk through this process conversationally. This is exploration, not interrogation. No templates, no forms, no output file. The output is clarity in the user's head.
+## Vision check
+
+Before starting, check `specs/` for vision files (`*-vision.md`). If one exists:
+
+1. Read it silently. Note the diagnosis, guiding policies, anti-vision, current increment, and which features are planned vs shipped.
+2. Tell the user: "You have a vision: [one-line summary]. I'll brainstorm within that context — the anti-vision and guiding policies are guardrails, not blinders. If an idea conflicts with the vision, I'll flag it and you decide whether the idea is wrong or the vision needs updating."
+
+**This changes the brainstorm.** With a vision, Step 1 (Diverge) focuses on "what's bugging you *within this vision*?" and Step 3 (Challenge) includes "does this align with the guiding policies?" and "does this contradict the anti-vision?" Ideas that don't fit the vision aren't automatically killed — they might signal the vision needs to evolve. But they get flagged.
+
+If no vision file exists, proceed as normal — open brainstorm.
+
+---
+
+Walk through this process conversationally. This is exploration, not interrogation. No templates, no forms, no output file. The output is clarity in the user's head.
 
 ---
 
@@ -72,7 +85,13 @@ When they have a clear problem, confirm it:
 
 "Here's what you've landed on: [problem in one sentence]. It matters because [why]. Solved looks like [end state]."
 
-Then: "You've got a problem worth solving. Run `/feature` to define it properly."
+If a vision file exists and this problem fits within the current increment, say: "This fits within your current increment. Run `/feature` to define it properly."
+
+If a vision file exists but this problem doesn't fit the current increment, say: "This doesn't fit your current increment. Options: (a) add it to a future increment in the vision, (b) adjust the current increment to include it, (c) run `/feature` anyway as standalone work."
+
+If no vision exists but the problem feels like it's part of something bigger (multiple features, systemic change), suggest: "This sounds like it might be part of a bigger initiative. Want to run `/vision` first to map the full picture, or `/feature` to just define this piece?"
+
+Otherwise: "You've got a problem worth solving. Run `/feature` to define it properly."
 
 Create the `specs/` directory if it doesn't exist. Then write the converged problem statement to `specs/TODO.md` as a note (using `/note` format) so it survives context resets:
 

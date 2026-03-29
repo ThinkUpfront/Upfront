@@ -23,9 +23,18 @@ Auto mode is for well-understood issues where you trust the pipeline. Remove `--
 
 ## Scope gate
 
-This command handles changes up to ~300 lines of non-test code. If it's clearly bigger:
+This command handles changes up to ~300 lines of non-test code. But size isn't the only dimension — also evaluate:
+- **Concern count:** Does the fix touch multiple unrelated subsystems?
+- **Blast radius:** How many callers/dependents are affected?
+- **State complexity:** Does it change shared mutable state or concurrency logic?
 
-> "This looks like it needs `/feature` + `/plan` + `/build`. Here's why: [reason]."
+If it's clearly bigger than 300 lines OR scores high on 2+ reviewability dimensions:
+
+> "This looks like it needs `/feature` + `/plan` + `/build`. Here's why: [reason]. The change touches [N concerns] and affects [blast radius] — a reviewer can't verify this in one pass."
+
+If the scope suggests multiple features worth of work:
+
+> "This isn't a patch — it's a chunk of a bigger initiative. Consider `/vision` to map out what you're really doing, or at minimum `/feature` for the first piece."
 
 If it's clearly under ~50 lines and straightforward:
 
