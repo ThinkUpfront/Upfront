@@ -205,7 +205,34 @@ These become sub-tasks within the appropriate implementation phases:
 
 If no questions were needed during research, skip this step. But be honest — if the code was genuinely clear, say so. If you're skipping because it's tedious, don't.
 
-### 6. Propose phases
+### 6. Strategize before phasing
+
+Before proposing phases, formulate 2-3 distinct implementation approaches. Do not jump straight to "break it into phases" — the phasing depends on which approach you take, and the first approach you think of is rarely the best.
+
+**Vary approaches along these dimensions:**
+
+- **Invasion depth:** How much existing code do you modify vs extend vs wrap? Modifying is clean but risky (regression surface). Wrapping is safe but adds indirection. Extending is the middle ground.
+- **Dependency direction:** Does the new code adapt to existing structures, or does it introduce abstractions that existing code is refactored to use? Adapting is faster. Introducing abstractions is cleaner long-term but more work now.
+- **Change scope:** Minimal surgical fix that solves exactly this problem, vs addressing the underlying structural issue that created the need? Surgical is scoped and shippable. Structural prevents the next three bugs but is harder to bound.
+- **Reversibility:** If this approach turns out to be wrong at Phase 3, how hard is it to back out? A new package is easy to delete. A refactor that touches 20 call sites is not.
+- **Testability:** Which approach produces code that's easiest to verify? Sometimes the architecturally "correct" design is harder to test than the pragmatic one.
+- **Incremental value:** Can you ship useful behavior after Phase 1, or is it all-or-nothing until the final phase?
+
+**Present as a table**, not paragraphs:
+
+```
+| Approach | Invasion | Reversibility | Phases | Risk |
+|----------|----------|---------------|--------|------|
+| A: Wrap existing PaymentService | Low | Easy to remove wrapper | 3 | Gateway adapter may not cover all edge cases |
+| B: Refactor PaymentService to use circuit breaker interface | High | Hard — 12 call sites change | 5 | Cleaner long-term, but scope creep risk |
+| C: New CheckoutPayment module delegating to PaymentService | Medium | Delete one package | 4 | Parallel path until cutover, then remove old |
+```
+
+**Challenge your own ideas.** For each approach, name the biggest risk. Do not present a "clearly correct" option — if one approach is obviously best, you haven't thought hard enough about the others.
+
+Let the user choose or discuss. The chosen approach determines the phasing.
+
+### 7. Propose phases
 
 Break the work into phases. Each phase should be:
 - **~400 lines or less** — based on your estimate of actual change size, not a guess
@@ -244,7 +271,7 @@ The user confirms which phases are human-writes. Mark them in the plan file:
 
 `/build` reads these markers and switches to human-writes mode for flagged phases.
 
-### 7. Present for review
+### 8. Present for review
 
 Present the plan to the user. For each phase, explain:
 - What it does and why it's in this order
@@ -255,7 +282,7 @@ Ask: "Does this phasing make sense? Should I adjust the order, split any phase f
 
 Iterate based on feedback.
 
-### 8. Write to disk
+### 9. Write to disk
 
 Once approved, write the plan as a separate file at `specs/[feature-name]-plan.md`:
 
