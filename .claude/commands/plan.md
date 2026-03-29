@@ -16,7 +16,7 @@ If no path is provided, check the `specs/` directory for recent specs and ask wh
 
 ## Process
 
-### 1. Read the spec and constitution
+### 1. Read the spec and architecture
 
 Read the entire spec file. Understand:
 - The intent (what problem, what metric, what's out of scope, what must not happen)

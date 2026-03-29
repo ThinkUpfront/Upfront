@@ -17,7 +17,7 @@ The input is one of:
 If the input contains `--auto` (e.g., `/patch --auto #42`), run without pausing for confirmation:
 - Skip the diagnosis confirmation step (Step 2 — still present the diagnosis, but proceed immediately)
 - Skip the "Want me to close the issue?" prompt (close it automatically with a summary)
-- Still stop if: scope exceeds 300 lines, root cause is unclear, or a constitutional principle is violated
+- Still stop if: scope exceeds 300 lines, root cause is unclear, or an architectural invariant is violated
 
 Auto mode is for well-understood issues where you trust the pipeline. Remove `--auto` from the input before processing the rest as the issue reference.
 

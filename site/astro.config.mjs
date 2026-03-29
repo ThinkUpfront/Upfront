@@ -4,8 +4,7 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://brennhill.github.io',
-	base: '/upfront',
+	site: 'https://thinkupfront.dev',
 	integrations: [
 		starlight({
 			title: 'Upfront',

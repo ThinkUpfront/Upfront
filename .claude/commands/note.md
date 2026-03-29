@@ -10,6 +10,7 @@ Argument: $ARGUMENTS
 
 - No conversation, no questions. Just do it and confirm.
 - File location: `specs/TODO.md` in the current project root.
+- Create the `specs/` directory if it doesn't exist.
 - If `specs/TODO.md` doesn't exist, create it with a `# TODO` header first.
 
 ## Behavior

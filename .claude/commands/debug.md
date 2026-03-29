@@ -33,7 +33,7 @@ Gather evidence BEFORE forming hypotheses:
 - Read `specs/ARCHITECTURE.md` if it exists, for system context
 - Read `specs/LEARNINGS.md` if it exists, for past debugging patterns
 
-Write initial state to `specs/DEBUG.md`:
+Create the `specs/` directory if it doesn't exist. Write initial state to `specs/DEBUG.md`:
 ```
 # Debug Session
 

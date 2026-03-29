@@ -27,7 +27,7 @@ Nobody notices until something breaks and no one on the team understands the sys
 
 - **GitClear (2024):** Across 211 million changed lines, code churn doubled while refactoring collapsed. More code, less of it survives production.
 
-[Full research citations](/upfront/research/)
+[Full research citations](/research/)
 
 ## What Upfront does
 
@@ -37,7 +37,7 @@ Upfront makes the thinking process explicit, challenging, and auditable. Every c
 
 **Thinking records.** Every phase of `/feature` produces a record of what was decided, why, what was rejected, and what was skipped. The spec is the audit trail of the thinking, not just the conclusions. A reviewer can tell in 30 seconds whether real thinking happened.
 
-**Human-writes mode.** For critical code — concurrency, security, core business logic — the AI writes the tests and the human writes the implementation. You cannot ship code you don't understand. [Read more](/upfront/human-first/)
+**Human-writes mode.** For critical code — concurrency, security, core business logic — the AI writes the tests and the human writes the implementation. You cannot ship code you don't understand. [Read more](/human-first/)
 
 **Constitutional governance.** Project-level invariants that gate every command. If a change would violate a constitutional principle, the system flags it. You can override, but you can't accidentally violate.
 
