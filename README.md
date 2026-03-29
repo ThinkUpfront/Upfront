@@ -378,7 +378,7 @@ For commercial licensing (proprietary use, SaaS embedding, or redistribution wit
 
 Inspired by [Superhuman](https://github.com/nicholasgriffintn/claude-code-flow), [Get-Shit-Done](https://github.com/gsd-build/get-shit-done), and [Agentic Brownfield Coding](https://github.com/ralfstrobel/agentic-brownfield-coding), and countless hours of research on the impact of AI on learning, coding, and people in general.
 
-Always Think Upfront.
+[Always Think Upfront.](https://thinkupfront.dev)
 
 ## Related
 
