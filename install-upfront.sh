@@ -128,6 +128,7 @@ main() {
   echo ""
   echo "  Docs:  https://github.com/$REPO"
   echo "  Book:  https://leanpub.com/thedeliverygap"
+  echo "  Blog:  https://brennhill.substack.com"
   echo ""
 }
 
