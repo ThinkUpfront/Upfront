@@ -14,9 +14,9 @@ Before starting Phase 1, check if `specs/ARCHITECTURE.md` exists. If it doesn't,
 
 If the user wants to proceed, continue — but note in the Design Conversation phase that your codebase understanding may be incomplete.
 
-If `specs/ARCHITECTURE.md` exists, read it silently for context. Also read `specs/DECISIONS.md`, `specs/LEARNINGS.md`, `specs/CONSTITUTION.md`, and `specs/TODO.md` if they exist. If `TODO.md` contains an `IDEATE:` entry (from `/ideate`), use it as starting context for Phase 1 — the user has already converged on a problem statement.
+If `specs/ARCHITECTURE.md` exists, read it silently for context. Also read `specs/DECISIONS.md`, `specs/LEARNINGS.md`, and `specs/TODO.md` if they exist. If `TODO.md` contains an `IDEATE:` entry (from `/ideate`), use it as starting context for Phase 1 — the user has already converged on a problem statement.
 
-If `specs/CONSTITUTION.md` exists, every design decision in Phases 3-4 must be checked against it. If a proposed design would violate a constitutional principle, flag it explicitly: "This approach conflicts with constitutional principle: [principle]. Options: (a) change the approach, (b) amend the constitution (requires explicit user approval)."
+If `specs/ARCHITECTURE.md` exists, every design decision in Phases 3-4 must be checked against its invariants section and the spec's "what must NOT happen" section. If a proposed design would violate an invariant, flag it explicitly: "This approach conflicts with architectural invariant: [invariant]. Options: (a) change the approach, (b) update the invariant (requires explicit user approval)."
 
 ## Ideation check
 
@@ -234,17 +234,18 @@ Once placement is decided, propose specifics:
 - Interfaces and integration points
 - How this connects to existing systems
 
-### Step 4: Pressure-test blind spots
+### Step 4: AI implementation risks
+
+Phase 2 covered behavioral correctness (will it work?). This step covers implementation risks (will the AI get it wrong?).
 
 Ask: "What will the AI get wrong when it builds this? Where will it make confident mistakes?"
 
 Wait for the user's answer. Let them think about it. Then fill gaps from this list — but only the ones they missed:
 - **Edge cases**: boundary values, empty/null/max-size inputs, off-by-one
-- **Concurrency**: race conditions, concurrent writes, optimistic locking
-- **Error handling**: what happens when each dependency is down or slow?
 - **Security**: auth on every endpoint, input validation, no secrets in logs
 - **Non-prompted concerns**: rate limiting, pagination, logging, audit trails, idempotency
 - **Hallucination risk**: are all referenced packages, APIs, and imports real?
+- Concurrency and error handling were covered in Phase 2 — focus here on risks specific to AI implementation.
 
 Do not accept "N/A" on all of them. Every feature has at least one blind spot.
 

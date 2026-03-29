@@ -364,6 +364,8 @@ AI can generate code. It cannot generate judgment. Every command in this toolkit
 
 The spec is not the point. The thinking the spec forces is the point.
 
+**[Read HUMAN-FIRST.md](HUMAN-FIRST.md)** for the full picture: how human-writes mode works, why challenge-first questioning matters, what thinking records capture, and what this means for ICs, leads, and managers.
+
 ---
 
 ## License

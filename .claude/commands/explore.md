@@ -282,7 +282,7 @@ Then tell the user:
 - Where the files are
 - To review `specs/ARCHITECTURE.md` before any `/feature` or `/plan` work
 - That future `/plan` runs will review and update this document
-- That `/feature` and `/plan` will append to `DECISIONS.md` and `LEARNINGS.md` over time
+- That `/feature` and `/build` will append to `DECISIONS.md` and `LEARNINGS.md` over time
 
 ---
 

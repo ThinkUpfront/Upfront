@@ -74,7 +74,7 @@ Notes from last session:
 
 ## Step 5: Check for stashed work
 
-If the handoff's "Git state" section mentions a stash (from `/pause` or `/quick`), remind the user:
+If the handoff's "Git state" section mentions a stash (from `/pause`), remind the user:
 
 > "There's a stash from the previous session. Run `git stash pop` to restore your changes before continuing."
 

@@ -26,7 +26,7 @@ Start implementing     →  /build
 Review / ship          →  /ship
 Understand code        →  /teach
 Document for AI        →  /explore
-Check what shipped     →  /retro
+Post-ship retro        →  /retro
 Save progress          →  /pause
 Pick up where I left   →  /resume
 Brainstorm             →  /ideate

@@ -44,10 +44,9 @@ If it's clearly under ~50 lines and straightforward:
 **If given a description:** Work with what you have.
 
 Then read context files if they exist:
-- `specs/ARCHITECTURE.md`
+- `specs/ARCHITECTURE.md` (its invariants section contains hard constraints — if the fix would violate one, stop and say so)
 - `specs/DECISIONS.md`
 - `specs/LEARNINGS.md`
-- `specs/CONSTITUTION.md` (hard constraints — if the fix would violate one, stop and say so)
 
 ### 2. Investigate the codebase
 
