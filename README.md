@@ -217,6 +217,10 @@ Upfront's design is grounded in empirical research on AI-assisted software devel
 
 ### The skill erosion problem
 
+- **Anthropic (2026):** Anthropic's own randomized controlled trial — 52 junior engineers learning an async library. The AI group scored 17% lower on comprehension. The largest gap was in *debugging* — AI specifically undermines the ability to identify when code is wrong. Critically, developers who used AI for *conceptual questions* scored 65%+, while those who *delegated code generation* scored below 40%. The interaction pattern matters more than whether AI was used. This is exactly the dynamic Upfront is designed to enforce — thinking, not delegating. (Anthropic, "The Impact of AI Assistance on Coding Skill Formation")
+
+- **METR (2025):** A randomized controlled trial found that AI tooling actually *increased* completion time by 19% for experienced open-source developers working on their own repositories. The productivity narrative assumes AI helps everyone — this study shows it can actively hurt experienced developers on familiar codebases. (METR, "Measuring the Impact of AI Coding Assistants on Developer Productivity")
+
 - **Harvard/BCG (2023):** 758 consultants using GPT-4 — quality jumped 40% inside the AI's capability frontier, but dropped 19 percentage points *below the no-AI group* on tasks outside it. The variable was judgment, and judgment atrophies without exercise. (Dell'Acqua et al., "Navigating the Jagged Technological Frontier")
 
 - **DORA (2025):** AI adoption increases throughput but also increases delivery instability. Teams shipping faster are simultaneously shipping less reliably. Speed without verification is not a gain. (DORA State of DevOps Report 2025)
