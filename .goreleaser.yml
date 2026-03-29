@@ -47,8 +47,9 @@ brews:
   - repository:
       owner: brennhill
       name: homebrew-tap
-    homepage: "https://github.com/brennhill/upfront"
-    description: "Audit trail for AI-assisted feature definition"
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    homepage: "https://thinkupfront.dev"
+    description: "Force thinking before code — audit trail for AI-assisted feature definition"
     license: "AGPL-3.0"
     install: |
       bin.install "upfront"
