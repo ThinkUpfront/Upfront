@@ -43,10 +43,38 @@ Create `specs/[feature-name]-progress.md` before starting Phase 1:
 
 This file is the memory between phases. Each sub-agent reads it. You update it after each phase. It captures what happened, what was surprising, and what the next phase should know.
 
+## Human-writes mode
+
+When the developer should write critical code themselves instead of delegating to the AI.
+
+**Three ways to activate:**
+
+1. **Spec-level (granular):** Mark specific sections in the spec with `[human-writes]`. The sub-agent generates `TODO(human)` stubs for those pieces and pauses for the developer to fill them in. Use this for auth logic, payment flows, concurrency primitives, security-critical code — anything where a human must understand every line.
+
+2. **`/build --human`:** Enables human-writes mode for the entire build. Every phase generates implementation as `TODO(human)` stubs with detailed comments explaining what each piece should do, the tests it must pass, and the constraints it must satisfy. The AI writes the tests, the human writes the implementation. The AI then reviews what the human wrote.
+
+3. **`/plan --human`:** Marks specific phases in the plan as human-implements. During planning, the AI identifies which phases contain critical logic and suggests: "Phase 3 (concurrency handler) should be human-writes — this is the piece where understanding matters most." The user confirms which phases are human-writes. These are flagged in the plan file.
+
+**How it works per phase:**
+
+When a phase is in human-writes mode, the sub-agent:
+1. Writes the failing tests (TDD red — AI does this)
+2. Generates `TODO(human)` stubs with:
+   - What the function/block should do (from the spec)
+   - The test it must pass (from step 1)
+   - Constraints and invariants it must respect (from ARCHITECTURE.md)
+   - Common mistakes to avoid (from LEARNINGS.md)
+3. Pauses: "This phase requires you to write the implementation. The tests are ready. Fill in the TODO(human) stubs and tell me when you're done."
+4. When the human says done: runs the tests, runs the review, provides feedback
+5. If tests fail: shows which tests fail and why, lets the human fix (does NOT fix it for them)
+
+**The point:** The AI writes the tests (what it should do) and the human writes the code (how to do it). The human is forced to understand the logic deeply enough to make the tests pass. This is how skills are maintained.
+
 ## Rules
 
 - **You are the orchestrator, not the implementer.** Spawn sub-agents for each phase. Do not write implementation code yourself.
 - **TDD is non-negotiable.** Every sub-agent must write failing tests before implementation code. If a sub-agent skips TDD, reject its work and re-spawn with explicit TDD instructions.
+- **In human-writes mode, the AI writes tests and stubs, the human writes implementation.** Do not implement for them. Do not "help" by writing the code. Review after they're done.
 - Follow the plan. Do not improvise, add features, or deviate from scope.
 - Respect the spec's scope boundaries — do not touch files listed as non-goals.
 - Do not skip verification steps.
@@ -250,6 +278,25 @@ To resume: run /build — it will detect the existing worktree
 To discard: git worktree remove <worktree-path> && git branch -D build/<feature-name>
 ```
 
+### Dev server for visual verification
+
+After worktree setup, check if the project has a dev server:
+- `package.json` scripts: `dev`, `start`, `serve`
+- `Makefile` / `Justfile`: `dev`, `serve`, `run`
+- Framework conventions: `next dev`, `vite`, `flask run`, `go run ./cmd/*/`
+
+If found and the feature touches UI (check the plan for frontend files — `.tsx`, `.vue`, `.svelte`, `.html`, templates, CSS):
+
+1. Start the dev server in the background: `cd <WORKTREE_DIR> && <dev-command> &`
+2. Note the URL (usually `http://localhost:3000` or similar)
+3. Tell the user: "Dev server running at [URL] for visual verification during the build."
+
+The dev server stays running throughout the build. It's used in two places:
+- **After each phase that touches UI files:** Use KaBOOM (browser devtools MCP) to screenshot the affected pages and verify they render correctly. Use `observe(what="screenshot")` to capture the state. If something looks broken (layout errors, blank pages, console errors), flag it before proceeding.
+- **During the red team:** The red team agent gets browser access to click through the feature and verify it actually works end-to-end (see "Try to break visually" below).
+
+If the project has no dev server or the feature is backend-only, skip this entirely.
+
 ### Seed test stubs from spec
 
 Before Phase 1, read the spec and generate skeleton test files with empty test cases named after the spec's requirements. This gives every sub-agent a map of what to test before they write any code.
@@ -359,7 +406,19 @@ When re-spawning, include this in the sub-agent's context: "A previous attempt a
 
 Do not trust the sub-agent's self-report alone. Run every automated verification command listed for this phase independently. If any fail, either fix or re-spawn the sub-agent with the failure context.
 
-#### 5. Post-phase code review
+#### 5. Visual verification (UI phases only)
+
+If this phase touched UI files AND the dev server is running, verify visually:
+
+1. Use KaBOOM MCP: `observe(what="screenshot")` on the affected pages
+2. Check for: blank pages, layout breaks, missing elements, console errors (`observe(what="errors")`)
+3. Compare against the spec's expected behavior
+
+If visual issues are found, fix them before proceeding to code review. If KaBOOM is not available, add visual checks to the manual verification list instead.
+
+Skip this step entirely for backend-only phases.
+
+#### 6. Post-phase code review
 
 After automated verification passes, spawn a **review agent** to audit the phase.
 
@@ -410,7 +469,7 @@ If the review finds **MUST FIX** items: fix them (spawn another sub-agent if nee
 
 If the review finds **SHOULD FIX** items: present them to the user. Let them decide whether to fix now or accept the risk.
 
-#### 6. Update the plan and progress file
+#### 7. Update the plan and progress file
 
 Check off completed automated verification items in the plan file.
 
@@ -425,7 +484,7 @@ Update `specs/[feature-name]-progress.md`:
 **Learnings for future phases:** [anything the next agent should know]
 ```
 
-#### 7. Commit
+#### 8. Commit
 
 Commit the phase immediately. Use a sequential ID so phases are easy to revert individually:
 
@@ -437,7 +496,7 @@ Phase [N] of specs/[name]-plan.md
 
 Example: `feat(upfront): 3/6 Local JSONL queue with concurrent write safety`
 
-#### 8. Report and auto-proceed
+#### 9. Report and auto-proceed
 
 ```
 [████████████████░░░░░░░░] 4/6 — Remote sender ✓
@@ -529,6 +588,17 @@ Read:
 - Are there code paths with no test coverage?
 - Do the tests test behavior or implementation details? (Tests that break on refactor are bad tests.)
 - Are there tests that always pass regardless of the code? (Tautological tests.)
+
+### Try to break visually (if dev server is running)
+If the feature has UI and the dev server is running, use KaBOOM MCP to actually interact with the feature:
+- Navigate to the affected pages using `interact(what="navigate", url="...")`
+- Click through the feature's user flows using `interact(what="click", ...)` and `interact(what="type", ...)`
+- Screenshot each state using `observe(what="screenshot")`
+- Check for: broken layouts, missing elements, wrong text, unresponsive buttons, console errors (`observe(what="errors")`)
+- Try edge cases visually: empty states, error states, rapid clicking, browser back/forward
+- If something looks wrong, report it with the screenshot as evidence
+
+This is not a substitute for automated tests — it's a supplement. Tests verify logic; this verifies the user actually sees what they're supposed to see.
 
 ### Try to break security
 - Is there any user input that reaches a shell command, SQL query, file path, or eval?

@@ -201,6 +201,30 @@ For each phase, define:
 2. **Automated verification** — exact commands to run (e.g., `make test`, `npm run typecheck`, specific test files)
 3. **Manual verification** — what a human checks before the next phase begins
 
+#### Human-writes mode (`/plan --human`)
+
+If the user runs `/plan --human`, or if the spec contains `[human-writes]` markers, identify which phases should be implemented by the human rather than the AI.
+
+**Suggest human-writes for phases that contain:**
+- Concurrency logic (locks, channels, atomics, transaction isolation)
+- Security-critical code (auth, authorization, input validation, crypto)
+- Core business logic (the mechanism from the spec — the thing that makes the feature work)
+- Invariant enforcement (the code that guarantees the rules from ARCHITECTURE.md)
+
+Present your suggestions: "I recommend these phases as human-writes: Phase 3 (queue concurrency) and Phase 5 (auth middleware). These are where understanding the code is more valuable than generating it. The rest can be AI-implemented. Agree?"
+
+The user confirms which phases are human-writes. Mark them in the plan file:
+
+```markdown
+### Phase 3: Queue concurrency handler [human-writes]
+**Files:** internal/queue/queue.go
+**Changes:** Implement concurrent append with O_APPEND, flush with rename-and-swap
+**Mode:** Human implements, AI writes tests and reviews
+...
+```
+
+`/build` reads these markers and switches to human-writes mode for flagged phases.
+
 ### 6. Present for review
 
 Present the plan to the user. For each phase, explain:
