@@ -186,7 +186,26 @@ Let the user decide. If they choose option 1, add a Phase 0 to the plan that ins
 
 Do not silently assume guardrails exist. Check. If the project is brand new with no tooling, say so — "This project has zero guardrails. I recommend adding [X, Y, Z] as Phase 0."
 
-### 5. Propose phases
+### 5. Clarity debt
+
+Review the research and architecture phases above. For every question you had to ask (the user or yourself) to understand existing code, that's a signal the code is unclear. Code that confused you will confuse the next developer — human or AI.
+
+Create a clarity debt list:
+- Unclear variable/function names you had to reason about
+- Missing comments on non-obvious design decisions
+- Implicit conventions that aren't documented anywhere
+- Code paths where the "why" is invisible without the conversation you just had
+
+These become sub-tasks within the appropriate implementation phases:
+- Rename unclear identifiers
+- Add comments explaining *why* (not *what*) on non-obvious design choices
+- Document implicit conventions in ARCHITECTURE.md or code comments
+
+**Do not create a separate "documentation phase."** Clarity fixes go into the phase that touches that code — if Phase 3 modifies `queue.go` and you had to ask why `Flush` uses rename-and-swap, add a sub-task to Phase 3 that adds a comment explaining it. The fix travels with the code it clarifies.
+
+If no questions were needed during research, skip this step. But be honest — if the code was genuinely clear, say so. If you're skipping because it's tedious, don't.
+
+### 6. Propose phases
 
 Break the work into phases. Each phase should be:
 - **~400 lines or less** — based on your estimate of actual change size, not a guess
@@ -225,7 +244,7 @@ The user confirms which phases are human-writes. Mark them in the plan file:
 
 `/build` reads these markers and switches to human-writes mode for flagged phases.
 
-### 6. Present for review
+### 7. Present for review
 
 Present the plan to the user. For each phase, explain:
 - What it does and why it's in this order
@@ -236,7 +255,7 @@ Ask: "Does this phasing make sense? Should I adjust the order, split any phase f
 
 Iterate based on feedback.
 
-### 7. Write to disk
+### 8. Write to disk
 
 Once approved, write the plan as a separate file at `specs/[feature-name]-plan.md`:
 
@@ -257,15 +276,21 @@ See `specs/ARCHITECTURE.md` (reviewed [date]).
 
 ### Phase 1: [descriptive name]
 **Files:** [list of files that change]
-**Changes:** [what happens in this phase]
+**Changes:** [what happens in this phase — detailed enough to execute without the original conversation. Include specific function names, patterns to follow, and constraints. This must survive context compaction.]
 **Estimated size:** [lines]
 
-**Automated verification:**
-- [ ] [exact command]
-- [ ] [exact command]
+**Verification** (ranked — use the highest applicable):
+1. TDD: [test file and what tests to write BEFORE implementation]
+2. Agentic: [commands the agent runs to confirm behavior, including edge cases]
+3. Manual: [what a human checks — specific commands, URLs, expected output]
 
-**Manual verification:**
-- [ ] [what to check]
+**Review checklist:**
+- [ ] Security: [input validation, auth, injection relevant to this phase — or "N/A"]
+- [ ] Performance: [queries, loops, data volume concerns — or "N/A"]
+- [ ] Error handling: [what can fail and how it's handled]
+- [ ] Pattern consistency: [which existing patterns this must match]
+
+**Clarity debt:** [identifiers to rename, comments to add, or "none"]
 
 ---
 
@@ -287,3 +312,4 @@ Then tell the user:
 - Each phase's verification criteria should trace back to the spec's acceptance criteria and blind spots. The plan is how you deliver the spec, not a separate document.
 - If the spec's Implementation Design section flags structural issues (slop, inconsistent patterns, cleanup needed), include refactoring as the first phase(s) — prerequisite work before building the feature on top. Do not build on a shaky foundation.
 - If the spec is missing information you need to plan (e.g., no implementation design, unclear architecture), say what's missing and ask the user to update the spec before proceeding.
+- **Plans must survive context compaction.** The implementing agent may have no memory of the planning conversation. Every phase must contain enough detail to execute from the plan file alone — specific function names, patterns to follow, file paths, constraints. If the agent needs the original conversation to understand a phase, the plan is incomplete.
