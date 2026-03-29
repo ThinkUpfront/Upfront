@@ -76,6 +76,18 @@
 	font-weight: 600;
 }
 
+/* ── Site title in header ── */
+.site-title {
+	font-family: 'Newsreader', Georgia, serif !important;
+	letter-spacing: -0.02em;
+}
+
+/* ── Page titles ── */
+h1.page-title,
+.content-panel :is(h1) {
+	font-family: 'Newsreader', Georgia, serif;
+}
+
 /* ── Sidebar ── */
 nav.sidebar .top-level > li > details > summary,
 nav.sidebar .top-level > li > a {
