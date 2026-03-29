@@ -15,14 +15,24 @@ import (
 	"github.com/brennhill/upfront/internal/remote"
 )
 
-const usage = `Usage: upfront <command> [options]
+// Set by goreleaser ldflags.
+var (
+	version = "dev"
+	commit  = "none"
+)
+
+const usage = `Upfront — audit trail for AI-assisted feature definition
+https://github.com/brennhill/upfront
+
+Usage: upfront <command> [options]
 
 Commands:
-  hook    Process Claude Code PostToolUse hook input from stdin
-  flush   Flush queued events to remote endpoint
-  log     Print audit events (--feature, --phase, --limit)
-  purge   Delete events older than TTL
-  status  Show queue status and configuration
+  hook      Process Claude Code PostToolUse hook input from stdin
+  flush     Flush queued events to remote endpoint
+  log       Print audit events (--feature, --phase, --limit)
+  purge     Delete events older than TTL
+  status    Show queue status and configuration
+  version   Print version
 `
 
 const (
@@ -54,6 +64,9 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 		return cmdPurge(stdout, stderr)
 	case "status":
 		return cmdStatus(stdout, stderr)
+	case "version", "--version", "-v":
+		fmt.Fprintf(stdout, "upfront %s (%s)\n", version, commit)
+		return 0
 	default:
 		fmt.Fprintf(stderr, "unknown subcommand: %s\n", args[0])
 		fmt.Fprint(stderr, usage)
@@ -277,6 +290,7 @@ func cmdStatus(stdout, stderr io.Writer) int {
 		return 1
 	}
 
+	fmt.Fprintf(stdout, "Upfront %s (%s)\n\n", version, commit)
 	fmt.Fprintf(stdout, "Queue file:  %s\n", qPath)
 	fmt.Fprintf(stdout, "Event count: %d\n", len(events))
 

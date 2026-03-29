@@ -1,0 +1,56 @@
+version: 2
+
+project_name: upfront
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - id: upfront
+    main: ./cmd/upfront/
+    binary: upfront
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}}
+
+archives:
+  - id: default
+    formats:
+      - tar.gz
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+brews:
+  - repository:
+      owner: brennhill
+      name: homebrew-tap
+    homepage: "https://github.com/brennhill/upfront"
+    description: "Audit trail for AI-assisted feature definition"
+    license: "MIT"
+    install: |
+      bin.install "upfront"
+    test: |
+      system "#{bin}/upfront", "status"

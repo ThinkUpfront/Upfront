@@ -194,20 +194,50 @@ These files accumulate project knowledge across features and sessions:
 
 ## Install
 
-Copy the commands into any project:
+### Homebrew (macOS / Linux)
+
+```bash
+brew install brennhill/tap/upfront
+```
+
+### Quick install (macOS / Linux)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.sh | bash
+```
+
+### Windows (PowerShell)
+
+```powershell
+irm https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.ps1 | iex
+```
+
+### From source
 
 ```bash
 git clone https://github.com/brennhill/upfront.git
+cd upfront
+go build -o upfront ./cmd/upfront/
+./install.sh
+```
+
+All installers build the binary, place it on your PATH, and register the PostToolUse hook in Claude Code automatically. Run `upfront status` to verify.
+
+### Commands only (no audit trail)
+
+If you just want the slash commands without the audit binary:
+
+```bash
 cp -r upfront/.claude/commands/ your-project/.claude/commands/
 ```
 
-Or install globally (available in every project):
+Or install globally:
 
 ```bash
 cp -r upfront/.claude/commands/ ~/.claude/commands/
 ```
 
-That's it. No dependencies, no build step, no API keys. The commands are markdown files that Claude Code reads as instructions.
+The commands are markdown files that Claude Code reads as instructions — no dependencies, no build step, no API keys.
 
 ---
 
