@@ -374,6 +374,12 @@ AGPL-3.0. See [LICENSE](LICENSE).
 
 For commercial licensing (proprietary use, SaaS embedding, or redistribution without AGPL obligations), contact [brenn@thedeliverygap.com](mailto:brenn@thedeliverygap.com).
 
+## Acknowledgments
+
+Inspired by [Superhuman](https://github.com/nicholasgriffintn/claude-code-flow), [Get-Shit-Done](https://github.com/gsd-build/get-shit-done), and [Agentic Brownfield Coding](https://github.com/ralfstrobel/agentic-brownfield-coding), and countless hours of research on the impact of AI on learning, coding, and people in general.
+
+Always Think Upfront.
+
 ## Related
 
 - [The Delivery Gap](https://thedeliverygap.com) — the book this toolkit accompanies
