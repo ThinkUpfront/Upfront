@@ -48,6 +48,7 @@ brews:
       owner: brennhill
       name: homebrew-tap
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    directory: Formula
     homepage: "https://thinkupfront.dev"
     description: "Force thinking before code — audit trail for AI-assisted feature definition"
     license: "AGPL-3.0"
