@@ -16,8 +16,9 @@ Silently read these files if they exist:
 - `specs/ARCHITECTURE.md`
 - `specs/DECISIONS.md`
 - `specs/LEARNINGS.md`
+- `specs/CONSTITUTION.md`
 
-These give you the project's conventions, patterns, prior decisions, and known gotchas. Follow them.
+These give you the project's conventions, patterns, prior decisions, and known gotchas. Follow them. Constitutional principles are hard constraints — if the change would violate one, stop and say so.
 
 ### 2. Scope check
 

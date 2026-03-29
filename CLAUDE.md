@@ -21,7 +21,7 @@ go build ./...
 go test ./...
 go test ./... -race    # always run with race detector
 go build -o upfront ./cmd/upfront/
-sloppy-joe check      # dependency supply chain check (typosquatting, hallucinated packages)
+sloppy-joe check --config ~/.sloppy-joe/upfront/config.json  # supply chain check
 ```
 
 ## Specs
@@ -33,7 +33,7 @@ All specs and plans are in `specs/`. Read these before making architectural deci
 
 ## Conventions
 
-- Go stdlib only — zero external dependencies. Enforced by `sloppy-joe check` with canonical config at `~/.sloppy-joe/config.json`
+- Go stdlib only — zero external dependencies. Enforced by `sloppy-joe check --config ~/.sloppy-joe/upfront/config.json`
 - Event format must match the trace schema in the Delivery-Gap-Toolkit agent-monitoring guide
 - Local queue file: `.upfront/audit.jsonl`
 - Config file: `.upfront/config.json` (project-level), `~/.upfront/config.json` (user-level fallback)

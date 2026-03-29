@@ -16,12 +16,14 @@ If no path is provided, check the `specs/` directory for recent specs and ask wh
 
 ## Process
 
-### 1. Read the spec
+### 1. Read the spec and constitution
 
 Read the entire spec file. Understand:
 - The intent (what problem, what metric, what's out of scope, what must not happen)
-- The constraint surface (model anchors, scope boundaries, acceptance criteria)
+- The constraint surface (scope boundaries, acceptance criteria)
 - The blind spots flagged
+
+Also read `specs/CONSTITUTION.md` if it exists. Constitutional principles are hard constraints — every proposed phase must comply. If a phase would require violating a constitutional principle, flag it before proposing the plan.
 
 ### 2. Research the codebase
 

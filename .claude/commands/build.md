@@ -16,7 +16,9 @@ Read both:
 - The plan file (provided by user)
 - The spec file (linked from the plan's header)
 
-Read both fully before starting. Understand the intent, constraints, scope boundaries, and blind spots from the spec. Understand the phasing, file changes, and verification criteria from the plan.
+Also read `specs/CONSTITUTION.md` if it exists — constitutional principles are hard constraints that override everything except explicit user override.
+
+Read all fully before starting. Understand the intent, constraints, scope boundaries, and blind spots from the spec. Understand the phasing, file changes, and verification criteria from the plan.
 
 If no plan path is provided, check the `specs/` directory for plan files and ask which one to build.
 
@@ -49,6 +51,17 @@ This file is the memory between phases. Each sub-agent reads it. You update it a
 - Respect the spec's scope boundaries — do not touch files listed as non-goals.
 - Do not skip verification steps.
 - Do not proceed to the next phase without human confirmation.
+
+### Decimal phase insertion
+
+If during a build you discover that a phase requires unexpected prerequisite work, insert it as a decimal phase rather than renumbering everything:
+
+- Phase 3 needs work that should have been Phase 2.5 → insert as **Phase 2.5**
+- Multiple insertions: 2.1, 2.2, 2.3, etc.
+
+Update the plan file and progress file with the inserted phase. Announce: "Inserting Phase 2.5: [description] — this is prerequisite work for Phase 3 that wasn't in the original plan."
+
+Commit inserted phases with: `feat([feature-name]): 2.5/[total] [description] (inserted)`
 
 ### Stuck loop detection
 
@@ -237,17 +250,37 @@ To resume: run /build — it will detect the existing worktree
 To discard: git worktree remove <worktree-path> && git branch -D build/<feature-name>
 ```
 
+### Seed test stubs from spec
+
+Before Phase 1, read the spec and generate skeleton test files with empty test cases named after the spec's requirements. This gives every sub-agent a map of what to test before they write any code.
+
+Pull test names from:
+- **Error cases** in the behavioral spec → `TestErrorCase_DependencyDown`, `TestErrorCase_ConcurrentWrite`, etc.
+- **Concurrency concerns** → `TestConcurrency_SimultaneousFlush`, `TestConcurrency_RaceOnAppend`, etc.
+- **Boundary values** from blind spots → `TestBoundary_EmptyInput`, `TestBoundary_MaxSize`, etc.
+- **Acceptance criteria** → `TestAcceptance_PhaseEventsLogged`, etc.
+- **Invariants** from ARCHITECTURE.md → `TestInvariant_SequenceMonotonic`, etc.
+
+Use the project's test framework and conventions. Each test body should be a single `t.Skip("TODO: implement in Phase N")` (or equivalent) so the test suite passes but the map is visible.
+
+Commit the stubs: `test(feature-name): seed test stubs from spec`
+
+Sub-agents in each phase replace `Skip` with real test logic during TDD. This means TDD starts with "which of these stubbed tests should I implement?" not "what should I test?"
+
 ### For each phase:
 
 #### 1. Announce the phase
 
-Tell the user what's about to happen:
+Show progress and what's about to happen:
 ```
-Starting Phase [N]: [descriptive name]
-Files: [list from plan]
+[████████████░░░░░░░░░░░░] 3/6 — Local JSONL queue
+
+Files: internal/queue/queue.go, internal/queue/queue_test.go
 Expected outcome: [what changes]
 Spawning fresh agent...
 ```
+
+The progress bar uses: `█` for complete phases, `░` for remaining. Keep it on one line.
 
 #### 2. Spawn a sub-agent with clean context
 
@@ -310,6 +343,17 @@ Found: [actual situation]
 How should I proceed?
 ```
 Do not guess. Wait for the user.
+
+**Error pattern forwarding:** When a sub-agent fails or is rejected, record the failure in the progress file before re-spawning:
+
+```markdown
+## Phase [N]: Failed attempt [M]
+**What went wrong:** [specific error or rejection reason]
+**Approach that failed:** [what the agent tried]
+**Avoid:** [concrete instruction for next attempt]
+```
+
+When re-spawning, include this in the sub-agent's context: "A previous attempt at this phase failed. Read the failed attempt notes in the progress file and avoid the same approach."
 
 #### 4. Run automated verification yourself
 
@@ -393,22 +437,33 @@ Phase [N] of specs/[name]-plan.md
 
 Example: `feat(upfront): 3/6 Local JSONL queue with concurrent write safety`
 
-#### 8. Report and pause
+#### 8. Report and auto-proceed
 
 ```
-Phase [N]/[total] committed.
+[████████████████░░░░░░░░] 4/6 — Remote sender ✓
 
-Automated verification passed:
-- [list what passed]
-
-Code review:
-- [summary of review findings — clean, or what was fixed/accepted]
-
-Manual verification items (if any):
-- [list manual items from the plan]
+Automated verification: all passing
+Code review: clean (no issues)
 ```
 
-Wait for user confirmation before proceeding to the next phase. The user can interrupt, redirect, or ask for changes at any point.
+**Auto-proceed logic:** If this phase has NO manual verification items in the plan, proceed automatically to the next phase. Print "Proceeding to Phase [N+1]..." and continue. The user can interrupt at any time.
+
+If this phase HAS manual verification items, pause and wait:
+
+```
+[████████████████░░░░░░░░] 4/6 — Remote sender ✓
+
+Automated verification: all passing
+Code review: clean
+
+Manual verification needed:
+- [ ] Config file format documented and matches example
+- [ ] Verify POST reaches test endpoint
+
+Let me know when manual checks are done.
+```
+
+This means most phases (the ones with only automated checks) flow continuously. The build only pauses when a human genuinely needs to verify something.
 
 ### After all phases: Integration sweep
 
@@ -518,12 +573,39 @@ Append to `specs/LEARNINGS.md` (create if it doesn't exist):
 **Process notes:** [what worked well, what was wasteful, what to change next time]
 ```
 
+### After learnings: Compound
+
+This is the step that makes the system get smarter over time. Scan `specs/LEARNINGS.md` for patterns that should become permanent agent instructions — not just documentation.
+
+Look for:
+- Mistakes that were made more than once across features
+- Patterns that surprised the agents (and would surprise them again)
+- Conventions that aren't in CLAUDE.md but should be
+- Gotchas specific to this codebase that future agents need to know
+
+For each pattern worth promoting, append it to the project's `CLAUDE.md` under a `## Learned Patterns` section (create if it doesn't exist):
+
+```markdown
+## Learned Patterns
+
+- When touching [area], always [do X] because [we learned Y during feature Z]
+- [Pattern]: [instruction] — learned [date]
+```
+
+**Only promote patterns that are:**
+- Actionable (tells an agent what to do, not just what happened)
+- Durable (will still be relevant in 6 months)
+- Not already captured elsewhere (ARCHITECTURE.md, DECISIONS.md)
+
+Present what you want to promote and let the user approve before writing to CLAUDE.md. This is the difference between learnings (history) and instructions (behavior).
+
 Then tell the user:
 - All phases are complete
 - Integration sweep results
 - Red team results (issues fixed, judgments made, risks flagged)
-- Learnings captured
+- Learnings captured and patterns compounded
 - The feature is ready for final review
+- "Run `/ship` to create a PR, or push the branch manually."
 
 ## Resuming
 

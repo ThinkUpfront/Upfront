@@ -14,7 +14,7 @@ The user provides a path to a spec file (e.g., `/refine specs/feature-name.md`).
 
 If no path is provided, check the `specs/` directory for recent specs and ask which one to refine.
 
-Read the entire spec, including all thinking records.
+Read the entire spec, including all thinking records. Also read `specs/LEARNINGS.md` and `specs/DECISIONS.md` if they exist — these may contain context from `/build` or `/retro` that should inform the revision.
 
 ## Process
 
