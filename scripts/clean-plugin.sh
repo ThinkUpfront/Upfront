@@ -66,7 +66,7 @@ else:
 fi
 
 echo ""
-echo "Done. Restart Claude Code, then:"
-echo "  /plugin marketplace add ThinkUpfront/Upfront"
-echo "  /plugin install upfront"
-echo "  /reload-plugins"
+echo "Done. Now run:"
+echo "  claude plugin marketplace add ThinkUpfront/Upfront"
+echo "  claude plugin install upfront"
+echo "Then restart Claude Code."

@@ -27,10 +27,16 @@ Figure out which workflow was active:
 - `/feature` — defining a feature spec
 - `/plan` — breaking a spec into phases
 - `/build` — executing phases from a plan
+- `/re-architect` — executing an architecture evolution
+- `/architect` — architecture review in progress
+- `/patch` — fixing a bug or small feature
 - `/quick` — small scoped change
+- `/debug` — hypothesis-driven debugging
+- `/explore` — codebase documentation
+- `/teach` — codebase walkthrough
 - Freeform — no structured command, just working
 
-If `/build` was running, identify the plan file path and which phase was in progress.
+If `/build` or `/re-architect` was running, identify the plan/evolution file path and which phase was in progress.
 
 ## Step 3: Write the handoff
 

@@ -28,11 +28,13 @@ Also read `specs/ARCHITECTURE.md` if it exists — its invariants section contai
 
 ### 2. Research the codebase
 
-Before proposing any phases, investigate the actual code. Use subagents for parallel research where possible.
+Before proposing any phases, investigate the actual code. **Delegate all broad codebase searches to Haiku sub-agents.** Do not run broad Grep/Glob calls from the main context — spawn a sub-agent with `model: "haiku"` to do the searching, and have it return a compressed summary. This saves significant tokens on the main model.
+
+For targeted reads (you already know the exact file), read directly. For exploratory searches ("where is auth handled?", "what files use the queue?"), always delegate.
 
 For each file, module, or component referenced in the spec (especially in the Design Approach and Implementation Design sections):
-- Read the referenced files
-- Understand the existing patterns, conventions, and architecture
+- Spawn Haiku explorers to locate and summarize the relevant code
+- Read specific files directly once the explorer tells you where they are
 
 Then answer:
 - What files will need to change?
@@ -167,24 +169,11 @@ Do not silently assume guardrails exist. Check. If the project is brand new with
 
 ### 5. Propose phases
 
-Break the work into phases. Each phase must be **reviewable** — a human must be able to read the diff and actually catch problems. ~400 lines is a proxy, but the real constraint is cognitive load.
-
-Each phase should be:
+Break the work into phases. Each phase should be:
 - **~400 lines or less** — based on your estimate of actual change size, not a guess
-- **Single concern** — one logical thing changes per phase. If a phase touches auth AND queue AND API, split it regardless of line count.
 - **Independently verifiable** — has its own automated and manual success criteria
 - **Independently committable** — the codebase compiles, tests pass, and nothing is broken after this phase alone
 - **Ordered by dependency** — schema before logic, logic before API, API before UI
-
-**Reviewability check per phase:** Before finalizing, evaluate each phase against:
-- **Concern count:** Does this phase change more than 2 distinct things? Split it.
-- **Blast radius:** Does this phase affect many callers? Flag it for careful review.
-- **Novelty:** Does this phase introduce a new pattern? Keep it small — new patterns need more review attention.
-- **State complexity:** Does this phase touch shared mutable state? Keep it very small — concurrency changes are 10x harder to review.
-
-If a phase scores high on 2+ dimensions, split it further even if it's under 400 lines. A 200-line phase that changes concurrency logic across 3 files is harder to review than a 500-line phase that adds straightforward CRUD handlers.
-
-**The test:** "Could a reviewer find a bug in this diff in under 15 minutes?" If no, the phase is too big or too complex.
 
 If Phase 0 (guardrails) was agreed upon, it comes first. No feature code until the tooling is in place.
 

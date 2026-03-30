@@ -35,13 +35,15 @@ Do not force the user through 5 phases of exploration on an empty repo. Exit ear
 
 **Your role: Investigate, then present for correction.**
 
-Read the codebase thoroughly using subagents for parallel exploration:
-- Language, framework, toolchain (go.mod, package.json, pyproject.toml, etc.)
-- Directory structure and module boundaries
-- Build, test, lint, format commands (Makefile, scripts, CI config)
-- Dependencies and their versions
-- Existing test infrastructure (what framework, what coverage, what patterns)
-- Existing patterns: error handling, logging, config management, naming conventions
+Read the codebase thoroughly by spawning **parallel Haiku sub-agents** for each area of investigation. Use `model: "haiku"` when spawning these agents. The sub-agents do the heavy searching (Grep, Glob, Read) on the cheap model and return compressed summaries. You (on the main model) synthesize their findings into the architecture doc.
+
+Spawn explorers in parallel for:
+1. **Stack & tooling** — language, framework, go.mod/package.json/pyproject.toml, build/test/lint/format commands, CI config
+2. **Structure & boundaries** — directory layout, module boundaries, what each package owns
+3. **Dependencies & patterns** — external deps and versions, error handling, logging, config, naming conventions
+4. **Test infrastructure** — framework, coverage, patterns, test/source file conventions
+
+Each explorer should return a structured summary under 200 lines — not raw search results. Instruct them: "Return findings as a concise summary for an AI reader. No raw file listings. Focus on patterns, conventions, and surprises."
 
 Present what you found concisely:
 

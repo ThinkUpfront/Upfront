@@ -58,19 +58,3 @@ git clone https://github.com/ThinkUpfront/Upfront.git
 bash Upfront/scripts/clean-plugin.sh
 ```
 
-## Audit binary (optional)
-
-The audit binary captures thinking records from skill runs into a JSONL queue. It's optional — the skills work without it.
-
-**Homebrew (macOS / Linux):**
-```bash
-brew install ThinkUpfront/tap/upfront
-```
-
-**From source:**
-```bash
-git clone https://github.com/ThinkUpfront/Upfront.git
-cd Upfront
-go build -o upfront ./cmd/upfront/
-./install.sh
-```

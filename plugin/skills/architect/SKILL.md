@@ -1,5 +1,6 @@
 ---
 description: Architecture review that produces an evolution plan — god modules first, then layers, then patterns
+user-invocable: true
 ---
 
 # Architect

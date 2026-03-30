@@ -198,8 +198,6 @@ These files accumulate project knowledge across features and sessions:
 
 ## Install
 
-### Plugin install (recommended)
-
 Run these in your terminal:
 
 ```bash
@@ -207,24 +205,7 @@ claude plugin marketplace add ThinkUpfront/Upfront
 claude plugin install upfront
 ```
 
-Restart Claude Code. All 18 `/upfront:*` skills will be available in every project.
-
-### Audit binary (optional)
-
-The plugin gives you the skills and hooks. The `upfront` binary adds the audit trail:
-
-**Homebrew (macOS / Linux):**
-```bash
-brew install ThinkUpfront/tap/upfront
-```
-
-**From source:**
-```bash
-git clone https://github.com/ThinkUpfront/Upfront.git
-cd Upfront
-go build -o upfront ./cmd/upfront/
-./install.sh
-```
+Restart Claude Code. All 20 `/upfront:*` skills will be available in every project.
 
 ---
 
