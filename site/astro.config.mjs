@@ -16,6 +16,17 @@ export default defineConfig({
 			customCss: ['./src/styles/custom.css'],
 			head: [
 				{
+					tag: 'script',
+					attrs: {
+						async: true,
+						src: 'https://www.googletagmanager.com/gtag/js?id=G-0NWJLNTR26',
+					},
+				},
+				{
+					tag: 'script',
+					content: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-0NWJLNTR26');",
+				},
+				{
 					tag: 'link',
 					attrs: {
 						rel: 'preconnect',
