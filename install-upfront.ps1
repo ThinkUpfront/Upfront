@@ -1,9 +1,9 @@
 # install-upfront.ps1 — Download and install upfront on Windows.
-# Usage: irm https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.ps1 | iex
+# Usage: irm https://raw.githubusercontent.com/ThinkUpfront/Upfront/main/install-upfront.ps1 | iex
 
 $ErrorActionPreference = "Stop"
 
-$Repo = "brennhill/upfront"
+$Repo = "ThinkUpfront/Upfront"
 $InstallDir = if ($env:INSTALL_DIR) { $env:INSTALL_DIR } else { "$env:LOCALAPPDATA\upfront\bin" }
 
 function Write-Info($msg) { Write-Host "==> $msg" -ForegroundColor Blue }
