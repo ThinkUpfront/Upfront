@@ -1,4 +1,5 @@
 ---
+name: debug
 description: Systematic debugging using the scientific method with persistent state across sessions
 ---
 

@@ -1,4 +1,5 @@
 ---
+name: ideate
 description: Divergent brainstorming to find a problem worth solving — use before /feature
 ---
 
@@ -20,10 +21,12 @@ Before starting, check `specs/` for vision files (`*-vision.md`). If one exists:
 If no vision file exists, proceed as normal — open brainstorm.
 
 ---
+name: ideate
 
 Walk through this process conversationally. This is exploration, not interrogation. No templates, no forms, no output file. The output is clarity in the user's head.
 
 ---
+name: ideate
 
 ## Step 1: Diverge
 

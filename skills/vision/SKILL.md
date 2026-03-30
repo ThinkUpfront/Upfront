@@ -1,4 +1,5 @@
 ---
+name: vision
 description: Capture a big ambition, force strategic clarity, and break it into reviewable increments
 ---
 
@@ -60,6 +61,7 @@ Summarize who and why. "Here's who we're building for and why they need it now. 
 Wait for confirmation. Do not proceed with a vague audience.
 
 ---
+name: vision
 
 ## Phase 2: Diagnosis
 
@@ -101,6 +103,7 @@ Present the diagnosis: "Here's what I think is actually going on: [structural di
 Wait for confirmation. Push back if they agree too quickly — "You said yes fast. Is this actually what you believe, or are you just moving on?"
 
 ---
+name: vision
 
 ## Phase 3: Strategy
 
@@ -159,6 +162,7 @@ Present the strategy: "Here's the strategy: given [diagnosis], we're betting on 
 Wait. Challenge quick agreement.
 
 ---
+name: vision
 
 ## Phase 4: Coherent Actions
 
@@ -206,6 +210,7 @@ If they're a solo creator with 4 hours a week, that shapes every increment diffe
 Adjust increment sizing to constraints. An increment for a solo creator might be 1 feature. For a team, it might be 3-4 features in parallel.
 
 ---
+name: vision
 
 ## Output
 
@@ -268,6 +273,7 @@ Write the vision to `specs/[name]-vision.md`:
 [remaining vision items — deliberately vague until closer]
 
 ---
+name: vision
 
 ## Thinking Record
 

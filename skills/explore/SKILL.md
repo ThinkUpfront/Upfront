@@ -1,4 +1,5 @@
 ---
+name: explore
 description: Document the codebase and its operational context for AI-assisted development
 ---
 
@@ -15,6 +16,7 @@ The AI can read code. What it cannot do is understand the system in context — 
 **Challenge first, decorate second.** Read the codebase, form your understanding, present it, and ask the user to correct you. Do not ask the user to explain things you can figure out from the code.
 
 ---
+name: explore
 
 ## Greenfield Check
 
@@ -29,6 +31,7 @@ Create the minimal files, then say: "Run `/feature` to define your first feature
 Do not force the user through 5 phases of exploration on an empty repo. Exit early.
 
 ---
+name: explore
 
 ## Phase 1: What's in the repo
 
@@ -54,6 +57,7 @@ Specifically ask:
 Wait for confirmation before proceeding.
 
 ---
+name: explore
 
 ## Phase 2: Internal architecture
 
@@ -89,6 +93,7 @@ Present all of this, then ask:
 Wait for confirmation before proceeding.
 
 ---
+name: explore
 
 ## Phase 3: External connections
 
@@ -139,6 +144,7 @@ Do not accept "it's just a REST API" without the details above. Every external c
 - **Authentication / authorization:** How does this system authenticate to external services? How do external services authenticate to it? Where are credentials stored?
 
 ---
+name: explore
 
 ## Phase 4: Ecosystem context
 
@@ -159,6 +165,7 @@ Then ask:
 - "Are there any upcoming changes to the ecosystem that will affect this system? (Migrations, deprecations, new dependencies)"
 
 ---
+name: explore
 
 ## Phase 5: Operational context
 
@@ -191,6 +198,7 @@ Ask about:
 - What's the scariest part of the code? (The thing that makes people nervous to touch)
 
 ---
+name: explore
 
 ## Output
 
@@ -285,6 +293,7 @@ Then tell the user:
 - That `/feature` and `/plan` will append to `DECISIONS.md` and `LEARNINGS.md` over time
 
 ---
+name: explore
 
 ## Rules
 

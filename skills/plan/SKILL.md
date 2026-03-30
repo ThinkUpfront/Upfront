@@ -1,4 +1,5 @@
 ---
+name: plan
 description: Break a feature spec into ~400 LOC implementation phases by researching the codebase
 ---
 
@@ -67,6 +68,7 @@ Before starting the deep-dive, check if `specs/ARCHITECTURE.md` exists.
 - Note that it doesn't exist and proceed — the deep-dive below will create it.
 
 ---
+name: plan
 
 Before proposing phases, walk through the architecture at three levels. Each level must be confirmed by the user before proceeding to the next. Wrong assumptions at any level will poison every phase.
 
@@ -245,6 +247,7 @@ See `specs/ARCHITECTURE.md` (reviewed [date]).
 [anything specific to this feature that doesn't belong in the shared architecture doc — e.g., "this feature adds a new subsystem (upfront/internal/queue/) not yet in ARCHITECTURE.md" or "N/A — no new architectural decisions"]
 
 ---
+name: plan
 
 ### Phase 1: [descriptive name]
 **Files:** [list of files that change]
@@ -259,6 +262,7 @@ See `specs/ARCHITECTURE.md` (reviewed [date]).
 - [ ] [what to check]
 
 ---
+name: plan
 
 ### Phase 2: [descriptive name]
 ...
