@@ -1,5 +1,6 @@
 ---
 description: Walk through the codebase to rebuild understanding, with optional quizzes to verify comprehension
+user-invocable: true
 ---
 
 # Teach

@@ -1,5 +1,6 @@
 ---
 description: "Smart router — figures out what you need and sends you there"
+user-invocable: true
 ---
 
 $ARGUMENTS

@@ -1,5 +1,6 @@
 ---
 description: Pause mid-work with a structured handoff for the next session
+user-invocable: true
 ---
 
 # Pause

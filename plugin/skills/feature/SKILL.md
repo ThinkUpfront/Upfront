@@ -1,5 +1,6 @@
 ---
 description: Define a new feature through intent, behavioral spec, design, and implementation design
+user-invocable: true
 ---
 
 # Feature

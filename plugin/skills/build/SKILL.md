@@ -1,5 +1,6 @@
 ---
 description: Execute an implementation plan phase by phase with strict TDD and post-phase review
+user-invocable: true
 ---
 
 # Build

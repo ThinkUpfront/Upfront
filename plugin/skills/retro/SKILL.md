@@ -1,5 +1,6 @@
 ---
 description: "Close the loop on a shipped feature — check spec predictions against production reality"
+user-invocable: true
 ---
 
 # /retro — Post-Ship Retrospective

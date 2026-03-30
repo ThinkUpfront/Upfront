@@ -1,5 +1,6 @@
 ---
 description: Divergent brainstorming to find a problem worth solving — use before /feature
+user-invocable: true
 ---
 
 # Ideate

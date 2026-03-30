@@ -1,5 +1,6 @@
 ---
 description: Execute a small, well-understood change without the full /feature + /plan + /build ceremony
+user-invocable: true
 ---
 
 # Quick

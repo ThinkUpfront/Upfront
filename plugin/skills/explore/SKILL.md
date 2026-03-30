@@ -1,5 +1,6 @@
 ---
 description: Document the codebase and its operational context for AI-assisted development
+user-invocable: true
 ---
 
 # Explore

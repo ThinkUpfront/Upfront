@@ -1,5 +1,6 @@
 ---
 description: Create a PR with spec-derived context so reviewers understand intent without reading the full spec
+user-invocable: true
 ---
 
 # Ship

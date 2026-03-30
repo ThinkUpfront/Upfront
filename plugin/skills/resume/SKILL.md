@@ -1,5 +1,6 @@
 ---
 description: Resume from a previous pause with full context restoration
+user-invocable: true
 ---
 
 # Resume

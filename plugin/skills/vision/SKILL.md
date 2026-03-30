@@ -1,5 +1,6 @@
 ---
 description: Capture a big ambition, force strategic clarity, and break it into reviewable increments
+user-invocable: true
 ---
 
 # Vision
