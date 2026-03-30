@@ -252,7 +252,7 @@ Upfront events are structured JSON, compatible with any tool that accepts HTTP P
 - **[Portkey](https://portkey.ai/)** — AI gateway with observability
 - **Custom webhooks** — any endpoint that accepts `POST` with `Content-Type: application/json`
 
-The event format extends the agent-monitoring trace schema from the [Delivery-Gap-Toolkit](https://github.com/ThinkUpfront/Delivery-Gap-Toolkit), which aligns with OpenTelemetry span conventions. Each event contains session, timestamp, phase, feature name, and the full thinking record summary.
+The event format extends the agent-monitoring trace schema from the [Delivery-Gap-Toolkit](https://github.com/brennhill/Delivery-Gap-Toolkit), which aligns with OpenTelemetry span conventions. Each event contains session, timestamp, phase, feature name, and the full thinking record summary.
 
 ### What managers see
 
@@ -333,5 +333,5 @@ Inspired by [Superhuman](https://github.com/nicholasgriffintn/claude-code-flow),
 ## Related
 
 - [The Delivery Gap](https://leanpub.com/thedeliverygap) — the book this toolkit accompanies
-- [Delivery Gap Toolkit](https://github.com/ThinkUpfront/Delivery-Gap-Toolkit) — verification infrastructure (gates, policies, measurement)
-- [sloppy-joe](https://github.com/ThinkUpfront/sloppy-joe) — slopsquatting protection for AI-generated package names
+- [Delivery Gap Toolkit](https://github.com/brennhill/Delivery-Gap-Toolkit) — verification infrastructure (gates, policies, measurement)
+- [sloppy-joe](https://github.com/brennhill/sloppy-joe) — slopsquatting protection for AI-generated package names
