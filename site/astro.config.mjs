@@ -19,12 +19,12 @@ export default defineConfig({
 					tag: 'script',
 					attrs: {
 						async: true,
-						src: 'https://www.googletagmanager.com/gtag/js?id=G-0NWJLNTR26',
+						src: 'https://www.googletagmanager.com/gtag/js?id=G-EBNJWXFM9Z',
 					},
 				},
 				{
 					tag: 'script',
-					content: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-0NWJLNTR26');",
+					content: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-EBNJWXFM9Z');",
 				},
 				{
 					tag: 'link',
