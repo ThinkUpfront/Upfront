@@ -3,60 +3,52 @@ title: Install
 description: Get Upfront running in your project.
 ---
 
-## Claude Code plugin (recommended)
+## Quick install (recommended)
 
-```
-/plugin marketplace add brennhill/Upfront
-/plugin install upfront@upfront
-```
+Clone the repo and ask Claude to install the skills:
 
-This gives you all slash commands and the PostToolUse audit hook. For the audit binary:
-
-```bash
-brew install brennhill/tap/upfront
-```
-
-## Audit binary only
-
-**Homebrew (macOS / Linux):**
-```bash
-brew install brennhill/tap/upfront
-```
-
-**Quick install (macOS / Linux):**
-```bash
-curl -fsSL https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.sh | bash
-```
-
-**Windows (PowerShell):**
-```powershell
-irm https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.ps1 | iex
-```
-
-**From source:**
 ```bash
 git clone https://github.com/brennhill/upfront.git
-cd upfront
-go build -o upfront ./cmd/upfront/
-./install.sh
 ```
 
-## Manual install (no plugin system)
+Then in Claude Code, say:
 
-Copy commands into any project:
+> "Install the Upfront skills from the `upfront/` directory into my global commands (`~/.claude/commands/`)"
+
+Claude will copy the markdown files and you'll have all slash commands available in every project.
+
+## Manual install
+
+Copy commands into a specific project:
 
 ```bash
 git clone https://github.com/brennhill/upfront.git
 cp -r upfront/.claude/commands/ your-project/.claude/commands/
 ```
 
-Or install globally:
+Or install globally (available in every project):
 
 ```bash
 cp -r upfront/.claude/commands/ ~/.claude/commands/
 ```
 
 The commands are markdown files — no dependencies, no build step, no API keys.
+
+## Audit binary (optional)
+
+The audit binary captures thinking records from `/feature` runs into a JSONL queue. It's optional — the slash commands work without it.
+
+**Homebrew (macOS / Linux):**
+```bash
+brew install brennhill/tap/upfront
+```
+
+**From source:**
+```bash
+cd upfront
+go build -o upfront ./cmd/upfront/
+./install.sh
+```
 
 ## What you get
 
