@@ -24,7 +24,7 @@ Gather evidence BEFORE forming hypotheses:
 - Read the error messages, logs, and stack traces mentioned in the bug description
 - If a GitHub issue/ticket link was provided, fetch it with `gh issue view` or `gh api`
 - Reproduce the issue if possible (run tests, hit the endpoint, trigger the flow)
-- **If browser devtools MCP tools are available** (`kaboom-browser-devtools`) and this is a web/UI issue:
+- **If browser devtools MCP tools are available** (`gasoline-browser-devtools`) and this is a web/UI issue:
   - `observe(what="error_bundles")` — get pre-assembled error context
   - `observe(what="console")` — check for console errors/warnings
   - `observe(what="network")` — check for failed requests, unexpected responses
@@ -34,7 +34,7 @@ Gather evidence BEFORE forming hypotheses:
 - Read `specs/ARCHITECTURE.md` if it exists, for system context
 - Read `specs/LEARNINGS.md` if it exists, for past debugging patterns
 
-Write initial state to `specs/DEBUG.md`:
+Create the `specs/` directory if it doesn't exist. Write initial state to `specs/DEBUG.md`:
 ```
 # Debug Session
 

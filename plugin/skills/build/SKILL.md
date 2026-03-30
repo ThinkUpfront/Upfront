@@ -7,7 +7,7 @@ description: Execute an implementation plan phase by phase with strict TDD and p
 
 You are the **orchestrator** for implementing an approved plan. You do not implement phases yourself. You spawn a fresh sub-agent for each phase, verify its work, run a post-phase review, and manage the progress file. Each phase gets a clean context with maximum leverage.
 
-This follows the RALPH pattern: fresh context per task, progress preserved through git commits and a progress file, not through conversation history.
+This uses fresh context per task, progress preserved through git commits and a progress file, not through conversation history.
 
 ## Input
 
@@ -17,7 +17,7 @@ Read both:
 - The plan file (provided by user)
 - The spec file (linked from the plan's header)
 
-Also read `specs/CONSTITUTION.md` if it exists — constitutional principles are hard constraints that override everything except explicit user override.
+Also read `specs/ARCHITECTURE.md` if it exists — its invariants section contains hard constraints that override everything except explicit user override.
 
 Read all fully before starting. Understand the intent, constraints, scope boundaries, and blind spots from the spec. Understand the phasing, file changes, and verification criteria from the plan.
 
@@ -70,6 +70,66 @@ When a phase is in human-writes mode, the sub-agent:
 5. If tests fail: shows which tests fail and why, lets the human fix (does NOT fix it for them)
 
 **The point:** The AI writes the tests (what it should do) and the human writes the code (how to do it). The human is forced to understand the logic deeply enough to make the tests pass. This is how skills are maintained.
+
+### Human-writes reporting
+
+Track every human-writes phase in the progress file:
+
+```markdown
+## Phase [N]: [name] [human-writes]
+
+### Stubs generated: [timestamp]
+- Tests written: [count] ([list test names])
+- TODO(human) stubs: [count] ([list function/block names])
+- Constraints provided: [list from ARCHITECTURE.md, LEARNINGS.md]
+
+### Human implementation
+- Attempt 1: [timestamp] — [N] tests passing, [M] failing
+  - Failures: [test names and one-line reason]
+- Attempt 2: [timestamp] — [N] tests passing, [M] failing
+  - Failures: [test names and one-line reason]
+- All passing: [timestamp] — [total] tests green after [N] attempts
+
+### Review
+- Review result: [clean / issues found]
+- Issues: [if any, what the AI flagged in the human's code]
+- Human response: [accepted fix / kept their approach / discussed]
+
+### Metrics
+- Time from stubs → all passing: [duration if measurable, or "N/A — multi-session"]
+- Attempts to green: [count]
+- Tests that caught real bugs in human code: [list, if any]
+```
+
+When all tests pass for a human-writes phase, announce it clearly:
+
+```
+✓ Phase [N] [human-writes]: ALL [count] TESTS PASSING
+
+  Human implementation complete after [N] attempts.
+  Tests that caught issues: [list or "none — clean first pass"]
+  Proceeding to AI review...
+```
+
+After review completes:
+
+```
+Phase [N] [human-writes]: VERIFIED
+
+  Implementation: human
+  Tests: [count] passing
+  Review: [clean / N issues found and resolved]
+  Commit: feat([feature]): [N]/[total] [description] [human-writes]
+```
+
+The `[human-writes]` tag in the commit message marks it in git history so `/retro` and future analysis can distinguish human-written phases from AI-written ones.
+
+### Human-writes in learnings
+
+After a human-writes phase, always capture in the progress file's Learnings section:
+- What the human did differently from what the AI would have done (if noticeable from the review)
+- Which tests caught real implementation bugs (these tests are high-value — they proved their worth)
+- Any patterns the human used that should inform future `TODO(human)` stubs
 
 ## Rules
 
@@ -293,7 +353,7 @@ If found and the feature touches UI (check the plan for frontend files — `.tsx
 3. Tell the user: "Dev server running at [URL] for visual verification during the build."
 
 The dev server stays running throughout the build. It's used in two places:
-- **After each phase that touches UI files:** Use KaBOOM (browser devtools MCP) to screenshot the affected pages and verify they render correctly. Use `observe(what="screenshot")` to capture the state. If something looks broken (layout errors, blank pages, console errors), flag it before proceeding.
+- **After each phase that touches UI files:** Use Gasoline (browser devtools MCP) to screenshot the affected pages and verify they render correctly. Use `observe(what="screenshot")` to capture the state. If something looks broken (layout errors, blank pages, console errors), flag it before proceeding.
 - **During the red team:** The red team agent gets browser access to click through the feature and verify it actually works end-to-end (see "Try to break visually" below).
 
 If the project has no dev server or the feature is backend-only, skip this entirely.
@@ -409,13 +469,13 @@ Do not trust the sub-agent's self-report alone. Run every automated verification
 
 #### 5. Visual verification (UI phases only)
 
-If this phase touched UI files AND the dev server is running, verify visually:
+If this phase touched UI files AND browser devtools MCP tools are available AND the dev server is running, verify visually:
 
-1. Use KaBOOM MCP: `observe(what="screenshot")` on the affected pages
-2. Check for: blank pages, layout breaks, missing elements, console errors (`observe(what="errors")`)
+1. Use Gasoline MCP: `observe(what="screenshot")` on the affected pages
+2. Check for: blank pages, layout breaks, missing elements, console errors (`observe(what="error_bundles")`)
 3. Compare against the spec's expected behavior
 
-If visual issues are found, fix them before proceeding to code review. If KaBOOM is not available, add visual checks to the manual verification list instead.
+If visual issues are found, fix them before proceeding to code review. If Gasoline is not available, add visual checks to the manual verification list instead.
 
 Skip this step entirely for backend-only phases.
 
@@ -590,12 +650,12 @@ Read:
 - Do the tests test behavior or implementation details? (Tests that break on refactor are bad tests.)
 - Are there tests that always pass regardless of the code? (Tautological tests.)
 
-### Try to break visually (if dev server is running)
-If the feature has UI and the dev server is running, use KaBOOM MCP to actually interact with the feature:
+### Try to break visually (if browser devtools MCP tools are available AND dev server is running)
+If the feature has UI and browser devtools MCP tools are available AND the dev server is running, use Gasoline MCP to actually interact with the feature:
 - Navigate to the affected pages using `interact(what="navigate", url="...")`
 - Click through the feature's user flows using `interact(what="click", ...)` and `interact(what="type", ...)`
 - Screenshot each state using `observe(what="screenshot")`
-- Check for: broken layouts, missing elements, wrong text, unresponsive buttons, console errors (`observe(what="errors")`)
+- Check for: broken layouts, missing elements, wrong text, unresponsive buttons, console errors (`observe(what="error_bundles")`)
 - Try edge cases visually: empty states, error states, rapid clicking, browser back/forward
 - If something looks wrong, report it with the screenshot as evidence
 

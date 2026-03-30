@@ -106,7 +106,6 @@ Push for specifics. "Be more careful" is not a lesson. "Add a load test to the p
 
 ```markdown
 ---
-name: retro
 ## Retrospective ([today's date])
 **Outcome:** [hit/partial/miss for each prediction]
 **Key learning:** [one sentence]
