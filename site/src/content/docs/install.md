@@ -12,7 +12,7 @@ claude plugin marketplace add ThinkUpfront/Upfront
 claude plugin install upfront
 ```
 
-Restart Claude Code. All 18 `/upfront:*` skills will be available in every project.
+Restart Claude Code. All 20 `/upfront:*` skills will be available in every project.
 
 ## Verify
 
@@ -43,6 +43,8 @@ In Claude Code, type `/upfront:` and you should see all skills in autocomplete. 
 | `/upfront:note` | Zero-friction idea/todo capture |
 | `/upfront:pause` | Structured handoff for next session |
 | `/upfront:resume` | Restore context from a pause |
+| `/upfront:architect` | Architecture review with evolution plan |
+| `/upfront:re-architect` | Execute an architecture evolution phase by phase |
 | `/upfront:up` | Smart router — figures out what you need |
 
 ## Uninstall

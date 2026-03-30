@@ -61,6 +61,8 @@ export default defineConfig({
 						{ label: '/upfront:ship', slug: 'commands/ship' },
 						{ label: '/upfront:retro', slug: 'commands/retro' },
 						{ label: '/upfront:teach', slug: 'commands/teach' },
+						{ label: '/upfront:architect', slug: 'commands/architect' },
+						{ label: '/upfront:re-architect', slug: 'commands/re-architect' },
 					],
 				},
 				{
