@@ -68,6 +68,8 @@ func ExtractEvents(h *Input) []format.Event {
 		return nil
 	}
 
+	projectID := format.ProjectID(h.Cwd)
+
 	var events []format.Event
 	for _, m := range matches {
 		phaseName := m[1]
@@ -78,7 +80,7 @@ func ExtractEvents(h *Input) []format.Event {
 			continue
 		}
 
-		e := format.NewEvent(h.SessionID, phase, phaseName, summary, h.Cwd, h.ToolInput.Args)
+		e := format.NewEvent(h.SessionID, projectID, phase, phaseName, summary, h.Cwd, h.ToolInput.Args)
 		events = append(events, e)
 	}
 	return events

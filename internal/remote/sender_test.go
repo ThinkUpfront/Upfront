@@ -137,7 +137,7 @@ func TestSend_Success(t *testing.T) {
 	})
 
 	events := []format.Event{
-		format.NewEvent("sess-1", 1, "Intent", "summary here", "/tmp", "my-feature"),
+		format.NewEvent("sess-1", "p1", 1, "Intent", "summary here", "/tmp", "my-feature"),
 	}
 	if err := s.Send(events); err != nil {
 		t.Fatalf("Send() error = %v", err)
@@ -170,7 +170,7 @@ func TestSend_ServerError(t *testing.T) {
 
 	s := NewSender(&Config{Endpoint: srv.URL})
 	events := []format.Event{
-		format.NewEvent("sess-1", 1, "Intent", "summary", "/tmp", "feat"),
+		format.NewEvent("sess-1", "p1", 1, "Intent", "summary", "/tmp", "feat"),
 	}
 	err := s.Send(events)
 	if err == nil {
@@ -190,7 +190,7 @@ func TestSend_Timeout(t *testing.T) {
 		client: &http.Client{Timeout: 50 * time.Millisecond},
 	}
 	events := []format.Event{
-		format.NewEvent("sess-1", 1, "Intent", "summary", "/tmp", "feat"),
+		format.NewEvent("sess-1", "p1", 1, "Intent", "summary", "/tmp", "feat"),
 	}
 	err := s.Send(events)
 	if err == nil {
@@ -201,7 +201,7 @@ func TestSend_Timeout(t *testing.T) {
 func TestSend_NilConfig(t *testing.T) {
 	s := NewSender(nil)
 	events := []format.Event{
-		format.NewEvent("sess-1", 1, "Intent", "summary", "/tmp", "feat"),
+		format.NewEvent("sess-1", "p1", 1, "Intent", "summary", "/tmp", "feat"),
 	}
 	err := s.Send(events)
 	if err != nil {
@@ -219,7 +219,7 @@ func TestSend_NoAuthHeader(t *testing.T) {
 
 	s := NewSender(&Config{Endpoint: srv.URL})
 	events := []format.Event{
-		format.NewEvent("sess-1", 1, "Intent", "summary", "/tmp", "feat"),
+		format.NewEvent("sess-1", "p1", 1, "Intent", "summary", "/tmp", "feat"),
 	}
 	if err := s.Send(events); err != nil {
 		t.Fatalf("Send() error = %v", err)

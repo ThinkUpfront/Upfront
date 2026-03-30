@@ -42,7 +42,7 @@ func newTestQueue(t *testing.T) *Queue {
 }
 
 func testEvent(session string, phase int, phaseName string) *format.Event {
-	e := format.NewEvent(session, phase, phaseName, "summary for "+phaseName, "/tmp/target", "test-feature")
+	e := format.NewEvent(session, "p1", phase, phaseName, "summary for "+phaseName, "/tmp/target", "test-feature")
 	return &e
 }
 

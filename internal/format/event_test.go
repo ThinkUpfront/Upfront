@@ -8,7 +8,7 @@ import (
 )
 
 func TestNewEvent_Defaults(t *testing.T) {
-	e := NewEvent("sess-123", 1, "Intent", "Decided to build X", "specs/foo.md", "foo")
+	e := NewEvent("sess-123", "p1", 1, "Intent", "Decided to build X", "specs/foo.md", "foo")
 
 	if e.AgentID != "upfront" {
 		t.Errorf("AgentID = %q, want %q", e.AgentID, "upfront")
@@ -58,7 +58,7 @@ func TestNewEvent_Defaults(t *testing.T) {
 }
 
 func TestEvent_JSONRoundTrip(t *testing.T) {
-	e := NewEvent("sess-456", 2, "Behavioral Spec", "Users want faster checkout", "specs/checkout.md", "checkout")
+	e := NewEvent("sess-456", "p1", 2, "Behavioral Spec", "Users want faster checkout", "specs/checkout.md", "checkout")
 
 	data, err := json.Marshal(e)
 	if err != nil {
@@ -112,7 +112,7 @@ func TestEvent_JSONRoundTrip(t *testing.T) {
 }
 
 func TestEvent_JSONFieldNames(t *testing.T) {
-	e := NewEvent("sess-789", 3, "Design", "Chose option C", "specs/design.md", "design-feature")
+	e := NewEvent("sess-789", "p1", 3, "Design", "Chose option C", "specs/design.md", "design-feature")
 	e.ErrorMessage = "something broke"
 
 	data, err := json.Marshal(e)
@@ -139,7 +139,7 @@ func TestEvent_JSONFieldNames(t *testing.T) {
 }
 
 func TestEvent_ErrorMessageOmittedWhenEmpty(t *testing.T) {
-	e := NewEvent("sess-err", 1, "Intent", "summary", "specs/x.md", "x")
+	e := NewEvent("sess-err", "p1", 1, "Intent", "summary", "specs/x.md", "x")
 
 	data, err := json.Marshal(e)
 	if err != nil {
@@ -161,7 +161,7 @@ func TestEvent_ErrorMessageOmittedWhenEmpty(t *testing.T) {
 }
 
 func TestEvent_DurationMSNullByDefault(t *testing.T) {
-	e := NewEvent("sess-abc", 1, "Intent", "summary", "specs/x.md", "x")
+	e := NewEvent("sess-abc", "p1", 1, "Intent", "summary", "specs/x.md", "x")
 
 	data, err := json.Marshal(e)
 	if err != nil {
@@ -184,7 +184,7 @@ func TestEvent_DurationMSNullByDefault(t *testing.T) {
 }
 
 func TestEvent_TimestampISO8601(t *testing.T) {
-	e := NewEvent("sess-time", 1, "Intent", "summary", "specs/t.md", "t")
+	e := NewEvent("sess-time", "p1", 1, "Intent", "summary", "specs/t.md", "t")
 
 	// Must parse as RFC3339 (ISO-8601 compatible)
 	if _, err := time.Parse(time.RFC3339, e.Timestamp); err != nil {
