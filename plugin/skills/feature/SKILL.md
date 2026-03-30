@@ -21,17 +21,11 @@ If `specs/ARCHITECTURE.md` exists, every design decision in Phases 3-4 must be c
 
 ## Reviewability check
 
-After the user describes what they want to build, evaluate the scope against these five dimensions:
+After the user describes what they want to build, spawn the `reviewability-scorer` agent to evaluate scope. Pass it the user's description and any relevant codebase context.
 
-| Dimension | Low (reviewable) | High (hard to review) |
-|---|---|---|
-| Concern count | 1-2 distinct things change | 3+ unrelated concerns in one change |
-| Blast radius | Localized, few callers affected | Many dependents, cross-cutting |
-| Novelty | Extending existing patterns | New patterns, abstractions, or subsystems |
-| State complexity | Stateless or single-owner | Shared mutable state, concurrency |
-| Reversibility | Clean revert possible | Entangled, hard to undo |
+The agent scores 5 dimensions (concern count, blast radius, novelty, state complexity, reversibility) on a 1-3 scale and returns a verdict: REVIEWABLE or NEEDS_DECOMPOSITION.
 
-**If 3+ dimensions score high**, this is bigger than a single feature. The AI should push back:
+**If the verdict is NEEDS_DECOMPOSITION** (3+ dimensions score high), this is bigger than a single feature. Push back:
 
 "This is ambitious — I count [N] distinct concerns ([list them]), it introduces [new patterns/subsystems], and it affects [blast radius]. If we build this as one feature, no human can meaningfully review it. You'll either rubber-stamp it or spend days reviewing it, and both are bad.
 
