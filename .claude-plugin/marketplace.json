@@ -1,6 +1,6 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "upfront",
+  "name": "thinkupfront",
   "description": "Force thinking before code. Skills for structured AI-assisted development.",
   "owner": {
     "name": "Brenn Hill",
@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "upfront",
-      "source": "./plugin",
+      "source": "./",
       "description": "Full toolkit: /vision, /increment, /feature, /plan, /build, /explore, and 14 more skills for spec-first development with audit trail.",
       "version": "0.1.2",
       "author": {
