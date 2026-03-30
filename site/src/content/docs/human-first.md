@@ -22,7 +22,7 @@ Speed is not the bottleneck. Understanding is.
 
 ### 1. Challenge before suggestion
 
-Every command follows the same pattern: **ask, wait, then decorate.**
+Every skill follows the same pattern: **ask, wait, then decorate.**
 
 The AI does not present options and wait for approval. It asks open questions, waits for the human's answer, and then fills the gaps the human missed. The human thinks first. The AI adds what they didn't think of.
 
@@ -48,12 +48,12 @@ The commit is tagged `[human-writes]` so git history distinguishes human-authore
 
 **Three activation levels:**
 - `[human-writes]` markers in the spec — granular, per-section
-- `/plan --human` — the planner identifies which phases should be human-writes
-- `/build --human` — every phase is human-writes
+- `/upfront:plan --human` — the planner identifies which phases should be human-writes
+- `/upfront:build --human` — every phase is human-writes
 
 ### 3. Thinking records
 
-Every phase of `/feature` produces a thinking record:
+Every phase of `/upfront:feature` produces a thinking record:
 
 - What was decided
 - Why (the argument that won)
@@ -68,15 +68,15 @@ These are not documentation. They are evidence that thinking happened. A spec wi
 
 `specs/CONSTITUTION.md` defines project-level invariants — things that must always be true regardless of what feature is being built.
 
-Every command reads the constitution. If a change would violate a principle, the system flags it and requires explicit approval to override. You can't accidentally violate a principle.
+Every skill reads the constitution. If a change would violate a principle, the system flags it and requires explicit approval to override. You can't accidentally violate a principle.
 
 ### 5. Teach mode
 
-Understanding decays. `/teach` walks developers through a codebase in layers: context, happy path, failure modes, invariants, connections. Optionally quizzes to verify understanding — not trivia, but questions that test whether you could debug a production issue.
+Understanding decays. `/upfront:teach` walks developers through a codebase in layers: context, happy path, failure modes, invariants, connections. Optionally quizzes to verify understanding — not trivia, but questions that test whether you could debug a production issue.
 
 ### 6. Retro closes the loop
 
-After a feature ships, `/retro` goes back to the spec's predictions and checks them against reality. Each prediction is scored: hit, partial, miss, or unknown. Misses are analyzed. Lessons feed forward.
+After a feature ships, `/upfront:retro` goes back to the spec's predictions and checks them against reality. Each prediction is scored: hit, partial, miss, or unknown. Misses are analyzed. Lessons feed forward.
 
 ## What this means for teams
 

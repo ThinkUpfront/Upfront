@@ -1,5 +1,5 @@
 ---
-title: /ship
+title: /upfront:ship
 description: Create a PR with spec-derived context.
 ---
 
@@ -8,7 +8,7 @@ Auto-populates PR descriptions from the spec so reviewers understand intent with
 ## When to use
 
 - Feature is built and verified
-- After `/build` completes
+- After `/upfront:build` completes
 
 ## What it does
 

@@ -1,5 +1,5 @@
 ---
-title: /build
+title: /upfront:build
 description: Execute phases with TDD, review, red team, and worktree isolation.
 ---
 
@@ -7,8 +7,8 @@ The orchestrator. Spawns a fresh sub-agent for each phase, enforces strict TDD, 
 
 ## When to use
 
-- You have an approved plan from `/plan`
-- Run as: `/build specs/[feature-name]-plan.md`
+- You have an approved plan from `/upfront:plan`
+- Run as: `/upfront:build specs/[feature-name]-plan.md`
 
 ## What it does
 
@@ -44,7 +44,7 @@ Before Phase 1, generates skeleton test files from the spec's requirements, erro
 4. **Compound** — promotes durable patterns from LEARNINGS.md to CLAUDE.md as agent instructions
 5. **Merge back** — merge worktree branch, clean up
 
-### Human-writes mode (`/build --human`)
+### Human-writes mode (`/upfront:build --human`)
 
 AI writes the tests. You write the implementation. Full reporting: attempts to green, tests that caught bugs, time from stubs to green. Commits tagged `[human-writes]`.
 
@@ -65,4 +65,4 @@ Committed phases on a feature branch, merged to base on success. Progress file, 
 
 ## Next step
 
-`/ship` to create a PR.
+`/upfront:ship` to create a PR.

@@ -33,7 +33,7 @@ In Claude Code, type `/upfront:` and you should see all skills in autocomplete. 
 | `/upfront:build` | Execute phases with strict TDD and review |
 | `/upfront:ship` | Create a PR with spec-derived context |
 | `/upfront:retro` | Check spec predictions against reality |
-| `/upfront:ideate` | Divergent brainstorming before `/feature` |
+| `/upfront:ideate` | Divergent brainstorming before `/upfront:feature` |
 | `/upfront:quick` | Small changes without full ceremony |
 | `/upfront:patch` | Bug fixes from issues or problem statements |
 | `/upfront:explore` | Document codebase and operational context |

@@ -1,5 +1,5 @@
 ---
-title: /ideate
+title: /upfront:ideate
 description: Divergent brainstorming to find a problem worth solving.
 ---
 
@@ -18,7 +18,7 @@ For when you don't know what to build yet.
 3. **Challenge** — Not all pain is worth solving. Kill weak clusters.
 4. **Converge** — Narrow to 1-3 candidates. State each as: problem, why it matters, what "solved" looks like.
 5. **Choose** — Help pick one. "Which one, if you solved it, would make the other two easier?"
-6. **Hand off** — Write the problem to `specs/TODO.md` and suggest `/feature`.
+6. **Hand off** — Write the problem to `specs/TODO.md` and suggest `/upfront:feature`.
 
 ## Output
 
@@ -26,4 +26,4 @@ No spec, no file. The output is clarity — plus a one-line note in `specs/TODO.
 
 ## Next step
 
-`/feature` to define it properly.
+`/upfront:feature` to define it properly.

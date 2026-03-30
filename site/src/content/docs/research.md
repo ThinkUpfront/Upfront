@@ -17,7 +17,7 @@ description: Empirical research backing Upfront's design decisions.
 
 ## The review collapse
 
-**SmartBear/Cisco:** Review effectiveness collapses above 400 lines of code. This is why `/plan` targets ~400 LOC phases.
+**SmartBear/Cisco:** Review effectiveness collapses above 400 lines of code. This is why `/upfront:plan` targets ~400 LOC phases.
 
 **Faros AI (2024):** 10,000 developers across 1,255 teams — PR volume increased 98% after AI adoption, but net throughput showed zero improvement. Volume increase absorbed by review overhead and rework.
 
@@ -29,10 +29,10 @@ description: Empirical research backing Upfront's design decisions.
 
 **Capers Jones:** Defect removal efficiency above 95% is adequate quality, across 12,000+ projects.
 
-**Mantyla & Lassenius (2009):** 75% of defects found in code review are evolvability issues, not functional bugs. This is why `/build`'s review checks architecture and spec compliance, not just correctness.
+**Mantyla & Lassenius (2009):** 75% of defects found in code review are evolvability issues, not functional bugs. This is why `/upfront:build`'s review checks architecture and spec compliance, not just correctness.
 
 ## The specification gap
 
-**Montgomery et al.:** Ambiguous requirements are the single largest source of downstream defects. Clear intent — what `/feature` forces — reduces rework more than any other intervention.
+**Montgomery et al.:** Ambiguous requirements are the single largest source of downstream defects. Clear intent — what `/upfront:feature` forces — reduces rework more than any other intervention.
 
 **Jellyfish (2025):** 60% of engineering leaders cite "lack of clear metrics" as their biggest AI challenge. Only 20% measure actual impact on delivery outcomes.

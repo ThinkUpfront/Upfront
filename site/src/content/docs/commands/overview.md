@@ -1,9 +1,9 @@
 ---
-title: Commands Overview
-description: All Upfront commands and when to use each one.
+title: Skills Overview
+description: All Upfront skills and when to use each one.
 ---
 
-Upfront is a set of slash commands for [Claude Code](https://claude.ai/claude-code). Each command is a markdown file — no dependencies, no build step.
+Upfront is a set of slash skills for [Claude Code](https://claude.ai/claude-code). Each skill is a markdown file — no dependencies, no build step.
 
 ## The flow
 
@@ -11,29 +11,29 @@ Upfront is a set of slash commands for [Claude Code](https://claude.ai/claude-co
 Think → Define → Plan → Build → Ship → Learn
 ```
 
-## Choosing the right command
+## Choosing the right skill
 
-| Situation | Command | Ceremony |
-|-----------|---------|----------|
-| Don't know what to build | `/ideate` | Conversation only |
-| Need to understand a codebase | `/explore` | Produces ARCHITECTURE.md |
-| Need to understand a codebase you forgot | `/teach` | Walkthrough + optional quiz |
-| Know the problem, need to define it | `/feature` | 4-phase forced thinking |
-| Need to revise a spec | `/refine` | Challenge-based iteration |
-| Spec ready, need implementation phases | `/plan` | Architecture deep-dive + phasing |
-| Plan ready, need to build | `/build` | TDD + review + red team per phase |
-| GitHub issue or clear bug | `/patch` | Investigate + TDD + commit |
-| Tiny change (<50 lines) | `/quick` | Just do it with TDD |
-| Something is broken, unclear why | `/debug` | Scientific method |
-| Feature built, need a PR | `/ship` | Auto-populated from spec |
-| Feature shipped, need to check | `/retro` | Predictions vs reality |
+| Situation | Skill | Ceremony |
+|-----------|-------|----------|
+| Don't know what to build | `/upfront:ideate` | Conversation only |
+| Need to understand a codebase | `/upfront:explore` | Produces ARCHITECTURE.md |
+| Need to understand a codebase you forgot | `/upfront:teach` | Walkthrough + optional quiz |
+| Know the problem, need to define it | `/upfront:feature` | 4-phase forced thinking |
+| Need to revise a spec | `/upfront:refine` | Challenge-based iteration |
+| Spec ready, need implementation phases | `/upfront:plan` | Architecture deep-dive + phasing |
+| Plan ready, need to build | `/upfront:build` | TDD + review + red team per phase |
+| GitHub issue or clear bug | `/upfront:patch` | Investigate + TDD + commit |
+| Tiny change (<50 lines) | `/upfront:quick` | Just do it with TDD |
+| Something is broken, unclear why | `/upfront:debug` | Scientific method |
+| Feature built, need a PR | `/upfront:ship` | Auto-populated from spec |
+| Feature shipped, need to check | `/upfront:retro` | Predictions vs reality |
 
 ## Size guide
 
-| Change size | Command path |
-|-------------|-------------|
-| <50 lines | `/quick` |
-| 50-300 lines | `/patch` |
-| 300+ lines | `/feature` → `/plan` → `/build` |
+| Change size | Skill path |
+|-------------|------------|
+| <50 lines | `/upfront:quick` |
+| 50-300 lines | `/upfront:patch` |
+| 300+ lines | `/upfront:feature` → `/upfront:plan` → `/upfront:build` |
 
-`/patch` and `/quick` both enforce scope gates — if a change grows beyond its boundary, the command stops and redirects you up.
+`/upfront:patch` and `/upfront:quick` both enforce scope gates — if a change grows beyond its boundary, the skill stops and redirects you up.

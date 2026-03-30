@@ -1,9 +1,9 @@
 ---
-title: /pause & /resume
+title: /upfront:pause & /upfront:resume
 description: Session continuity across context resets.
 ---
 
-## /pause
+## /upfront:pause
 
 Captures everything the next session needs and writes `specs/HANDOFF.md`:
 
@@ -15,7 +15,7 @@ Captures everything the next session needs and writes `specs/HANDOFF.md`:
 
 Offers to stash uncommitted changes for safety. Detects active worktrees via `git worktree list`.
 
-## /resume
+## /upfront:resume
 
 Reads the handoff, checks what changed since the pause, and presents a structured briefing:
 
@@ -24,4 +24,4 @@ Reads the handoff, checks what changed since the pause, and presents a structure
 - Is there a stash to pop?
 - Is the worktree still there?
 
-Waits for confirmation before doing anything. If `/build` was running, tells you to run `/build` to resume — it has its own crash recovery.
+Waits for confirmation before doing anything. If `/upfront:build` was running, tells you to run `/upfront:build` to resume — it has its own crash recovery.
