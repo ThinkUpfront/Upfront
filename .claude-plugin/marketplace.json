@@ -1,6 +1,6 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "brennhill-upfront",
+  "name": "thinkupfront-upfront",
   "description": "Force thinking before code. Skills for structured AI-assisted development.",
   "owner": {
     "name": "Brenn Hill",
@@ -17,7 +17,7 @@
         "url": "https://brennhill.substack.com"
       },
       "homepage": "https://thinkupfront.dev",
-      "repository": "https://github.com/brennhill/Upfront",
+      "repository": "https://github.com/ThinkUpfront/Upfront",
       "license": "AGPL-3.0",
       "keywords": ["feature-definition", "spec-first", "audit-trail", "tdd", "code-review", "ai-development"],
       "category": "development"
