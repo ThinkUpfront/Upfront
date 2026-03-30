@@ -1,5 +1,4 @@
 ---
-name: plan
 description: Break a feature spec into ~400 LOC implementation phases by researching the codebase
 ---
 

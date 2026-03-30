@@ -1,5 +1,4 @@
 ---
-name: patch
 description: Fix a bug or implement a small feature from a GitHub issue or clear problem statement — more structure than /quick, less ceremony than /feature
 ---
 

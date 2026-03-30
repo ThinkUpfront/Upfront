@@ -1,5 +1,4 @@
 ---
-name: increment
 description: Retro on a shipped increment and steer the next one — forces reflection before moving forward
 ---
 

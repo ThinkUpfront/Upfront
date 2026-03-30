@@ -1,5 +1,4 @@
 ---
-name: retro
 description: "Close the loop on a shipped feature — check spec predictions against production reality"
 ---
 

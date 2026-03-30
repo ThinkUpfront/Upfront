@@ -1,5 +1,4 @@
 ---
-name: note
 description: Zero-friction idea/todo capture. Append a note, view list, mark done, or clear completed.
 ---
 

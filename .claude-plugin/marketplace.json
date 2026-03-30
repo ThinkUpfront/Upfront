@@ -1,27 +1,15 @@
 {
-  "name": "thinkupfront",
-  "metadata": {
-    "description": "Force thinking before code. Skills for structured AI-assisted development."
-  },
-  "owner": {
-    "name": "Brenn Hill",
-    "email": "brenn@thinkupfront.dev"
-  },
-  "plugins": [
-    {
-      "name": "upfront",
-      "source": "./plugin",
-      "description": "Full toolkit: /vision, /increment, /feature, /plan, /build, /explore, and 14 more skills for spec-first development with audit trail.",
-      "version": "0.1.2",
-      "author": {
-        "name": "Brenn Hill",
-        "email": "brenn@thinkupfront.dev"
-      },
-      "homepage": "https://thinkupfront.dev",
-      "repository": "https://github.com/ThinkUpfront/Upfront",
-      "license": "AGPL-3.0",
-      "keywords": ["feature-definition", "spec-first", "audit-trail", "tdd", "code-review", "ai-development"],
-      "category": "development"
-    }
-  ]
+    "name": "thinkupfront",
+    "metadata": {
+        "description": "Force thinking before code. Skills for structured AI-assisted development."
+    },
+    "owner": {
+        "name": "Brenn Hill"
+    },
+    "plugins": [
+        {
+            "name": "upfront",
+            "source": "./plugin"
+        }
+    ]
 }

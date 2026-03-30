@@ -1,5 +1,4 @@
 ---
-name: refine
 description: Iterate on a spec with inline corrections and conversational challenge
 ---
 

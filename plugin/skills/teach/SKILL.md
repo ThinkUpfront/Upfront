@@ -1,5 +1,4 @@
 ---
-name: teach
 description: Walk through the codebase to rebuild understanding, with optional quizzes to verify comprehension
 ---
 

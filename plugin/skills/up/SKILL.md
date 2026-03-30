@@ -1,5 +1,4 @@
 ---
-name: up
 description: "Smart router — figures out what you need and sends you there"
 ---
 

@@ -1,5 +1,4 @@
 ---
-name: ideate
 description: Divergent brainstorming to find a problem worth solving — use before /feature
 ---
 

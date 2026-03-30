@@ -1,5 +1,4 @@
 ---
-name: explore
 description: Document the codebase and its operational context for AI-assisted development
 ---
 
