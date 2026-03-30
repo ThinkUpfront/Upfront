@@ -1,5 +1,27 @@
 {
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The tool call in $ARGUMENTS is about to edit a file. If the file is a linter config, formatter config, type checker config, or CI/CD pipeline file (e.g. .eslintrc, .prettierrc, tsconfig.json, .rubocop.yml, .golangci.yml, pyproject.toml linting sections, .github/workflows/*, Makefile lint targets, pre-commit config, biome.json, deno.json), check: is the edit WEAKENING a rule (disabling, loosening, adding ignores/exceptions)? If yes, respond with exactly: {\"decision\": \"block\", \"reason\": \"Fix the code, not the config. Weakening linter/formatter rules hides problems instead of solving them.\"}. If the edit is ADDING or STRENGTHENING rules, or if the file is not a config file, respond with: {\"decision\": \"allow\"}.",
+            "model": "claude-haiku-4-5-20251001"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The tool call in $ARGUMENTS is about to write a file. If the file is a linter config, formatter config, type checker config, or CI/CD pipeline file (e.g. .eslintrc, .prettierrc, tsconfig.json, .rubocop.yml, .golangci.yml, pyproject.toml linting sections, .github/workflows/*, Makefile lint targets, pre-commit config, biome.json, deno.json), check: is the write REMOVING or WEAKENING existing rules (disabling, loosening, adding ignores/exceptions) compared to what a stricter version would have? If this is a brand new config file being created, allow it. If it's overwriting an existing config to weaken rules, respond with exactly: {\"decision\": \"block\", \"reason\": \"Fix the code, not the config. Weakening linter/formatter rules hides problems instead of solving them.\"}. Otherwise respond with: {\"decision\": \"allow\"}.",
+            "model": "claude-haiku-4-5-20251001"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Skill",
