@@ -9,9 +9,9 @@
   "plugins": [
     {
       "name": "upfront",
-      "source": "./",
+      "source": "./plugin",
       "description": "Full toolkit: /vision, /increment, /feature, /plan, /build, /explore, and 14 more skills for spec-first development with audit trail.",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": {
         "name": "Brenn Hill",
         "url": "https://brennhill.substack.com"
