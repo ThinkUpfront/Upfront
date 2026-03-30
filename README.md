@@ -382,6 +382,6 @@ Inspired by [Superhuman](https://github.com/nicholasgriffintn/claude-code-flow),
 
 ## Related
 
-- [The Delivery Gap](https://thedeliverygap.com) — the book this toolkit accompanies
+- [The Delivery Gap](https://leanpub.com/thedeliverygap) — the book this toolkit accompanies
 - [Delivery Gap Toolkit](https://github.com/brennhill/Delivery-Gap-Toolkit) — verification infrastructure (gates, policies, measurement)
 - [sloppy-joe](https://github.com/brennhill/sloppy-joe) — slopsquatting protection for AI-generated package names
