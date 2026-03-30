@@ -8,8 +8,11 @@
   "plugins": [
     {
       "name": "upfront",
-      "source": ".",
-      "description": "Full toolkit: /feature, /plan, /build, /explore, and 12 more skills for spec-first development with audit trail."
+      "source": {
+        "source": "github",
+        "repo": "brennhill/Upfront"
+      },
+      "description": "Full toolkit: /vision, /increment, /feature, /plan, /build, /explore, and 14 more skills for spec-first development with audit trail."
     }
   ]
 }
