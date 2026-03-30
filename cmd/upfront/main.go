@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/brennhill/upfront/internal/format"
-	"github.com/brennhill/upfront/internal/hook"
-	"github.com/brennhill/upfront/internal/queue"
-	"github.com/brennhill/upfront/internal/remote"
+	"github.com/ThinkUpfront/Upfront/internal/format"
+	"github.com/ThinkUpfront/Upfront/internal/hook"
+	"github.com/ThinkUpfront/Upfront/internal/queue"
+	"github.com/ThinkUpfront/Upfront/internal/remote"
 )
 
 // Set by goreleaser ldflags.
@@ -22,7 +22,7 @@ var (
 )
 
 const usage = `Upfront — audit trail for AI-assisted feature definition
-https://github.com/brennhill/upfront
+https://github.com/ThinkUpfront/Upfront
 
 Usage: upfront <command> [options]
 

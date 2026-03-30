@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/brennhill/upfront/internal/format"
+	"github.com/ThinkUpfront/Upfront/internal/format"
 )
 
 func TestEnsureDir_CreatesDirectory(t *testing.T) {

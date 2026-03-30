@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/brennhill/upfront/internal/format"
+	"github.com/ThinkUpfront/Upfront/internal/format"
 )
 
 // Queue manages a local JSONL audit event queue.

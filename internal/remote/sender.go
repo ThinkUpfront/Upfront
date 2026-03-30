@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/brennhill/upfront/internal/format"
+	"github.com/ThinkUpfront/Upfront/internal/format"
 )
 
 // Config holds remote sender configuration.

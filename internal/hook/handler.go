@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/brennhill/upfront/internal/format"
+	"github.com/ThinkUpfront/Upfront/internal/format"
 )
 
 // Input represents the JSON payload from Claude Code PostToolUse hook stdin.

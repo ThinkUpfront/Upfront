@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/brennhill/upfront/internal/format"
+	"github.com/ThinkUpfront/Upfront/internal/format"
 )
 
 func TestLoadConfig_MalformedJSON(t *testing.T) {
