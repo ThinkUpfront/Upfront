@@ -22,7 +22,7 @@ If the AI can't talk you out of your approach, your approach is probably sound. 
 
 ## How it works
 
-Upfront is a set of slash commands for [Claude Code](https://claude.ai/claude-code) that cover the full development lifecycle. Each command is a markdown file in `.claude/commands/` — no dependencies, no build step, no SaaS. Copy the commands into any project and they work.
+Upfront is a set of skills for [Claude Code](https://claude.ai/claude-code) that cover the full development lifecycle. Install as a plugin — two commands in your terminal, no dependencies, no build step, no SaaS.
 
 The commands follow a natural flow:
 
@@ -198,64 +198,33 @@ These files accumulate project knowledge across features and sessions:
 
 ## Install
 
-### Claude Code plugin (recommended)
+### Plugin install (recommended)
 
-Install the skills, hooks, and audit trail as a Claude Code plugin:
-
-```
-/plugin marketplace add brennhill/Upfront
-/plugin install upfront@upfront
-```
-
-This gives you all 16 slash commands and the PostToolUse audit hook. If you also want the audit binary for `upfront log`, `upfront status`, etc.:
+Run these in your terminal:
 
 ```bash
-brew install brennhill/tap/upfront
+claude plugin marketplace add ThinkUpfront/Upfront
+claude plugin install upfront
 ```
 
-### Audit binary only
+Restart Claude Code. All 18 `/upfront:*` skills will be available in every project.
 
-If you manage skills separately and just want the audit binary:
+### Audit binary (optional)
+
+The plugin gives you the skills and hooks. The `upfront` binary adds the audit trail:
 
 **Homebrew (macOS / Linux):**
 ```bash
-brew install brennhill/tap/upfront
-```
-
-**Quick install (macOS / Linux):**
-```bash
-curl -fsSL https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.sh | bash
-```
-
-**Windows (PowerShell):**
-```powershell
-irm https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.ps1 | iex
+brew install ThinkUpfront/tap/upfront
 ```
 
 **From source:**
 ```bash
-git clone https://github.com/brennhill/upfront.git
-cd upfront
+git clone https://github.com/ThinkUpfront/Upfront.git
+cd Upfront
 go build -o upfront ./cmd/upfront/
 ./install.sh
 ```
-
-### Manual install (no plugin system)
-
-Copy the skills directly into any project:
-
-```bash
-git clone https://github.com/brennhill/upfront.git
-cp -r upfront/.claude/commands/ your-project/.claude/commands/
-```
-
-Or install globally:
-
-```bash
-cp -r upfront/.claude/commands/ ~/.claude/commands/
-```
-
-The commands are markdown files that Claude Code reads as instructions — no dependencies, no build step, no API keys.
 
 ---
 

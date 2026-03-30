@@ -3,60 +3,72 @@ title: Install
 description: Get Upfront running in your project.
 ---
 
-## Quick install (recommended)
+## Plugin install (recommended)
 
-Clone the repo and ask Claude to install the skills:
+Install via the Claude Code plugin system. Run these in your terminal:
 
 ```bash
-git clone https://github.com/brennhill/upfront.git
+claude plugin marketplace add ThinkUpfront/Upfront
+claude plugin install upfront
 ```
 
-Then in Claude Code, say:
+Restart Claude Code. All 18 `/upfront:*` skills will be available in every project.
 
-> "Install the Upfront skills from the `upfront/` directory into my global commands (`~/.claude/commands/`)"
+## Verify
 
-Claude will copy the markdown files and you'll have all slash commands available in every project.
+In Claude Code, type `/upfront:` and you should see all skills in autocomplete. Try:
 
-## Manual install
-
-Copy commands into a specific project:
-
-```bash
-git clone https://github.com/brennhill/upfront.git
-cp -r upfront/.claude/commands/ your-project/.claude/commands/
 ```
-
-Or install globally (available in every project):
-
-```bash
-cp -r upfront/.claude/commands/ ~/.claude/commands/
-```
-
-The commands are markdown files — no dependencies, no build step, no API keys.
-
-## Audit binary (optional)
-
-The audit binary captures thinking records from `/feature` runs into a JSONL queue. It's optional — the slash commands work without it.
-
-**Homebrew (macOS / Linux):**
-```bash
-brew install brennhill/tap/upfront
-```
-
-**From source:**
-```bash
-cd upfront
-go build -o upfront ./cmd/upfront/
-./install.sh
+/upfront:up
 ```
 
 ## What you get
 
-| File | Purpose |
-|------|---------|
-| `.claude/commands/*.md` | 16 slash commands |
-| `specs/ARCHITECTURE.md` | Created by `/explore`, read by everything |
-| `specs/DECISIONS.md` | Created by `/feature`, append-only |
-| `specs/LEARNINGS.md` | Created by `/build`, grows over time |
-| `specs/CONSTITUTION.md` | Optional — project-level invariants |
-| `.upfront/audit.jsonl` | Local audit queue (if binary installed) |
+| Skill | Purpose |
+|-------|---------|
+| `/upfront:vision` | Strategic clarity for big ambitions (Rumelt's kernel) |
+| `/upfront:increment` | Structured retro between increments |
+| `/upfront:feature` | Define a feature through intent, spec, and design |
+| `/upfront:plan` | Break a spec into ~400 LOC implementation phases |
+| `/upfront:build` | Execute phases with strict TDD and review |
+| `/upfront:ship` | Create a PR with spec-derived context |
+| `/upfront:retro` | Check spec predictions against reality |
+| `/upfront:ideate` | Divergent brainstorming before `/feature` |
+| `/upfront:quick` | Small changes without full ceremony |
+| `/upfront:patch` | Bug fixes from issues or problem statements |
+| `/upfront:explore` | Document codebase and operational context |
+| `/upfront:refine` | Iterate on a spec with challenge |
+| `/upfront:debug` | Scientific method debugging with persistent state |
+| `/upfront:teach` | Walk through codebase with comprehension checks |
+| `/upfront:note` | Zero-friction idea/todo capture |
+| `/upfront:pause` | Structured handoff for next session |
+| `/upfront:resume` | Restore context from a pause |
+| `/upfront:up` | Smart router — figures out what you need |
+
+## Uninstall
+
+Edit `~/.claude/settings.json` and remove `"upfront@thinkupfront": true` from `enabledPlugins`. Optionally remove the `"thinkupfront"` entry from `extraKnownMarketplaces`.
+
+Or use the clean script from the repo:
+
+```bash
+git clone https://github.com/ThinkUpfront/Upfront.git
+bash Upfront/scripts/clean-plugin.sh
+```
+
+## Audit binary (optional)
+
+The audit binary captures thinking records from skill runs into a JSONL queue. It's optional — the skills work without it.
+
+**Homebrew (macOS / Linux):**
+```bash
+brew install ThinkUpfront/tap/upfront
+```
+
+**From source:**
+```bash
+git clone https://github.com/ThinkUpfront/Upfront.git
+cd Upfront
+go build -o upfront ./cmd/upfront/
+./install.sh
+```
