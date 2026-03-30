@@ -49,6 +49,8 @@ export default defineConfig({
 					label: 'Skills',
 					items: [
 						{ label: 'Overview', slug: 'commands/overview' },
+						{ label: '/upfront:vision', slug: 'commands/vision' },
+						{ label: '/upfront:increment', slug: 'commands/increment' },
 						{ label: '/upfront:ideate', slug: 'commands/ideate' },
 						{ label: '/upfront:explore', slug: 'commands/explore' },
 						{ label: '/upfront:feature', slug: 'commands/feature' },
@@ -68,6 +70,7 @@ export default defineConfig({
 				{
 					label: 'Support',
 					items: [
+						{ label: '/upfront:up', slug: 'commands/up' },
 						{ label: '/upfront:note', slug: 'commands/note' },
 						{ label: '/upfront:pause & /upfront:resume', slug: 'commands/pause-resume' },
 					],
