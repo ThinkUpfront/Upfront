@@ -16,7 +16,7 @@ Both Upfront and [GSD](https://github.com/gsd-build/get-shit-done) enforce struc
 | **Feature definition** | 4-phase adversarial conversation | `discuss-phase` with targeted questions (or `--auto`) |
 | **Planning** | Architecture deep-dive, ~400 LOC phases, reviewability scoring | Research + plan with Nyquist verification (every task has automated verify) |
 | **Building** | TDD, fresh subagent per phase, red team, human review | Wave-based parallel subagents, conversational UAT |
-| **Verification** | Post-phase code review + red team adversarial pass | Nyquist validation (every requirement has an automated test command) |
+| **Verification** | Requirements traceability (R1-Rn), verify commands defined in plan, TDD, code review, red team, integration sweep with coverage check | Nyquist validation (every task has an automated verify command) |
 | **Project scope** | Feature-level (with `/upfront:vision` for bigger) | Project-level (milestones, roadmaps, requirements traceability) |
 | **Session persistence** | `/upfront:pause` + `/upfront:resume` with HANDOFF.md | STATE.md + CONTEXT.md survive context resets automatically |
 | **Audit trail** | JSONL thinking records with remote flush | None |
@@ -35,6 +35,7 @@ Both Upfront and [GSD](https://github.com/gsd-build/get-shit-done) enforce struc
 
 ## Where Upfront is stronger
 
+- **Verification with traceability** — like GSD's Nyquist, every phase has verify commands defined in the plan. But Upfront adds requirements traceability: requirements get stable IDs (R1-Rn) in the spec, plan phases declare which requirements they deliver, and the integration sweep checks that every requirement was covered. You can trace from intent through to delivery.
 - **Human engagement** — Upfront's core design is adversarial. The AI asks open questions, waits for your answer, then fills gaps. GSD's `--auto` mode explicitly minimizes human interaction. If you believe skill atrophy is the real risk, Upfront forces the exercise that prevents it.
 - **Reviewability** — scores changes on 5 dimensions and pushes back if a change is too complex for meaningful human review. GSD doesn't gate on reviewability.
 - **Thinking records** — every phase produces a structured audit trail: what was decided, why, what was rejected, what was skipped. Captures reasoning, not just conclusions. Flushable to Langfuse, Arize Phoenix, etc.

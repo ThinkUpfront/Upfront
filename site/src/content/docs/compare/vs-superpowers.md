@@ -16,6 +16,7 @@ Both Upfront and [Superpowers](https://github.com/obra/superpowers) are Claude C
 | **Planning** | `/upfront:plan` — architecture deep-dive, ~400 LOC phases | Auto-generated implementation plan from spec |
 | **Building** | `/upfront:build` — TDD, fresh subagent per phase, red team | TDD with subagent-driven execution, two-stage review |
 | **Human role during build** | Reviews each phase, decides on judgment calls | Approves spec, then subagents execute with automated review |
+| **Verification** | Requirements traceability (R1-Rn), verify commands defined in plan, TDD, code review, red team, integration sweep with coverage check | TDD with two-stage automated review (spec compliance + code quality) |
 | **Reviewability** | Reviewability scoring (5 dimensions), escalates to `/upfront:vision` if too complex | No explicit reviewability check |
 | **Strategic planning** | `/upfront:vision` for multi-feature ambitions, `/upfront:increment` for retros | Not addressed — operates at feature level |
 | **Audit trail** | JSONL thinking records with remote flush to observability tools | None |
@@ -31,6 +32,7 @@ Both Upfront and [Superpowers](https://github.com/obra/superpowers) are Claude C
 
 ## Where Upfront is stronger
 
+- **Verification depth** — requirements get stable IDs (R1-Rn) in the spec. Plan phases declare which requirements they deliver. Verify commands are defined in the plan before building starts. The integration sweep checks that every requirement was covered. This is end-to-end traceability from "what we said we'd build" through "what we actually built."
 - **Adversarial thinking** — the AI doesn't suggest and wait for approval. It asks open questions, waits for your answer, then fills gaps. The goal is to make *you* think, not to generate a spec *for* you.
 - **Reviewability gates** — scores changes on 5 dimensions (concern count, blast radius, novelty, state complexity, reversibility) and pushes back before any code is written if the change is too complex for meaningful review.
 - **Strategic layer** — `/upfront:vision` captures multi-feature ambitions using Rumelt's kernel (diagnosis, guiding policies, coherent actions). `/upfront:increment` forces structured retros between increments. Superpowers operates at the feature level.
