@@ -12,7 +12,7 @@ Both Upfront and [GSD](https://github.com/gsd-build/get-shit-done) enforce struc
 | **Core bet** | Protect human thinking and judgment | Maximize autonomous execution with persistent context |
 | **Planning model** | Human-driven with AI challenge | AI-driven with human checkpoints |
 | **Context strategy** | Thinking records in specs, crash recovery from git | `.planning/` directory with STATE.md, CONTEXT.md per phase |
-| **Autonomous mode** | No — human reviews each phase | Yes — `/gsd:autonomous` runs all phases unattended |
+| **Autonomous mode** | Building can be autonomous, but thinking and planning require a human | Yes — `/gsd:autonomous` runs all phases unattended |
 | **Feature definition** | 4-phase adversarial conversation | `discuss-phase` with targeted questions (or `--auto`) |
 | **Planning** | Architecture deep-dive, ~400 LOC phases, reviewability scoring | Research + plan with Nyquist verification (every task has automated verify) |
 | **Building** | TDD, fresh subagent per phase, red team, human review | Wave-based parallel subagents, conversational UAT |
