@@ -24,7 +24,7 @@ export default defineConfig({
 				},
 				{
 					tag: 'script',
-					content: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-EBNJWXFM9Z');",
+					content: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-EBNJWXFM9Z',{storage:'none',anonymize_ip:true});",
 				},
 				{
 					tag: 'link',
