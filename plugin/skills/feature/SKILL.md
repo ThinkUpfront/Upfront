@@ -360,6 +360,19 @@ Write the complete spec to disk. Populate every section from the conversation â€
 
 ---
 
+## Requirements
+
+Extract every concrete requirement from the conversation above â€” what the feature must do, what it must not do, what constraints it must satisfy. Assign each a stable ID. These IDs are referenced by `/plan` phases and checked at build completion.
+
+- **R1:** [requirement derived from intent, behavioral spec, or design]
+- **R2:** [requirement]
+- **R3:** [requirement]
+- ...
+
+Every requirement must be testable or verifiable. "It should be fast" is not a requirement. "P95 response time under 200ms" is. Pull from: success criteria (Phase 1), behavioral states (Phase 2), constraints and non-negotiables (Phase 4), and "what must NOT happen" (Phase 1).
+
+---
+
 ## Implementation Design
 
 ### Architecture

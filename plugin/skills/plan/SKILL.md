@@ -237,6 +237,7 @@ See `specs/ARCHITECTURE.md` (reviewed [date]).
 ---
 
 ### Phase 1: [descriptive name]
+**Delivers:** R1, R3
 **Files:** [list of files that change]
 **Changes:** [what happens in this phase]
 **Estimated size:** [lines]
@@ -265,6 +266,7 @@ Then tell the user:
 - Do NOT make phases too granular — a phase that changes 3 lines is not worth the overhead. Combine small related changes.
 - Do NOT assume file structure — verify it by reading the codebase.
 - Respect the spec's scope boundaries — do not plan changes to files listed as non-goals.
+- Every phase MUST list which requirements (R1, R2, etc.) it delivers. After all phases are defined, check coverage: every requirement from the spec must appear in at least one phase. If a requirement has no phase, either add a phase or flag it as out of scope for this plan.
 - Every phase MUST have a verify command. No exceptions. If you cannot write a concrete command that proves the phase works, the phase is too vague — break it down or clarify the spec. "It compiles" is not verification. "go test ./internal/queue/... -race" is.
 - Each phase's verify commands should trace back to the spec's acceptance criteria and blind spots. The plan is how you deliver the spec, not a separate document.
 - If the spec's Implementation Design section flags structural issues (slop, inconsistent patterns, cleanup needed), include refactoring as the first phase(s) — prerequisite work before building the feature on top. Do not build on a shaky foundation.

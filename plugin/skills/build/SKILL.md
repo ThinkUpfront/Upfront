@@ -727,9 +727,10 @@ Read:
 - Progress: specs/[feature-name]-progress.md (learnings and surprises)
 
 Then:
-1. Read the current codebase state — all changes are committed.
-2. Run the full test suite. Every test must pass.
-3. Check for:
+1. **Requirements coverage check:** Read the spec's Requirements section (R1, R2, etc.) and the plan's "Delivers" field on each phase. Verify every requirement was delivered by at least one phase. List any gaps: "R5 (idempotent retries) — no phase delivered this."
+2. Read the current codebase state — all changes are committed.
+3. Run the full test suite. Every test must pass.
+4. Check for:
    - Cross-phase integration issues (Phase 2 depends on Phase 1's output — does it actually work?)
    - Gaps between phases (anything that fell between the cracks)
    - Spec blind spots (edge cases, concurrency, security, non-prompted concerns)
