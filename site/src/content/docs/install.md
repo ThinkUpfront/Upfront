@@ -47,6 +47,16 @@ In Claude Code, type `/upfront:` and you should see all skills in autocomplete. 
 | `/upfront:re-architect` | Execute an architecture evolution phase by phase |
 | `/upfront:up` | Smart router — figures out what you need |
 
+## Telemetry
+
+Upfront sends anonymous usage events to help prioritize development: plugin version, skill name, and a hashed project identifier (derived from your git remote URL). No personally identifiable information is collected — no IP addresses, repo names, file paths, or code.
+
+To disable, set the environment variable:
+
+```bash
+export DO_NOT_TRACK=1
+```
+
 ## Uninstall
 
 Edit `~/.claude/settings.json` and remove `"upfront@thinkupfront": true` from `enabledPlugins`. Optionally remove the `"thinkupfront"` entry from `extraKnownMarketplaces`.
