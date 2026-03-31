@@ -44,6 +44,7 @@ export default defineConfig({
 			],
 			sidebar: [
 				{ label: 'Why Upfront', slug: 'why' },
+				{ label: 'Get Started', slug: 'get-started' },
 				{ label: 'Human-First Development', slug: 'human-first' },
 				{
 					label: 'Skills',
@@ -78,7 +79,6 @@ export default defineConfig({
 				{ label: 'Audit Trail', slug: 'audit-trail' },
 				{ label: 'Research', slug: 'research' },
 				{ label: 'Install', slug: 'install' },
-				{ label: 'Get Started', slug: 'get-started' },
 			],
 		}),
 	],
