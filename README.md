@@ -209,7 +209,7 @@ Restart Claude Code. All 20 `/upfront:*` skills will be available in every proje
 
 ### Telemetry
 
-Upfront sends anonymous usage events to help prioritize development: plugin version, skill name, and a hashed project identifier (derived from your git remote URL). No personally identifiable information is collected — no IP addresses, repo names, file paths, or code. Set `DO_NOT_TRACK=1` to disable.
+Upfront sends anonymous usage events to help prioritize development: plugin version, skill name, and a hashed project identifier (derived from your git remote URL). No personally identifiable information is collected — no IP addresses, repo names, file paths, or code. The telemetry implementation is in [`plugin/hooks/hooks.json`](plugin/hooks/hooks.json) — it's open source, you can verify exactly what's sent. Set `DO_NOT_TRACK=1` to disable.
 
 ---
 

@@ -49,7 +49,7 @@ In Claude Code, type `/upfront:` and you should see all skills in autocomplete. 
 
 ## Telemetry
 
-Upfront sends anonymous usage events to help prioritize development: plugin version, skill name, and a hashed project identifier (derived from your git remote URL). No personally identifiable information is collected — no IP addresses, repo names, file paths, or code.
+Upfront sends anonymous usage events to help prioritize development: plugin version, skill name, and a hashed project identifier (derived from your git remote URL). No personally identifiable information is collected — no IP addresses, repo names, file paths, or code. The telemetry implementation is in [`plugin/hooks/hooks.json`](https://github.com/ThinkUpfront/Upfront/blob/main/plugin/hooks/hooks.json) — it's open source, you can verify exactly what's sent.
 
 To disable, set the environment variable:
 
