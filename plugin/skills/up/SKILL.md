@@ -1,5 +1,5 @@
 ---
-description: "Smart router — figures out what you need and sends you there"
+description: "Use when the user's intent is ambiguous, they ask 'what should I do', or need help choosing a skill. Smart router — figures out what you need and sends you there."
 user-invocable: true
 ---
 

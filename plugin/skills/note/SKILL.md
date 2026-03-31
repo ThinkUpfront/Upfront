@@ -1,5 +1,5 @@
 ---
-description: Zero-friction idea/todo capture. Append a note, view list, mark done, or clear completed.
+description: Use when the user says "remember this", "note this", "todo", "jot this down", or wants to capture an idea. Zero-friction idea/todo capture.
 user-invocable: true
 ---
 

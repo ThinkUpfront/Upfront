@@ -1,5 +1,5 @@
 ---
-description: Divergent brainstorming to find a problem worth solving — use before /feature
+description: Use when the user is unsure what to build — "I'm not sure what to do", "brainstorm", "explore ideas", "what should I work on", "I have a vague idea". Divergent brainstorming to find a problem worth solving.
 user-invocable: true
 ---
 

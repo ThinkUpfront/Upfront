@@ -1,5 +1,5 @@
 ---
-description: Retro on a shipped increment and steer the next one — forces reflection before moving forward
+description: Use when the user has shipped an increment and is ready for the next one — "what's next", "increment done", "ready for the next phase", "retro on this increment". Forces reflection before moving forward.
 user-invocable: true
 ---
 

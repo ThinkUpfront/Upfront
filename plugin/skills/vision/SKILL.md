@@ -1,5 +1,5 @@
 ---
-description: Capture a big ambition, force strategic clarity, and break it into reviewable increments
+description: Use when the user describes something big — "build me an app", "I want to create a platform", "big project", multi-feature ambitions. Captures the vision, forces strategic clarity, and breaks it into reviewable increments.
 user-invocable: true
 ---
 

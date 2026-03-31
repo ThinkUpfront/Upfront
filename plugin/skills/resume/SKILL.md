@@ -1,5 +1,5 @@
 ---
-description: Resume from a previous pause with full context restoration
+description: Use when the user says "where was I", "continue", "pick up where I left off", or is starting a session with existing HANDOFF.md. Full context restoration from a previous pause.
 user-invocable: true
 ---
 

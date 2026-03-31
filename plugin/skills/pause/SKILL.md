@@ -1,5 +1,5 @@
 ---
-description: Pause mid-work with a structured handoff for the next session
+description: Use when the user says "save progress", "gotta go", "stopping for today", "need to stop", or is ending a session. Structured handoff for the next session.
 user-invocable: true
 ---
 

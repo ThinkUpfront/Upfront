@@ -1,5 +1,5 @@
 ---
-description: Systematic debugging using the scientific method with persistent state across sessions
+description: Use when the user reports a bug, error, or unexpected behavior — "it's broken", "not working", "failing", "crash". Systematic debugging using the scientific method with persistent state.
 user-invocable: true
 ---
 

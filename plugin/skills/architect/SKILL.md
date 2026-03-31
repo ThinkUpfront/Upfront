@@ -1,5 +1,5 @@
 ---
-description: Architecture review that produces an evolution plan — god modules first, then layers, then patterns
+description: Use when the user says "the code is a mess", "needs restructuring", "technical debt", "architecture review", or asks about module structure. Architecture review that produces an evolution plan.
 user-invocable: true
 ---
 

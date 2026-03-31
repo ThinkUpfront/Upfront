@@ -1,5 +1,5 @@
 ---
-description: Document the codebase and its operational context for AI-assisted development
+description: Use when the user says "document this codebase", "what does this project do", "set up for AI", or needs to understand an unfamiliar codebase. Documents the codebase and its operational context.
 user-invocable: true
 ---
 
