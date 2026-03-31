@@ -8,13 +8,15 @@ Upfront is a set of slash skills for [Claude Code](https://claude.ai/claude-code
 ## The flow
 
 ```
-Think → Define → Plan → Build → Ship → Learn
+Vision → Feature → Plan → Build
 ```
 
 ## Choosing the right skill
 
 | Situation | Skill | Ceremony |
 |-----------|-------|----------|
+| Big ambition, need strategic clarity | `/upfront:vision` | Rumelt's kernel: diagnosis, policies, actions |
+| Between increments, need to reflect | `/upfront:increment` | Structured retro + next increment steering |
 | Don't know what to build | `/upfront:ideate` | Conversation only |
 | Need to understand a codebase | `/upfront:explore` | Produces ARCHITECTURE.md |
 | Need to understand a codebase you forgot | `/upfront:teach` | Walkthrough + optional quiz |
@@ -25,8 +27,14 @@ Think → Define → Plan → Build → Ship → Learn
 | GitHub issue or clear bug | `/upfront:patch` | Investigate + TDD + commit |
 | Tiny change (<50 lines) | `/upfront:quick` | Just do it with TDD |
 | Something is broken, unclear why | `/upfront:debug` | Scientific method |
+| Structural debt, need evolution plan | `/upfront:architect` | Architecture review + evolution plan |
+| Evolution plan ready, need to restructure | `/upfront:re-architect` | Phase-by-phase restructuring |
 | Feature built, need a PR | `/upfront:ship` | Auto-populated from spec |
 | Feature shipped, need to check | `/upfront:retro` | Predictions vs reality |
+| Not sure where to start | `/upfront:up` | Smart router |
+| Capture a quick idea or todo | `/upfront:note` | Append to TODO.md |
+| Need to stop mid-work | `/upfront:pause` | Structured handoff |
+| Resuming from a pause | `/upfront:resume` | Context restoration |
 
 ## Size guide
 
