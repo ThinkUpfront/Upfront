@@ -25,7 +25,7 @@ Both Upfront and [Superpowers](https://github.com/obra/superpowers) are Claude C
 ## Where Superpowers is stronger
 
 - **Execution automation** — Superpowers' subagent-driven development mode can execute a full plan with two-stage automated review (spec compliance, then code quality) with less human involvement.
-- **Hard gates** — brainstorming is mandatory, not suggested. You literally cannot skip to code. Upfront pushes back but lets you override.
+- **Structured brainstorm gate** — brainstorming is designed as a prerequisite in the workflow, though in practice it can be skipped. Both tools push back on skipping thinking but neither physically prevents it.
 - **Composability** — skills activate automatically based on context. You don't need to know which command to run.
 - **Maturity** — 40k+ stars, in the official Anthropic plugin marketplace, created by Jesse Vincent.
 
