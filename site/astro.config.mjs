@@ -78,6 +78,7 @@ export default defineConfig({
 				{ label: 'Audit Trail', slug: 'audit-trail' },
 				{ label: 'Research', slug: 'research' },
 				{ label: 'Install', slug: 'install' },
+				{ label: 'Get Started', slug: 'get-started' },
 			],
 		}),
 	],
