@@ -39,7 +39,8 @@ Both Upfront and [GSD](https://github.com/gsd-build/get-shit-done) enforce struc
 - **Reviewability** — scores changes on 5 dimensions and pushes back if a change is too complex for meaningful human review. GSD doesn't gate on reviewability.
 - **Thinking records** — every phase produces a structured audit trail: what was decided, why, what was rejected, what was skipped. Captures reasoning, not just conclusions. Flushable to Langfuse, Arize Phoenix, etc.
 - **Strategic planning** — `/upfront:vision` uses Rumelt's kernel (diagnosis, guiding policies, coherent actions) for multi-feature ambitions. `/upfront:increment` forces structured retros between increments with kill criteria. GSD has milestones but not an opinionated strategic framework.
-- **Config protection** — blocks the AI from weakening linter/formatter rules instead of fixing the code.
+- **Security guardrails** — `/upfront:plan` audits for missing security tooling (linters, type checkers, vulnerability scanners, secret detection, slopsquatting protection) and pushes for installation as Phase 0 before feature code. Config protection hook blocks the AI from weakening rules once installed.
+- **Architecture as a living document** — `/upfront:plan` checks if `ARCHITECTURE.md` is stale, actively compares it to the codebase, and updates before planning. `/upfront:architect` does full structural reviews. Architecture is revisited regularly, not written once and forgotten.
 - **Simplicity** — 20 skills, zero dependencies, Go stdlib binary. No `.planning/` directory structure to learn, no STATE.md format to understand.
 
 ## Different philosophies

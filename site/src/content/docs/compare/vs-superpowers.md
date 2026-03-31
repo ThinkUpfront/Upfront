@@ -35,7 +35,8 @@ Both Upfront and [Superpowers](https://github.com/obra/superpowers) are Claude C
 - **Reviewability gates** — scores changes on 5 dimensions (concern count, blast radius, novelty, state complexity, reversibility) and pushes back before any code is written if the change is too complex for meaningful review.
 - **Strategic layer** — `/upfront:vision` captures multi-feature ambitions using Rumelt's kernel (diagnosis, guiding policies, coherent actions). `/upfront:increment` forces structured retros between increments. Superpowers operates at the feature level.
 - **Audit trail** — every phase produces a thinking record captured as structured events. Flushable to Langfuse, Arize Phoenix, or any observability tool. Managers can see adoption, depth, and effectiveness without reading specs.
-- **Config protection** — a hook that blocks the AI from weakening linter/formatter rules. Fix the code, not the config.
+- **Security guardrails** — `/upfront:plan` audits the project for missing security tooling (linters, type checkers, vulnerability scanners, secret detection, slopsquatting protection) and pushes hard for installation as Phase 0 before any feature code. The config protection hook blocks the AI from weakening rules after they're installed.
+- **Architecture as a living document** — `/upfront:plan` checks if `ARCHITECTURE.md` is stale (>30 days with commits), actively compares it to the codebase, and updates it before planning. `/upfront:architect` does full structural reviews. The architecture is revisited regularly, not written once and forgotten.
 
 ## They're complementary
 
