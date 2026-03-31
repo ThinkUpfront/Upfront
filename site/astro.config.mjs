@@ -78,6 +78,13 @@ export default defineConfig({
 				},
 				{ label: 'Audit Trail', slug: 'audit-trail' },
 				{ label: 'Research', slug: 'research' },
+				{
+					label: 'Compare',
+					items: [
+						{ label: 'vs Superpowers', slug: 'compare/vs-superpowers' },
+						{ label: 'vs GSD', slug: 'compare/vs-gsd' },
+					],
+				},
 				{ label: 'Install', slug: 'install' },
 			],
 		}),
