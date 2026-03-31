@@ -179,7 +179,7 @@ If Phase 0 (guardrails) was agreed upon, it comes first. No feature code until t
 
 For each phase, define:
 1. **What changes** — specific files and what happens to them
-2. **Automated verification** — exact commands to run (e.g., `make test`, `npm run typecheck`, specific test files)
+2. **Verify command** — the exact command(s) that prove this phase works. Every phase MUST have at least one. If you can't write a verify command, the phase isn't well-defined enough — break it down further or clarify the acceptance criteria. Examples: `go test ./internal/queue/... -race`, `curl -sf localhost:8080/health`, `npm run typecheck`, a specific test file. These are defined HERE in the plan, not invented during build.
 3. **Manual verification** — what a human checks before the next phase begins
 
 #### Human-writes mode (`/plan --human`)
@@ -241,12 +241,12 @@ See `specs/ARCHITECTURE.md` (reviewed [date]).
 **Changes:** [what happens in this phase]
 **Estimated size:** [lines]
 
-**Automated verification:**
-- [ ] [exact command]
-- [ ] [exact command]
+**Verify:**
+- [ ] `[exact command that proves this phase works]`
+- [ ] `[exact command]`
 
-**Manual verification:**
-- [ ] [what to check]
+**Manual check:**
+- [ ] [what a human checks before moving on]
 
 ---
 
@@ -265,6 +265,7 @@ Then tell the user:
 - Do NOT make phases too granular — a phase that changes 3 lines is not worth the overhead. Combine small related changes.
 - Do NOT assume file structure — verify it by reading the codebase.
 - Respect the spec's scope boundaries — do not plan changes to files listed as non-goals.
-- Each phase's verification criteria should trace back to the spec's acceptance criteria and blind spots. The plan is how you deliver the spec, not a separate document.
+- Every phase MUST have a verify command. No exceptions. If you cannot write a concrete command that proves the phase works, the phase is too vague — break it down or clarify the spec. "It compiles" is not verification. "go test ./internal/queue/... -race" is.
+- Each phase's verify commands should trace back to the spec's acceptance criteria and blind spots. The plan is how you deliver the spec, not a separate document.
 - If the spec's Implementation Design section flags structural issues (slop, inconsistent patterns, cleanup needed), include refactoring as the first phase(s) — prerequisite work before building the feature on top. Do not build on a shaky foundation.
 - If the spec is missing information you need to plan (e.g., no implementation design, unclear architecture), say what's missing and ask the user to update the spec before proceeding.
