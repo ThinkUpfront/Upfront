@@ -11,6 +11,9 @@ INSTALLED="$HOME/.claude/plugins/installed_plugins.json"
 # Remove cache and marketplace dirs
 rm -rf ~/.claude/plugins/cache/thinkupfront ~/.claude/plugins/marketplaces/thinkupfront 2>/dev/null && echo "✓ Deleted cache/marketplace dirs" || true
 
+# Remove install marker so next session sends plugin_install event
+rm -f ~/.upfront/.installed 2>/dev/null && echo "✓ Removed install marker" || true
+
 # Remove from settings.json (enabledPlugins + extraKnownMarketplaces)
 if [ -f "$SETTINGS" ]; then
     python3 -c "
