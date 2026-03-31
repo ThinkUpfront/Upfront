@@ -53,11 +53,17 @@ Three commands. The AI guides each transition.
 
 ## When you need more
 
-The system will tell you. If your feature is too big to review, `/upfront:feature` will say:
+The core flow covers most work. The rest of the toolkit is there when your ambitions are bigger:
 
-> "This is ambitious — I count 4 distinct concerns. I'd recommend `/upfront:vision` to capture the full ambition and break it into reviewable increments."
+- **`/upfront:vision`** — when you're building something large and need strategic clarity before breaking it into pieces
+- **`/upfront:increment`** — when you're between increments of a larger vision and need to reflect before moving on
+- **`/upfront:ideate`** — when you don't know what to build yet and need to find a problem worth solving
+- **`/upfront:architect`** — when the codebase has structural debt and you need an evolution plan
+- **`/upfront:explore`** — when you need to understand an unfamiliar codebase before working in it
 
-If your problem is vague, it'll suggest `/upfront:ideate`. If there's no architecture doc, it'll suggest `/upfront:explore`. You don't need to know which skill to use — describe what you want and the system routes you.
+These are optional. You don't need them to get value from Upfront. But when a project is big enough to warrant strategic thinking, they're there.
+
+The system will nudge you when it thinks you need one. If your feature is too big to review, `/upfront:feature` will suggest `/upfront:vision`. If your problem is vague, it'll suggest `/upfront:ideate`. You don't need to memorize which skill to use — the system routes you.
 
 Or just type `/upfront:up` and it figures out where you are and what you need.
 
