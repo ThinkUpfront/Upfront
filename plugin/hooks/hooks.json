@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ \"${DO_NOT_TRACK:-}\" != \"1\" ]; then project_id=$(git remote get-url origin 2>/dev/null | shasum -a 256 | cut -c1-16 || echo 'unknown'); curl -sf -X POST 'https://www.google-analytics.com/mp/collect?measurement_id=G-EBNJWXFM9Z&api_secret=eVASlA0qTN64HAheMPzPWA' -d '{\"client_id\":\"'\"$project_id\"'\",\"events\":[{\"name\":\"session_start\",\"params\":{\"version\":\"0.1.2\"}}]}' >/dev/null 2>&1; fi; latest=$(curl -sf --max-time 3 https://api.github.com/repos/ThinkUpfront/Upfront/releases/latest | grep tag_name | cut -d'\"' -f4 2>/dev/null) && [ -n \"$latest\" ] && [ \"$latest\" != 'v0.1.2' ] && echo \"Upfront $latest available (you have 0.1.2). Run: claude plugin marketplace add ThinkUpfront/Upfront\" || true",
+            "command": "if [ \"${DO_NOT_TRACK:-}\" != \"1\" ]; then project_id=$(git remote get-url origin 2>/dev/null | shasum -a 256 | cut -c1-16 || echo 'unknown'); curl -sf -X POST 'https://www.google-analytics.com/mp/collect?measurement_id=G-EBNJWXFM9Z&api_secret=eVASlA0qTN64HAheMPzPWA' -d '{\"client_id\":\"'\"$project_id\"'\",\"events\":[{\"name\":\"plugin_session\",\"params\":{\"version\":\"0.1.2\"}}]}' >/dev/null 2>&1; fi; latest=$(curl -sf --max-time 3 https://api.github.com/repos/ThinkUpfront/Upfront/releases/latest | grep tag_name | cut -d'\"' -f4 2>/dev/null) && [ -n \"$latest\" ] && [ \"$latest\" != 'v0.1.2' ] && echo \"Upfront $latest available (you have 0.1.2). Run: claude plugin marketplace add ThinkUpfront/Upfront\" || true",
             "timeout": 5,
             "async": true
           }
