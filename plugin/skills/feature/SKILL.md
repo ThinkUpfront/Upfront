@@ -253,20 +253,27 @@ Once placement is decided, propose specifics:
 - Interfaces and integration points
 - How this connects to existing systems
 
-### Step 4: AI implementation risks
+### Step 4: Hidden complexity
 
-Phase 2 covered behavioral correctness (will it work?). This step covers implementation risks (will the AI get it wrong?).
+Phase 2 covered behavioral correctness (will it work?). This step surfaces the traps — things that look simple but aren't.
 
-Ask: "What will the AI get wrong when it builds this? Where will it make confident mistakes?"
+Ask: "What seems simple about this problem but is actually complex? What's the counterintuitive thing about this domain that someone new would get wrong?"
 
-Wait for the user's answer. Let them think about it. Then fill gaps from this list — but only the ones they missed:
-- **Edge cases**: boundary values, empty/null/max-size inputs, off-by-one
-- **Security**: auth on every endpoint, input validation, no secrets in logs
+Wait for the user's answer. Let them think about it.
+
+If they say "I don't know" or "I can't think of anything" — offer to research it: "Want me to dig into this area of the codebase and look for complexity that isn't obvious? I'll check for tricky patterns, subtle invariants, and things that have historically caused problems in similar systems."
+
+If they accept, research the relevant code, dependencies, and patterns. Present what you found: edge cases, implicit assumptions, ordering dependencies, failure modes that aren't handled. Discuss each one — don't just list them.
+
+After the user has answered (or after research), fill gaps they missed from this list — but only what's relevant:
+- **Domain traps**: business rules that contradict intuition, implicit ordering requirements, state transitions that look valid but aren't
+- **Edge cases**: boundary values, empty/null/max-size inputs, off-by-one errors that compound
+- **Security**: auth on every endpoint, input validation, secrets in logs, privilege escalation paths
 - **Non-prompted concerns**: rate limiting, pagination, logging, audit trails, idempotency
-- **Hallucination risk**: are all referenced packages, APIs, and imports real?
-- Concurrency and error handling were covered in Phase 2 — focus here on risks specific to AI implementation.
+- **Hallucination risk**: are all referenced packages, APIs, and imports real? Verify before building.
+- Concurrency and error handling were covered in Phase 2 — focus here on complexity specific to implementation.
 
-Do not accept "N/A" on all of them. Every feature has at least one blind spot.
+Every feature has at least one trap. If neither the user nor the research found one, push harder — the trap is just hidden.
 
 ### Step 5: Rollback and ownership
 
@@ -386,13 +393,8 @@ Every requirement must be testable or verifiable. "It should be fast" is not a r
 - Reliability/SLA: [specifics with numbers]
 - Compliance/policy: [specifics]
 
-### Known AI Blind Spots
-- [x/N/A] Edge cases: [specifics]
-- [x/N/A] Concurrency: [specifics]
-- [x/N/A] Error handling: [specifics]
-- [x/N/A] Security: [specifics]
-- [x/N/A] Non-prompted concerns: [specifics]
-- [x/N/A] Hallucination risk: [specifics]
+### Hidden Complexity
+[What looks simple but isn't — domain traps, edge cases, security, implicit assumptions. Include findings from codebase research if conducted.]
 
 ### Rollback Plan
 - Trigger signal: [answer]
