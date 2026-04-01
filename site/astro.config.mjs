@@ -52,7 +52,7 @@ export default defineConfig({
 						{ label: 'Overview', slug: 'commands/overview' },
 						{ label: '/upfront:vision', slug: 'commands/vision' },
 						{ label: '/upfront:increment', slug: 'commands/increment' },
-						{ label: '/upfront:brainstorm', slug: 'commands/brainstorm' },
+						{ label: '/upfront:assess', slug: 'commands/assess' },
 						{ label: '/upfront:ideate', slug: 'commands/ideate' },
 						{ label: '/upfront:explore', slug: 'commands/explore' },
 						{ label: '/upfront:feature', slug: 'commands/feature' },

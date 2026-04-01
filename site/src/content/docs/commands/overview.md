@@ -17,7 +17,7 @@ Vision → Feature → Plan → Build
 |-----------|-------|----------|
 | Big ambition, need strategic clarity | `/upfront:vision` | Rumelt's kernel: diagnosis, policies, actions |
 | Between increments, need to reflect | `/upfront:increment` | Structured retro + next increment steering |
-| Specific concern, risk, or tradeoff | `/upfront:brainstorm` | Interactive problem-solving |
+| Specific concern, risk, or tradeoff | `/upfront:assess` | Interactive problem-solving |
 | Don't know what to build | `/upfront:ideate` | Conversation only |
 | Need to understand a codebase | `/upfront:explore` | Produces ARCHITECTURE.md |
 | Need to understand a codebase you forgot | `/upfront:teach` | Walkthrough + optional quiz |

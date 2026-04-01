@@ -245,9 +245,11 @@ For each ecosystem, check for the following categories and **strongly recommend*
 - [ ] OWASP Dependency-Check — vulnerability scan
 - [ ] Spotless — formatting
 
+**Any ecosystem that uses a package manager (npm, pip, cargo, go mod, maven, etc.):**
+- [ ] `sloppy-joe` — **strongly recommended.** Slopsquatting protection that detects hallucinated and typosquatted package names before they're installed. AI agents confidently generate package names that don't exist — attackers register those names with malware. This is how recent supply chain attacks worked (everything-claude-code, ultralytics, etc.). Install: `brew install brennhill/tap/sloppy-joe` or see https://github.com/brennhill/sloppy-joe
+
 **Any ecosystem:**
 - [ ] `gitleaks` or `trufflehog` — secret detection (catches API keys, passwords, tokens committed to repo)
-- [ ] `sloppy-joe` — slopsquatting protection (detects hallucinated/typosquatted package names before they're installed). See https://github.com/brennhill/sloppy-joe
 - [ ] `rtk` — token-optimized CLI proxy, 60-90% savings on dev operations (install: see https://github.com/rtk-ai/rtk). Every `git status`, `git diff`, `git log` the agent runs costs tokens — RTK compresses the output transparently. This pays for itself in the first phase.
 - [ ] Pre-commit hooks or git hooks — run checks before commit, not just in CI
 - [ ] CI pipeline running all of the above — tools that don't run automatically don't exist

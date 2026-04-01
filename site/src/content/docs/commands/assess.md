@@ -1,11 +1,11 @@
 ---
-title: /upfront:brainstorm
+title: /upfront:assess
 description: Interactive problem-solving for a specific concern, risk, or tradeoff.
 ---
 
 ## What it does
 
-`/upfront:brainstorm` is a focused conversation about a specific concern. Not feature definition — problem-solving. The AI brings domain knowledge you don't have, maps the landscape, teaches you the risks, and helps you choose between tradeoffs.
+`/upfront:assess` is a focused conversation about a specific concern. Not feature definition — problem-solving. The AI brings domain knowledge you don't have, maps the landscape, teaches you the risks, and helps you choose between tradeoffs.
 
 ## When to use it
 
