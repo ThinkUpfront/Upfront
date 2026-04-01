@@ -33,6 +33,7 @@ Vision → Feature → Plan → Build
 | Evolution plan ready, need to restructure | `/upfront:re-architect` | Phase-by-phase restructuring |
 | Feature built, need a PR | `/upfront:ship` | Auto-populated from spec |
 | Feature shipped, need to check | `/upfront:retro` | Predictions vs reality |
+| Check tooling is current | `/upfront:upgrade` | Health check + fix |
 | Not sure where to start | `/upfront:up` | Smart router |
 | Capture a quick idea or todo | `/upfront:note` | Append to TODO.md |
 | Need to stop mid-work | `/upfront:pause` | Structured handoff |

@@ -74,6 +74,7 @@ export default defineConfig({
 					label: 'Support',
 					items: [
 						{ label: '/upfront:up', slug: 'commands/up' },
+						{ label: '/upfront:upgrade', slug: 'commands/upgrade' },
 						{ label: '/upfront:note', slug: 'commands/note' },
 						{ label: '/upfront:pause & /upfront:resume', slug: 'commands/pause-resume' },
 					],

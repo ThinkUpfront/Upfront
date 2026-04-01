@@ -36,6 +36,8 @@ Pick up where I left   →  /upfront:resume
 Brainstorm ideas       →  /upfront:ideate
 Update a spec          →  /upfront:refine
 Capture a note/todo    →  /upfront:note
+Check tooling health   →  /upfront:upgrade
+Improve AI config      →  /upfront:enlighten
 ```
 
 Then wait for their answer before routing.
