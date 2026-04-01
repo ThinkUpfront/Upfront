@@ -117,11 +117,29 @@ Append to `specs/LEARNINGS.md` (create if it doesn't exist):
 **Next increment adjusted because:** [what the retro changed about the plan]
 ```
 
+## Debt check
+
+Before wrapping up, check if `specs/DEBT.md` exists. If it does, count open items (status: open). If there are any:
+
+```
+Tech debt check: [N] open items from this increment.
+
+[list each — one line per item with severity]
+
+These will compound if left unaddressed. Options:
+  a) Plan a debt paydown phase in the next increment
+  b) Acknowledge and carry forward
+  c) Review each item now and close any that are resolved
+```
+
+This is not a gate — the user can carry debt. But they should see the balance.
+
 ## Then
 
 Tell the user:
 - What was captured
 - What changed in the vision (if applicable)
+- Debt balance (if any)
 - "Ready to start the next increment? I'll launch `/upfront:feature` for the first feature." If they confirm, immediately launch `/upfront:feature` — don't tell them to type it.
 
 ## Rules

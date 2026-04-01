@@ -15,8 +15,8 @@ Check the latest Upfront release:
 curl -sf --max-time 5 https://api.github.com/repos/ThinkUpfront/Upfront/releases/latest | grep tag_name
 ```
 
-Compare with the installed version (currently `0.3.6`). Report:
-- Current: `0.3.6`
+Compare with the installed version (currently `0.3.7`). Report:
+- Current: `0.3.7`
 - Latest: `v[X.Y.Z]`
 - Status: UP TO DATE or UPDATE AVAILABLE
 
@@ -66,7 +66,16 @@ Check `specs/ARCHITECTURE.md`:
 - **Missing:** "No architecture doc. Want me to create one?" If they confirm, immediately launch `/upfront:explore`.
 - **Exists:** Check the "Last reviewed" date. If stale (>30 days with commits since), flag it: "Architecture doc is [N] days old with [N] commits since. Consider running `/upfront:architect` to review."
 
-## Step 5: Summary
+## Step 5: Debt balance
+
+Check if `specs/DEBT.md` exists. If it does, count open items by severity:
+- Severity 3 (structural risk): **flag prominently**
+- Severity 2 (needs fixing before production): count
+- Severity 1 (cosmetic): count
+
+Include in the summary below.
+
+## Step 6: Summary
 
 Present a clean report:
 
@@ -74,7 +83,7 @@ Present a clean report:
 Upfront Health Check
 ====================
 
-Plugin:        0.3.6 ✓ (latest)
+Plugin:        0.3.7 ✓ (latest)
 sloppy-joe:    installed ✓
 gitleaks:      MISSING — brew install gitleaks
 Test runner:   npm test ✓ (passing)
@@ -83,6 +92,7 @@ Formatter:     prettier ✓ (configured)
 Pre-commit:    MISSING — recommend husky + lint-staged
 CLAUDE.md:     exists, 2/4 checks pass — run /upfront:enlighten
 ARCHITECTURE:  exists, reviewed 12 days ago ✓
+Tech debt:     3 open items (1 severity 3, 2 severity 2)
 
 Action needed:
   1. Install gitleaks: brew install gitleaks

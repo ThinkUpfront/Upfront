@@ -23,6 +23,7 @@ Build something new    →  /upfront:feature or /upfront:ideate
 Specific concern       →  /upfront:assess
 Increment retro        →  /upfront:increment
 Fix a bug              →  /upfront:debug
+Prototype fast         →  /upfront:spike
 Small change           →  /upfront:quick
 Fix a GitHub issue     →  /upfront:patch
 Plan from a spec       →  /upfront:plan
@@ -53,6 +54,8 @@ Read the user's intent and match it to the right command. Think about what they 
 **Building something new**: If vague ("I want to add something", "new feature but not sure what"), route to `/upfront:ideate`. If they have a clear problem or feature in mind, route to `/upfront:feature`.
 
 **Something is broken**: "bug", "broken", "doesn't work", "error", "failing" → route to `/upfront:debug`.
+
+**Rapid prototype / spike**: "just build it", "let me see it", "spike this", "prototype", "I need to try something", "quick and dirty", "throwaway", "let's just test it" → route to `/upfront:spike`.
 
 **Small scoped change**: "rename", "update timeout", "change the color", "bump version", "tweak" → route to `/upfront:quick`.
 

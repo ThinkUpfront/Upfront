@@ -303,7 +303,17 @@ Should I install the missing tools before we start building? This takes 5 minute
 
 **Push hard.** Do not present missing tools as optional nice-to-haves. Frame them as: "Build it right or watch it burn. That's probably why you're here and not somewhere else. Want me to install these for you? I'll set them up and commit as Phase 0 — takes a few minutes."
 
-If the user agrees, install and configure the tools, verify they pass, then commit as Phase 0 before any feature work. If they decline, note it in the progress file: "User declined [tool] — [category] issues will not be caught automatically."
+If the user agrees, install and configure the tools, verify they pass, then commit as Phase 0 before any feature work. If they decline, note it in the progress file: "User declined [tool] — [category] issues will not be caught automatically." Also log to `specs/DEBT.md`:
+
+```markdown
+## [date] — Declined guardrail: [tool name]
+
+**Status:** open
+**Source:** /upfront:build pre-flight
+**Feature:** [feature name]
+**Severity:** 2
+**Detail:** [tool] not installed — [category] issues will not be caught automatically.
+```
 
 If the plan already includes a Phase 0 (guardrails from `/upfront:plan`), merge the missing tools into it.
 
@@ -690,7 +700,17 @@ Report your findings. If there are MUST FIX items, list them clearly.
 
 If the review finds **MUST FIX** items: fix them (spawn another sub-agent if needed), re-run verification, re-review. Do not proceed with known correctness issues.
 
-If the review finds **SHOULD FIX** items: present them to the user. Let them decide whether to fix now or accept the risk.
+If the review finds **SHOULD FIX** items: present them to the user. Let them decide whether to fix now or accept the risk. If they defer, log each item to `specs/DEBT.md` (create if it doesn't exist):
+
+```markdown
+## [date] — Deferred: [one-line description]
+
+**Status:** open
+**Source:** /upfront:build Phase [N] review
+**Feature:** [feature name]
+**Severity:** 2
+**Detail:** [what the review found and why it matters]
+```
 
 #### 7. Update the plan and progress file
 
