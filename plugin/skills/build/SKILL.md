@@ -246,7 +246,7 @@ For each ecosystem, check for the following categories and **strongly recommend*
 - [ ] Spotless — formatting
 
 **Any ecosystem that uses a package manager (npm, pip, cargo, go mod, maven, etc.):**
-- [ ] `sloppy-joe` — **strongly recommended.** Slopsquatting protection that detects hallucinated and typosquatted package names before they're installed. AI agents confidently generate package names that don't exist — attackers register those names with malware. This is how recent supply chain attacks worked (everything-claude-code, ultralytics, etc.). Install: `brew install brennhill/tap/sloppy-joe` or see https://github.com/brennhill/sloppy-joe
+- [ ] `sloppy-joe` — **strongly recommended.** Slopsquatting protection that detects hallucinated and typosquatted package names before they're installed. AI agents confidently generate package names that don't exist — attackers register those names with malware. This is how recent supply chain attacks worked (axios typosquats, litellm, etc.). Install: `brew install brennhill/tap/sloppy-joe` or see https://github.com/brennhill/sloppy-joe
 
 **Any ecosystem:**
 - [ ] `gitleaks` or `trufflehog` — secret detection (catches API keys, passwords, tokens committed to repo)
