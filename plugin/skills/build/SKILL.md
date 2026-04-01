@@ -179,6 +179,30 @@ The key signal is *same or similar failure*. If each attempt fails differently (
 
 ## Process
 
+### Step 0: Validate project root
+
+Before anything else, confirm the working directory is correct. Wrong root = wrong codebase = wasted build.
+
+1. **Check git root:**
+   ```bash
+   git rev-parse --show-toplevel
+   ```
+   If this fails, the directory is not a git repository. **Stop.** Tell the user: "This directory is not a git repository. Initialize one with `git init` or `cd` to the correct project root."
+
+2. **Confirm source root = git root:** The git root from step 1 must match the current working directory. If `pwd` differs from `git rev-parse --show-toplevel`, you're in a subdirectory. **Stop.** Tell the user: "You're in `[pwd]` but the git root is `[git root]`. Run `/upfront:build` from the project root."
+
+3. **Confirm with the user:**
+   ```
+   Project root: [git root]
+   Branch: [current branch]
+   Clean: [yes/no — if uncommitted changes, list them]
+
+   Is this the correct project? Proceeding will create a build branch from here.
+   ```
+   Wait for confirmation. If there are uncommitted changes, warn: "You have uncommitted changes. These won't be in the build branch. Commit or stash them first?"
+
+4. **Ensure git is initialized properly:** Check that `git log --oneline -1` succeeds (at least one commit exists). If the repo has zero commits, tell the user: "This repo has no commits. Make an initial commit first so the build branch has a base."
+
 ### Pre-flight: Verify and harden guardrails
 
 Before starting Phase 1 (skip this on resume), audit the project's tooling and verify everything works. This is two steps: check what's installed, then strongly recommend what's missing.
@@ -441,18 +465,6 @@ To abort and clean up at any time:
 
 All sub-agents, commits, verification, and reviews happen in the worktree directory. The progress file and spec are in the worktree's `specs/` directory.
 
-#### Merge back (after red team + learnings)
-
-After all phases are complete and the red team pass is done:
-
-1. Run merge from the base directory: `cd <BASE_DIR> && git merge build/<feature-name>`
-   - If there are conflicts (someone committed to the base branch during the build), present them to the user. Do not auto-resolve.
-2. Clean up: `git worktree remove <WORKTREE_DIR>` and `git branch -d build/<feature-name>`
-
-3. Remove the post-edit hook: delete `.claude/hooks/post-edit.sh` and the entry from `.claude/settings.local.json`
-
-Tell the user: "Feature merged to `<BASE_BRANCH>`. Worktree and build hooks cleaned up."
-
 #### Abort / crash
 
 If the user aborts mid-build or the session crashes, the worktree and branch survive for inspection:
@@ -529,7 +541,9 @@ You are implementing Phase [N] of a feature plan. You have a clean context — d
 For broad codebase searches ("where is X used?", "find all files that import Y"), spawn a Haiku sub-agent with model: "haiku" to do the searching and return a summary. Do NOT run broad Grep/Glob calls directly — they waste tokens loading irrelevant results into your context. For targeted reads where you already know the file path, read directly.
 
 ## Your task
-[paste the specific phase from the plan, including files, changes, and verification criteria]
+[paste the specific phase from the plan, including files, changes, and verification commands]
+
+IMPORTANT: Include the Verify commands but do NOT include the "Expected output" block from the plan. The sub-agent should make the code work correctly based on the spec and tests, not by reverse-engineering the expected output.
 
 ## Spec (intent and constraints)
 Read the spec at: specs/[feature-name].md
@@ -594,9 +608,26 @@ Do not guess. Wait for the user.
 
 When re-spawning, include this in the sub-agent's context: "A previous attempt at this phase failed. Read the failed attempt notes in the progress file and avoid the same approach."
 
-#### 4. Run automated verification yourself
+#### 4. Run automated verification yourself (blind check)
 
-Do not trust the sub-agent's self-report alone. Run every automated verification command listed for this phase independently. If any fail, either fix or re-spawn the sub-agent with the failure context.
+Do not trust the sub-agent's self-report alone. Run every automated verification command listed for this phase independently.
+
+**Blind output check:** After running the verify commands, compare the actual output against the plan's `Expected output:` block for this phase. The sub-agent never saw the expected output — this is your independent confirmation that the implementation is genuinely correct, not just "tests pass."
+
+Present the comparison to the user:
+```
+Verify: [command]
+Expected: [from plan]
+Actual:   [from running the command]
+Match:    ✓ / ✗
+```
+
+If the actual output doesn't match the expected output, investigate. It could mean:
+- The implementation is wrong (re-spawn the sub-agent with the failure context)
+- The expected output in the plan was inaccurate (update the plan if the implementation is clearly correct)
+- The output format changed due to framework updates (note it and move on)
+
+Do not show the expected output to the sub-agent when re-spawning — only describe *what's wrong*, not *what the right answer looks like*.
 
 #### 5. Visual verification (UI phases only)
 
@@ -875,13 +906,29 @@ Architectural drift accumulates silently. Consider running /upfront:architect to
 
 This is a suggestion, not a gate. The user can ignore it. But the nudge should be visible.
 
-Then tell the user:
-- All phases are complete
-- Integration sweep results
-- Red team results (issues fixed, judgments made, risks flagged)
-- Learnings captured and patterns compounded
-- The feature is ready for final review
-- "Run `/upfront:ship` to create a PR, or push the branch manually."
+### Merge back to main branch
+
+After learnings and compounding are done, merge the build branch back:
+
+1. Switch to the base directory: `cd <BASE_DIR>`
+2. Merge: `git merge build/<feature-name>`
+   - If there are conflicts (someone committed to the base branch during the build), present them to the user. Do not auto-resolve.
+3. Clean up the worktree: `git worktree remove <WORKTREE_DIR>`
+4. Clean up the branch: `git branch -d build/<feature-name>`
+5. Remove the post-edit hook: delete `.claude/hooks/post-edit.sh` and the entry from `.claude/settings.local.json`
+
+Tell the user:
+```
+Feature merged to [BASE_BRANCH]. Build branch and worktree cleaned up.
+
+Summary:
+- Phases completed: [N]/[total]
+- Integration sweep: [pass/issues found]
+- Red team: [issues fixed, judgments made, risks flagged]
+- Learnings captured, patterns compounded
+
+Next: run /upfront:ship to create a PR, or push manually.
+```
 
 ## Resuming
 

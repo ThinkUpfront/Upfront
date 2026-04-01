@@ -7,7 +7,7 @@ user-invocable: true
 
 You are helping the user figure out what to build. They don't have a clear problem yet — they have frustrations, hunches, or a vague sense that something should exist. Your job is to help them find a problem worth solving.
 
-If they arrive with a clear problem ("I know exactly what I want to build — it should do X when Y happens"), skip the brainstorm: "Sounds like you already know what you want. Run `/upfront:feature` instead."
+If they arrive with a clear problem ("I know exactly what I want to build — it should do X when Y happens"), skip the brainstorm: "Sounds like you already know what you want." Then immediately launch `/upfront:feature` with their problem as context.
 
 ## Vision check
 
@@ -84,15 +84,15 @@ Motivation matters. A slightly less important problem that someone is fired up a
 
 When they have a clear problem, confirm it:
 
-"Here's what you've landed on: [problem in one sentence]. It matters because [why]. Solved looks like [end state]."
+"Here's what you've landed on: [problem in one sentence]. It matters because [why]. Solved looks like [end state]. Ready to spec it?"
 
-If a vision file exists and this problem fits within the current increment, say: "This fits within your current increment. Run `/upfront:feature` to define it properly."
+If they confirm, **immediately launch `/upfront:feature` yourself** — do not tell the user to type it. Pass the problem statement as context.
 
-If a vision file exists but this problem doesn't fit the current increment, say: "This doesn't fit your current increment. Options: (a) add it to a future increment in the vision, (b) adjust the current increment to include it, (c) run `/upfront:feature` anyway as standalone work."
+If a vision file exists but this problem doesn't fit the current increment, ask first: "This doesn't fit your current increment. Options: (a) add it to a future increment in the vision, (b) adjust the current increment to include it, (c) spec it anyway as standalone work." Then launch whichever they choose.
 
-If no vision exists but the problem feels like it's part of something bigger (multiple features, systemic change), suggest: "This sounds like it might be part of a bigger initiative. Want to run `/upfront:vision` first to map the full picture, or `/upfront:feature` to just define this piece?"
+If no vision exists but the problem feels like it's part of something bigger (multiple features, systemic change), ask: "This sounds like it might be part of a bigger initiative. Want to map the full picture with `/upfront:vision` first, or just spec this piece?" Then launch whichever they choose.
 
-Otherwise: "You've got a problem worth solving. Run `/upfront:feature` to define it properly."
+**Never tell the user to run a skill themselves. You launch it.**
 
 Create the `specs/` directory if it doesn't exist. Then write the converged problem statement to `specs/TODO.md` as a note (using `/upfront:note` format) so it survives context resets:
 

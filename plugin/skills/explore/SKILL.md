@@ -25,7 +25,7 @@ If the repo is empty or near-empty (only scaffolding, go.mod, package.json, READ
 
 Say: "This looks like a greenfield project — there's no existing architecture to document yet. I'll create a minimal `specs/ARCHITECTURE.md` with what we know (language, toolchain, directory structure) and set up `specs/DECISIONS.md` and `specs/LEARNINGS.md` for future use."
 
-Create the minimal files, then say: "Run `/upfront:feature` to define your first feature. The architecture will build up naturally as you make decisions."
+Create the minimal files, then say: "Ready to define your first feature? The architecture will build up naturally as you make decisions." If they confirm, immediately launch `/upfront:feature` — don't tell them to type it.
 
 Do not force the user through 5 phases of exploration on an empty repo. Exit early.
 
@@ -287,7 +287,7 @@ Then tell the user:
 - That future `/upfront:plan` runs will review and update this document
 - That `/upfront:feature` and `/upfront:build` will append to `DECISIONS.md` and `LEARNINGS.md` over time
 
-Also check if `CLAUDE.md` or `AGENTS.md` exists and is well-structured (has build/test commands, boundaries, stack-specific examples). If it's missing or thin, suggest: "Your instruction file could use some work — run `/upfront:enlighten` to audit it and add stack-specific examples. Better instructions = better AI output everywhere."
+Also check if `CLAUDE.md` or `AGENTS.md` exists and is well-structured (has build/test commands, boundaries, stack-specific examples). If it's missing or thin, suggest: "Your instruction file could use some work. Want me to audit it and add stack-specific examples?" If they confirm, immediately launch `/upfront:enlighten` — don't tell them to type it.
 
 ---
 

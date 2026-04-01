@@ -15,8 +15,8 @@ Check the latest Upfront release:
 curl -sf --max-time 5 https://api.github.com/repos/ThinkUpfront/Upfront/releases/latest | grep tag_name
 ```
 
-Compare with the installed version (currently `0.3.4`). Report:
-- Current: `0.3.4`
+Compare with the installed version (currently `0.3.5`). Report:
+- Current: `0.3.5`
 - Latest: `v[X.Y.Z]`
 - Status: UP TO DATE or UPDATE AVAILABLE
 
@@ -50,7 +50,7 @@ Run the test runner and linter to verify they pass. If they fail, report the fai
 
 Check for `CLAUDE.md` or `AGENTS.md` in the project root.
 
-**If missing:** "No AI instruction file found. Run `/upfront:enlighten` to create one — it makes every AI interaction in this repo better."
+**If missing:** "No AI instruction file found. Want me to create one? It makes every AI interaction in this repo better." If they confirm, immediately launch `/upfront:enlighten`.
 
 **If exists:** Quick audit — does it have:
 - [ ] Build/test/lint commands near the top?
@@ -58,12 +58,12 @@ Check for `CLAUDE.md` or `AGENTS.md` in the project root.
 - [ ] Stack-specific code examples?
 - [ ] References to specs/ files (`@specs/ARCHITECTURE.md`)?
 
-Report how many of the 4 checks pass. If less than 3: "Your instruction file is thin. Run `/upfront:enlighten` to improve it."
+Report how many of the 4 checks pass. If less than 3: "Your instruction file is thin. Want me to improve it?" If they confirm, immediately launch `/upfront:enlighten`.
 
 ## Step 4: Architecture health
 
 Check `specs/ARCHITECTURE.md`:
-- **Missing:** "No architecture doc. Run `/upfront:explore` to create one."
+- **Missing:** "No architecture doc. Want me to create one?" If they confirm, immediately launch `/upfront:explore`.
 - **Exists:** Check the "Last reviewed" date. If stale (>30 days with commits since), flag it: "Architecture doc is [N] days old with [N] commits since. Consider running `/upfront:architect` to review."
 
 ## Step 5: Summary
@@ -74,7 +74,7 @@ Present a clean report:
 Upfront Health Check
 ====================
 
-Plugin:        0.3.4 ✓ (latest)
+Plugin:        0.3.5 ✓ (latest)
 sloppy-joe:    installed ✓
 gitleaks:      MISSING — brew install gitleaks
 Test runner:   npm test ✓ (passing)

@@ -31,8 +31,8 @@ Evaluate the requested change. If ANY of these are true, stop immediately:
 
 If you hit any of these, escalate:
 
-- If it's a single feature: "This is bigger than a /upfront:quick change. Run `/upfront:feature` instead to define the intent and constraints properly."
-- If it spans multiple concerns, subsystems, or would take multiple features to do right: "This isn't quick — it's increment 1 of something bigger. Consider `/upfront:vision` to capture what you're really after, or at minimum `/upfront:feature` to define one piece properly."
+- If it's a single feature: "This is bigger than a /upfront:quick change — it needs a proper spec. Want me to start `/upfront:feature`?" If they confirm, launch it immediately.
+- If it spans multiple concerns or subsystems: "This isn't quick — it's increment 1 of something bigger. Want to map it out with `/upfront:vision`, or just spec one piece with `/upfront:feature`?" Then launch whichever they choose.
 
 Do not proceed. Do not try to be helpful by doing it anyway.
 
@@ -71,7 +71,7 @@ Now that you have made the change, check: did it stay under ~50 lines of non-tes
 
 If it grew beyond that, stop and say:
 
-> "This turned out to be bigger than expected (~[N] lines). The change is partially done. You should run `/upfront:feature` to define this properly, then `/upfront:plan` and `/upfront:build` to finish it. I'll stash the work-in-progress so you can pick it up later: `git stash push -m 'quick: partial [description]'`"
+> "This turned out to be bigger than expected (~[N] lines). I'll stash the work-in-progress and launch `/upfront:feature` to define it properly."
 
 Stash the partial work before stopping. Do not leave uncommitted half-done code in the working tree.
 

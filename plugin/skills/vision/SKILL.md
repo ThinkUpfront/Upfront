@@ -299,7 +299,7 @@ Also update `specs/DECISIONS.md` with the strategic decisions made.
 Then tell the user:
 - Where the vision file is
 - To review it before proceeding
-- "Start increment 1: run `/upfront:feature` for the first feature in the increment. After the increment ships, run `/upfront:increment` for a retro before starting the next one."
+- "Ready to start increment 1? I'll launch `/upfront:feature` for the first feature." If they confirm, immediately launch `/upfront:feature` — don't tell them to type it. After the increment ships, they should run `/upfront:increment` for a retro before starting the next one.
 
 ## Rules
 

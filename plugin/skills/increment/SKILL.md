@@ -122,7 +122,7 @@ Append to `specs/LEARNINGS.md` (create if it doesn't exist):
 Tell the user:
 - What was captured
 - What changed in the vision (if applicable)
-- "When you're ready to start the next increment, run `/upfront:feature` for the first feature."
+- "Ready to start the next increment? I'll launch `/upfront:feature` for the first feature." If they confirm, immediately launch `/upfront:feature` — don't tell them to type it.
 
 ## Rules
 

@@ -189,7 +189,7 @@ Append to `specs/DECISIONS.md`:
 Tell the user:
 - Summary of findings (god modules, layer violations, pattern opportunities)
 - The evolution doc location
-- "Run `/upfront:re-architect` to execute this evolution phase by phase."
+- "Ready to execute this evolution?" If they confirm, immediately launch `/upfront:re-architect` — don't tell them to type it.
 - If architecture is clean: "No structural issues found. Marking as reviewed." — and update the "Last reviewed" date in `specs/ARCHITECTURE.md` so the health check nudge in `/upfront:build` knows.
 
 ## Rules

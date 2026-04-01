@@ -249,6 +249,12 @@ See `specs/ARCHITECTURE.md` (reviewed [date]).
 - [ ] `[exact command that proves this phase works]`
 - [ ] `[exact command]`
 
+**Expected output:**
+```
+[what the verify commands should print when the phase is working correctly]
+[e.g., "PASS: 4/4 tests passed" or "ok  internal/queue  0.012s" or specific output lines]
+```
+
 **Manual check:**
 - [ ] [what a human checks before moving on]
 
@@ -271,6 +277,7 @@ Then tell the user:
 - Respect the spec's scope boundaries — do not plan changes to files listed as non-goals.
 - Every phase MUST list which requirements (R1, R2, etc.) it delivers. After all phases are defined, check coverage: every requirement from the spec must appear in at least one phase. If a requirement has no phase, either add a phase or flag it as out of scope for this plan.
 - Every phase MUST have a verify command. No exceptions. If you cannot write a concrete command that proves the phase works, the phase is too vague — break it down or clarify the spec. "It compiles" is not verification. "go test ./internal/queue/... -race" is.
+- Every phase MUST have an `Expected output:` block describing what the verify commands should print when working correctly. Be specific — include test counts, OK messages, or key output lines. This is used as a blind check: the build orchestrator compares actual output against this expectation, but the implementing sub-agent never sees it. This prevents the agent from gaming verification.
 - Each phase's verify commands should trace back to the spec's acceptance criteria and blind spots. The plan is how you deliver the spec, not a separate document.
 - If the spec's Implementation Design section flags structural issues (slop, inconsistent patterns, cleanup needed), include refactoring as the first phase(s) — prerequisite work before building the feature on top. Do not build on a shaky foundation.
 - If the spec is missing information you need to plan (e.g., no implementation design, unclear architecture), say what's missing and ask the user to update the spec before proceeding.

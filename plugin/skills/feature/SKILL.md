@@ -11,7 +11,9 @@ You are helping the user define a new feature before implementation begins. This
 
 Before starting Phase 1, check if `specs/ARCHITECTURE.md` exists. If it doesn't, and this is a brownfield project (substantial existing code), suggest:
 
-"This project doesn't have an architecture doc yet. Running `/upfront:explore` first will give me the context I need to ask better questions in Phases 3 and 4 (design and implementation). Want to run `/upfront:explore` first, or proceed without it?"
+"This project doesn't have an architecture doc yet. Running `/upfront:explore` first will give me the context I need to ask better questions in Phases 3 and 4 (design and implementation). Want me to run that first, or proceed without it?"
+
+If they want explore first, immediately launch `/upfront:explore` — don't tell them to type it.
 
 If the user wants to proceed, continue — but note in the Design Conversation phase that your codebase understanding may be incomplete.
 
@@ -41,7 +43,9 @@ If the user has a vision file and this feature is part of an increment, skip the
 
 When the user answers "What problem does this solve?" in Phase 1, evaluate their first response. If their answer is vague, uncertain, or exploratory — signals like "I don't know", "I'm not sure", "maybe something like...", "I was thinking maybe...", describing a solution without a clear problem, or struggling to articulate what's actually wrong — suggest:
 
-"It sounds like you're still exploring what to build. Want to run `/upfront:ideate` first to brainstorm, then come back to `/upfront:feature` when you have a clearer problem?"
+"It sounds like you're still exploring what to build. Want to brainstorm first?"
+
+If they say yes, immediately launch `/upfront:ideate` — don't tell them to type it.
 
 Do NOT auto-redirect. Some people think by talking and will sharpen up after one push-back. If they want to keep going, proceed normally with the Phase 1 challenge process — push back on their vague answer and see if they can sharpen it. Only suggest `/upfront:ideate` once.
 
