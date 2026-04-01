@@ -5,7 +5,7 @@ user-invocable: true
 
 # Explore
 
-You are documenting a codebase so that future `/feature`, `/plan`, and `/build` sessions have full context. This is a one-time deep investigation that produces `specs/ARCHITECTURE.md` — the shared reference document for all future work.
+You are documenting a codebase so that future `/upfront:feature`, `/upfront:plan`, and `/upfront:build` sessions have full context. This is a one-time deep investigation that produces `specs/ARCHITECTURE.md` — the shared reference document for all future work.
 
 If `specs/ARCHITECTURE.md` already exists, read it first. You are updating it, not starting from scratch. Present what's changed since the last review.
 
@@ -25,7 +25,7 @@ If the repo is empty or near-empty (only scaffolding, go.mod, package.json, READ
 
 Say: "This looks like a greenfield project — there's no existing architecture to document yet. I'll create a minimal `specs/ARCHITECTURE.md` with what we know (language, toolchain, directory structure) and set up `specs/DECISIONS.md` and `specs/LEARNINGS.md` for future use."
 
-Create the minimal files, then say: "Run `/feature` to define your first feature. The architecture will build up naturally as you make decisions."
+Create the minimal files, then say: "Run `/upfront:feature` to define your first feature. The architecture will build up naturally as you make decisions."
 
 Do not force the user through 5 phases of exploration on an empty repo. Exit early.
 
@@ -203,7 +203,7 @@ After all five phases, write or update `specs/ARCHITECTURE.md`:
 # Architecture
 
 > Last explored: [date]
-> Last reviewed during /plan: [date if applicable]
+> Last reviewed during /upfront:plan: [date if applicable]
 
 ## Codebase Overview
 [language, framework, toolchain, directory structure, build/test/lint commands]
@@ -265,9 +265,9 @@ Also create or update `specs/DECISIONS.md` if it doesn't exist:
 # Decisions
 
 > Append-only register of architectural and design decisions.
-> Read by /feature and /plan for context. Do not edit past entries.
+> Read by /upfront:feature and /upfront:plan for context. Do not edit past entries.
 
-[no entries yet — future /feature sessions will append here]
+[no entries yet — future /upfront:feature sessions will append here]
 ```
 
 And create or update `specs/LEARNINGS.md` if it doesn't exist:
@@ -276,16 +276,16 @@ And create or update `specs/LEARNINGS.md` if it doesn't exist:
 # Learnings
 
 > Append-only register of what surprised us, what the agent got wrong, what patterns emerged.
-> Read by /plan and /build for context. Do not edit past entries.
+> Read by /upfront:plan and /upfront:build for context. Do not edit past entries.
 
-[no entries yet — future /build sessions will append here]
+[no entries yet — future /upfront:build sessions will append here]
 ```
 
 Then tell the user:
 - Where the files are
-- To review `specs/ARCHITECTURE.md` before any `/feature` or `/plan` work
-- That future `/plan` runs will review and update this document
-- That `/feature` and `/build` will append to `DECISIONS.md` and `LEARNINGS.md` over time
+- To review `specs/ARCHITECTURE.md` before any `/upfront:feature` or `/upfront:plan` work
+- That future `/upfront:plan` runs will review and update this document
+- That `/upfront:feature` and `/upfront:build` will append to `DECISIONS.md` and `LEARNINGS.md` over time
 
 ---
 

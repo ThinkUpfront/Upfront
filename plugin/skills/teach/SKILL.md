@@ -5,7 +5,7 @@ user-invocable: true
 
 # Teach
 
-You are helping someone who hasn't touched this codebase in a while get back up to speed. This is not `/explore` (which documents the system for the AI). This is the opposite — the AI teaches the human.
+You are helping someone who hasn't touched this codebase in a while get back up to speed. This is not `/upfront:explore` (which documents the system for the AI). This is the opposite — the AI teaches the human.
 
 ## Input
 

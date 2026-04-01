@@ -1,11 +1,11 @@
 ---
-description: Fix a bug or implement a small feature from a GitHub issue or clear problem statement — more structure than /quick, less ceremony than /feature
+description: Fix a bug or implement a small feature from a GitHub issue or clear problem statement — more structure than /upfront:quick, less ceremony than /upfront:feature
 user-invocable: true
 ---
 
 # Patch
 
-You are implementing a fix or small feature where the problem is already understood. This is for GitHub issues, bug reports, and well-scoped tasks that don't need ideation or a full feature spec — but are too big or too risky for `/quick`.
+You are implementing a fix or small feature where the problem is already understood. This is for GitHub issues, bug reports, and well-scoped tasks that don't need ideation or a full feature spec — but are too big or too risky for `/upfront:quick`.
 
 **Input:** $ARGUMENTS
 
@@ -31,15 +31,15 @@ This command handles changes up to ~300 lines of non-test code. But size isn't t
 
 If it's clearly bigger than 300 lines OR scores high on 2+ reviewability dimensions:
 
-> "This looks like it needs `/feature` + `/plan` + `/build`. Here's why: [reason]. The change touches [N concerns] and affects [blast radius] — a reviewer can't verify this in one pass."
+> "This looks like it needs `/upfront:feature` + `/upfront:plan` + `/upfront:build`. Here's why: [reason]. The change touches [N concerns] and affects [blast radius] — a reviewer can't verify this in one pass."
 
 If the scope suggests multiple features worth of work:
 
-> "This isn't a patch — it's a chunk of a bigger initiative. Consider `/vision` to map out what you're really doing, or at minimum `/feature` for the first piece."
+> "This isn't a patch — it's a chunk of a bigger initiative. Consider `/upfront:vision` to map out what you're really doing, or at minimum `/upfront:feature` for the first piece."
 
 If it's clearly under ~50 lines and straightforward:
 
-> "This is small enough for `/quick`. Want me to run that instead?"
+> "This is small enough for `/upfront:quick`. Want me to run that instead?"
 
 ## Process
 
@@ -90,7 +90,7 @@ For changes that aren't unit-testable (config, docs, build scripts), state why a
 
 If the change grows beyond ~300 lines during implementation, stop:
 
-> "This grew to ~[N] lines. Want me to continue as-is, or should we switch to `/feature` + `/plan` + `/build` for proper phasing?"
+> "This grew to ~[N] lines. Want me to continue as-is, or should we switch to `/upfront:feature` + `/upfront:plan` + `/upfront:build` for proper phasing?"
 
 ### 4. Self-review
 
@@ -104,7 +104,7 @@ Review your own diff. Check:
 
 If you find issues, fix them and re-run tests.
 
-If investigation reveals the root cause is unclear and requires hypothesis testing, suggest `/debug` instead.
+If investigation reveals the root cause is unclear and requires hypothesis testing, suggest `/upfront:debug` instead.
 
 ### 5. Run all checks
 

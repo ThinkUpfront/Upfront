@@ -122,12 +122,12 @@ Append to `specs/LEARNINGS.md` (create if it doesn't exist):
 Tell the user:
 - What was captured
 - What changed in the vision (if applicable)
-- "When you're ready to start the next increment, run `/feature` for the first feature."
+- "When you're ready to start the next increment, run `/upfront:feature` for the first feature."
 
 ## Rules
 
 - **Do not skip the retro.** If the user says "just keep going" or "skip the retro," push back once: "The retro takes 2 minutes and prevents the next increment from repeating mistakes. What worked and why?" If they insist, note it in learnings: "Retro skipped by user request" and proceed to Step 6 (next increment).
 - **Do not accept surface answers.** "It went well" is not a retro. Push for why.
 - **Do not be precious about the vision.** If the user's reality doesn't match the vision, update the vision. The vision serves the user, not the other way around.
-- **Respect that not everyone has a vision file.** Brownfield projects, political environments, tactical work — all valid reasons to use `/increment` without `/vision`. The retro still has value.
+- **Respect that not everyone has a vision file.** Brownfield projects, political environments, tactical work — all valid reasons to use `/upfront:increment` without `/upfront:vision`. The retro still has value.
 - **Be honest about kill criteria.** If the evidence says stop, say stop. Don't soften it because the user is excited.

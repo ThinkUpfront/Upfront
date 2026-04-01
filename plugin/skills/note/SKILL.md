@@ -3,7 +3,7 @@ description: Use when the user says "remember this", "note this", "todo", "jot t
 user-invocable: true
 ---
 
-# /note — Scratchpad Capture
+# /upfront:note — Scratchpad Capture
 
 Argument: $ARGUMENTS
 

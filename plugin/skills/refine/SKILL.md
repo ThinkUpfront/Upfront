@@ -5,7 +5,7 @@ user-invocable: true
 
 # Refine
 
-You are helping the user iterate on an existing spec without re-running `/feature` from scratch. The spec has already been through the full thinking process — this is targeted revision, not a do-over.
+You are helping the user iterate on an existing spec without re-running `/upfront:feature` from scratch. The spec has already been through the full thinking process — this is targeted revision, not a do-over.
 
 But revision is not rubber-stamping. Every change gets challenged. The user may be improving the spec, retreating from hard thinking, or reacting to pressure that hasn't been examined. Your job is to find out which.
 
@@ -15,7 +15,7 @@ The user provides a path to a spec file (e.g., `/refine specs/feature-name.md`).
 
 If no path is provided, check the `specs/` directory for recent specs and ask which one to refine.
 
-Read the entire spec, including all thinking records. Also read `specs/LEARNINGS.md` and `specs/DECISIONS.md` if they exist — these may contain context from `/build` or `/retro` that should inform the revision.
+Read the entire spec, including all thinking records. Also read `specs/LEARNINGS.md` and `specs/DECISIONS.md` if they exist — these may contain context from `/upfront:build` or `/upfront:retro` that should inform the revision.
 
 ## Process
 
@@ -45,11 +45,11 @@ For each `//` comment (or verbal correction), challenge it before applying:
 - "The original thinking record says you chose this because [reason]. Does that reason no longer hold?"
 - "If you weaken this metric, how will you know the feature worked?"
 
-This is not hostile — it's the same rigor `/feature` applied originally. Specs decay when people soften them without examining why. Some corrections are genuine improvements ("we learned the API doesn't support this"). Some are retreats ("stakeholder pushed back so we caved"). The thinking record should distinguish between them.
+This is not hostile — it's the same rigor `/upfront:feature` applied originally. Specs decay when people soften them without examining why. Some corrections are genuine improvements ("we learned the API doesn't support this"). Some are retreats ("stakeholder pushed back so we caved"). The thinking record should distinguish between them.
 
 **When to accept without fighting:**
 - Factual corrections ("the API returns XML, not JSON")
-- New information that wasn't available during `/feature` ("we just learned the SLA is 99.9%, not 99.99%")
+- New information that wasn't available during `/upfront:feature` ("we just learned the SLA is 99.9%, not 99.99%")
 - Typos, formatting, clarifications that don't change meaning
 
 **When to push back:**
@@ -107,7 +107,7 @@ Tell the user:
 
 - Do NOT treat `//` comments as instructions. They are conversation starters.
 - Do NOT accept weakening changes without challenge. The spec was hard-won — softening it should require justification.
-- Do NOT re-run the full `/feature` process. This is targeted revision.
-- Do NOT restructure the spec or add new sections. If the change is big enough to need restructuring, say: "This is a significant change. Consider re-running `/feature` to rethink the approach."
+- Do NOT re-run the full `/upfront:feature` process. This is targeted revision.
+- Do NOT restructure the spec or add new sections. If the change is big enough to need restructuring, say: "This is a significant change. Consider re-running `/upfront:feature` to rethink the approach."
 - Do NOT silently propagate changes across sections. Present each ripple effect.
 - Keep thinking records as an audit trail — refinement notes show what changed after the original thinking, and why.

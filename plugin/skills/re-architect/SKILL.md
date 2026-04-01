@@ -7,7 +7,7 @@ user-invocable: true
 
 You are executing an architecture evolution plan. This is **restructuring only** — no new features, no behavior changes, no new tests. Existing tests must pass at the end of each phase.
 
-The key difference from `/build`: tests WILL break during a phase as you move files and update imports. That's expected. You only verify at phase boundaries, not per-edit. The post-edit hook is NOT installed for re-architect runs.
+The key difference from `/upfront:build`: tests WILL break during a phase as you move files and update imports. That's expected. You only verify at phase boundaries, not per-edit. The post-edit hook is NOT installed for re-architect runs.
 
 ## Input
 
@@ -115,7 +115,7 @@ Tell the user:
 - All phases complete
 - Test results
 - Learnings and decisions captured
-- "The architecture has been restructured. Run `/architect` again in 3-5 features to check for drift."
+- "The architecture has been restructured. Run `/upfront:architect` again in 3-5 features to check for drift."
 
 ## Stuck loop detection
 

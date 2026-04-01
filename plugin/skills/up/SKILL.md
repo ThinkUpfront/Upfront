@@ -14,27 +14,28 @@ First, check if `specs/HANDOFF.md` exists in the current project. If it does, no
 ## Step 2: Get intent
 
 If `$ARGUMENTS` is empty or blank:
-- If `specs/HANDOFF.md` exists, say: "You have a paused session from [date]. Want to /resume, or start something new?"
+- If `specs/HANDOFF.md` exists, say: "You have a paused session from [date]. Want to /upfront:resume, or start something new?"
 - Otherwise, ask: "What are you trying to do?" and show this brief menu:
 
 ```
-Something big          →  /vision (strategy + increments)
-Build something new    →  /feature or /ideate
-Increment retro        →  /increment (reflect + steer)
-Fix a bug              →  /debug
-Small change           →  /quick
-Fix a GitHub issue     →  /patch
-Plan from a spec       →  /plan
-Start implementing     →  /build
-Review / ship          →  /ship
-Understand code        →  /teach
-Document for AI        →  /explore
-Post-ship retro        →  /retro
-Save progress          →  /pause
-Pick up where I left   →  /resume
-Brainstorm             →  /ideate
-Update a spec          →  /refine
-Capture a note/todo    →  /note
+Something big          →  /upfront:vision
+Build something new    →  /upfront:feature or /upfront:ideate
+Specific concern       →  /upfront:assess
+Increment retro        →  /upfront:increment
+Fix a bug              →  /upfront:debug
+Small change           →  /upfront:quick
+Fix a GitHub issue     →  /upfront:patch
+Plan from a spec       →  /upfront:plan
+Start implementing     →  /upfront:build
+Review / ship          →  /upfront:ship
+Understand code        →  /upfront:teach
+Document for AI        →  /upfront:explore
+Post-ship retro        →  /upfront:retro
+Save progress          →  /upfront:pause
+Pick up where I left   →  /upfront:resume
+Brainstorm ideas       →  /upfront:ideate
+Update a spec          →  /upfront:refine
+Capture a note/todo    →  /upfront:note
 ```
 
 Then wait for their answer before routing.
@@ -45,39 +46,39 @@ If `$ARGUMENTS` is provided, proceed to routing.
 
 Read the user's intent and match it to the right command. Think about what they MEAN, not just keywords.
 
-**Something big / multi-feature / app / product / initiative**: "build me an app", "I want to build a system that...", "big project", describes something with many features or subsystems → route to `/vision`. If they seem to already have a vision and are between increments, route to `/increment`.
+**Something big / multi-feature / app / product / initiative**: "build me an app", "I want to build a system that...", "big project", describes something with many features or subsystems → route to `/upfront:vision`. If they seem to already have a vision and are between increments, route to `/upfront:increment`.
 
-**Building something new**: If vague ("I want to add something", "new feature but not sure what"), route to `/ideate`. If they have a clear problem or feature in mind, route to `/feature`.
+**Building something new**: If vague ("I want to add something", "new feature but not sure what"), route to `/upfront:ideate`. If they have a clear problem or feature in mind, route to `/upfront:feature`.
 
-**Something is broken**: "bug", "broken", "doesn't work", "error", "failing" → route to `/debug`.
+**Something is broken**: "bug", "broken", "doesn't work", "error", "failing" → route to `/upfront:debug`.
 
-**Small scoped change**: "rename", "update timeout", "change the color", "bump version", "tweak" → route to `/quick`.
+**Small scoped change**: "rename", "update timeout", "change the color", "bump version", "tweak" → route to `/upfront:quick`.
 
-**GitHub issue or patch**: Links a GitHub issue, says "fix issue #N", "patch this" → route to `/patch`.
+**GitHub issue or patch**: Links a GitHub issue, says "fix issue #N", "patch this" → route to `/upfront:patch`.
 
-**Has a spec, needs a plan**: "break this down", "I have a spec", "plan the implementation" → route to `/plan`.
+**Has a spec, needs a plan**: "break this down", "I have a spec", "plan the implementation" → route to `/upfront:plan`.
 
-**Ready to build**: "let's build", "start implementing", "execute the plan", references a plan file → route to `/build`.
+**Ready to build**: "let's build", "start implementing", "execute the plan", references a plan file → route to `/upfront:build`.
 
-**Review or ship**: "review this", "create a PR", "ship it", "merge" → route to `/ship`.
+**Review or ship**: "review this", "create a PR", "ship it", "merge" → route to `/upfront:ship`.
 
-**Learning / understanding**: "I'm lost", "what does this do", "walk me through", "explain" → route to `/teach`.
+**Learning / understanding**: "I'm lost", "what does this do", "walk me through", "explain" → route to `/upfront:teach`.
 
-**Codebase documentation**: "document this codebase", "set up for AI", "create context docs" → route to `/explore`.
+**Codebase documentation**: "document this codebase", "set up for AI", "create context docs" → route to `/upfront:explore`.
 
 **What's next**: "what should I work on", "what's next" → Check for `specs/TODO.md`, `specs/HANDOFF.md`, and any in-progress spec files in `specs/`. Summarize what's pending and suggest the logical next step.
 
-**Check results**: "did that work", "check metrics", "how did it go", "production" → route to `/retro`.
+**Check results**: "did that work", "check metrics", "how did it go", "production" → route to `/upfront:retro`.
 
-**Pause work**: "I need to stop", "save progress", "pause", "gotta go" → route to `/pause`.
+**Pause work**: "I need to stop", "save progress", "pause", "gotta go" → route to `/upfront:pause`.
 
-**Resume work**: "where was I", "continue", "pick up", "resume" → route to `/resume`.
+**Resume work**: "where was I", "continue", "pick up", "resume" → route to `/upfront:resume`.
 
-**Brainstorm**: "brainstorm", "I don't know what to build", "explore ideas" → route to `/ideate`.
+**Brainstorm**: "brainstorm", "I don't know what to build", "explore ideas" → route to `/upfront:ideate`.
 
-**Update spec**: "update the spec", "change the spec", "revise requirements" → route to `/refine`.
+**Update spec**: "update the spec", "change the spec", "revise requirements" → route to `/upfront:refine`.
 
-**Capture a note**: "remember this", "note:", "todo:", "jot this down" → route to `/note`.
+**Capture a note**: "remember this", "note:", "todo:", "jot this down" → route to `/upfront:note`.
 
 If the intent is ambiguous between exactly two options, ask ONE short clarifying question. Example: "Are you fixing a bug or making a small change?" Do not ask more than one question.
 

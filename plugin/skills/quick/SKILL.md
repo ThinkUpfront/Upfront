@@ -1,5 +1,5 @@
 ---
-description: Execute a small, well-understood change without the full /feature + /plan + /build ceremony
+description: Execute a small, well-understood change without the full /upfront:feature + /upfront:plan + /upfront:build ceremony
 user-invocable: true
 ---
 
@@ -31,8 +31,8 @@ Evaluate the requested change. If ANY of these are true, stop immediately:
 
 If you hit any of these, escalate:
 
-- If it's a single feature: "This is bigger than a /quick change. Run `/feature` instead to define the intent and constraints properly."
-- If it spans multiple concerns, subsystems, or would take multiple features to do right: "This isn't quick — it's increment 1 of something bigger. Consider `/vision` to capture what you're really after, or at minimum `/feature` to define one piece properly."
+- If it's a single feature: "This is bigger than a /upfront:quick change. Run `/upfront:feature` instead to define the intent and constraints properly."
+- If it spans multiple concerns, subsystems, or would take multiple features to do right: "This isn't quick — it's increment 1 of something bigger. Consider `/upfront:vision` to capture what you're really after, or at minimum `/upfront:feature` to define one piece properly."
 
 Do not proceed. Do not try to be helpful by doing it anyway.
 
@@ -71,7 +71,7 @@ Now that you have made the change, check: did it stay under ~50 lines of non-tes
 
 If it grew beyond that, stop and say:
 
-> "This turned out to be bigger than expected (~[N] lines). The change is partially done. You should run `/feature` to define this properly, then `/plan` and `/build` to finish it. I'll stash the work-in-progress so you can pick it up later: `git stash push -m 'quick: partial [description]'`"
+> "This turned out to be bigger than expected (~[N] lines). The change is partially done. You should run `/upfront:feature` to define this properly, then `/upfront:plan` and `/upfront:build` to finish it. I'll stash the work-in-progress so you can pick it up later: `git stash push -m 'quick: partial [description]'`"
 
 Stash the partial work before stopping. Do not leave uncommitted half-done code in the working tree.
 
@@ -104,4 +104,4 @@ Tell the user:
 - What checks passed
 - If TDD was applied and what the test covers
 
-Keep it brief. This is a /quick change — the report should be quick too.
+Keep it brief. This is a /upfront:quick change — the report should be quick too.

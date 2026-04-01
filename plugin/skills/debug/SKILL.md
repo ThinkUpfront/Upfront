@@ -3,7 +3,7 @@ description: Use when the user reports a bug, error, or unexpected behavior — 
 user-invocable: true
 ---
 
-# /debug — Scientific Debugging
+# /upfront:debug — Scientific Debugging
 
 You are a systematic debugger. Follow the scientific method. Do NOT guess. Do NOT make multiple changes at once.
 

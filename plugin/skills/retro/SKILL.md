@@ -3,7 +3,7 @@ description: "Close the loop on a shipped feature — check spec predictions aga
 user-invocable: true
 ---
 
-# /retro — Post-Ship Retrospective
+# /upfront:retro — Post-Ship Retrospective
 
 You are running a structured retrospective that compares a feature spec's predictions against what actually happened in production. The goal is to improve future specs by learning from prediction accuracy.
 
@@ -44,7 +44,7 @@ Then ask:
 > "Were there any unexpected outcomes — good or bad — that the spec didn't predict?"
 
 **Rules for evidence gathering:**
-- If the user doesn't have data yet, stop here: "No production data available yet. Re-run `/retro` when you have **[specific metric]** data."
+- If the user doesn't have data yet, stop here: "No production data available yet. Re-run `/upfront:retro` when you have **[specific metric]** data."
 - Do NOT fabricate data or assume outcomes.
 - If the user says "I think it improved," push back: "Do you have the actual number, or is that a feeling? Feelings are fine to note but they're not evidence."
 - If the user gives partial data, work with what's available but flag what's missing.
@@ -73,7 +73,7 @@ Guide the user through three possible causes:
 3. **Environment** — something external changed (market, user behavior, dependencies)
 
 Then ask:
-> "Should the spec have caught this? What question in `/feature` would have surfaced it?"
+> "Should the spec have caught this? What question in `/upfront:feature` would have surfaced it?"
 
 For **unexpected outcomes** (good or bad):
 > "Was this predictable? What signal did we miss?"
@@ -99,7 +99,7 @@ Push for specifics. "Be more careful" is not a lesson. "Add a load test to the p
 **Score:** [N hits, N partials, N misses, N unknown]
 **Why predictions missed:** [analysis from step 4]
 **Lessons for future specs:** [what to do differently]
-**Process notes:** [did /feature ask the right questions? did /build catch the right things?]
+**Process notes:** [did /upfront:feature ask the right questions? did /upfront:build catch the right things?]
 ```
 
 **Add a Retrospective section to the bottom of the spec file itself:**
@@ -113,11 +113,11 @@ Push for specifics. "Be more careful" is not a lesson. "Add a load test to the p
 
 ### Step 7: Feed forward
 
-Review the retro findings for patterns that should change how `/feature`, `/plan`, or `/build` works. If you see one, say so explicitly. Examples:
+Review the retro findings for patterns that should change how `/upfront:feature`, `/upfront:plan`, or `/upfront:build` works. If you see one, say so explicitly. Examples:
 
-- "This is the third feature where the success metric was unmeasurable. Should `/feature` push harder on metric availability?"
-- "The concurrency bug that shipped suggests `/build`'s red team should specifically test [pattern]."
-- "The pre-mortem missed the biggest risk. Should `/feature` add a question about [category]?"
+- "This is the third feature where the success metric was unmeasurable. Should `/upfront:feature` push harder on metric availability?"
+- "The concurrency bug that shipped suggests `/upfront:build`'s red team should specifically test [pattern]."
+- "The pre-mortem missed the biggest risk. Should `/upfront:feature` add a question about [category]?"
 
 These are suggestions for evolving the system, not automatic changes. Present them as observations for the user to act on.
 

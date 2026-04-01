@@ -15,7 +15,7 @@ Silently read whatever exists:
 - `specs/ARCHITECTURE.md`
 - `specs/DECISIONS.md`
 - `specs/LEARNINGS.md`
-- Any `specs/*-progress.md` file (if `/build` was running)
+- Any `specs/*-progress.md` file (if `/upfront:build` was running)
 
 Run `git status`, `git log --oneline -5`, and `git worktree list` to capture current git state (including any active build worktrees).
 
@@ -24,19 +24,19 @@ Do not ask the user questions. Extract everything from the conversation history 
 ## Step 2: Determine what was running
 
 Figure out which workflow was active:
-- `/feature` — defining a feature spec
-- `/plan` — breaking a spec into phases
-- `/build` — executing phases from a plan
-- `/re-architect` — executing an architecture evolution
-- `/architect` — architecture review in progress
-- `/patch` — fixing a bug or small feature
-- `/quick` — small scoped change
-- `/debug` — hypothesis-driven debugging
-- `/explore` — codebase documentation
-- `/teach` — codebase walkthrough
+- `/upfront:feature` — defining a feature spec
+- `/upfront:plan` — breaking a spec into phases
+- `/upfront:build` — executing phases from a plan
+- `/upfront:re-architect` — executing an architecture evolution
+- `/upfront:architect` — architecture review in progress
+- `/upfront:patch` — fixing a bug or small feature
+- `/upfront:quick` — small scoped change
+- `/upfront:debug` — hypothesis-driven debugging
+- `/upfront:explore` — codebase documentation
+- `/upfront:teach` — codebase walkthrough
 - Freeform — no structured command, just working
 
-If `/build` or `/re-architect` was running, identify the plan/evolution file path and which phase was in progress.
+If `/upfront:build` or `/upfront:re-architect` was running, identify the plan/evolution file path and which phase was in progress.
 
 ## Step 3: Write the handoff
 
@@ -49,7 +49,7 @@ Create `specs/HANDOFF.md` (overwrite if it exists):
 
 ## What was running
 
-**Command:** [/feature | /plan | /build path/to/plan.md | /quick | freeform]
+**Command:** [/feature | /upfront:plan | /upfront:build path/to/plan.md | /upfront:quick | freeform]
 **Phase/step:** [e.g., "Phase 3 — hook parser" or "Step 2: scope check" or "implementing the retry logic"]
 
 ## Completed
@@ -79,7 +79,7 @@ Create `specs/HANDOFF.md` (overwrite if it exists):
 ## Git state
 
 - **Branch:** [branch name]
-- **Worktree:** [path if /build created a worktree, or "none"]
+- **Worktree:** [path if /upfront:build created a worktree, or "none"]
 - **Uncommitted changes:** [list of modified/new files, or "clean"]
 - **Recent commits:**
   - [hash] [message]
@@ -105,7 +105,7 @@ If `git status` shows uncommitted changes (modified or new files), offer to stas
 You have uncommitted changes. Want me to stash them for safety?
   git stash push -m "pause: [brief description of current work]"
 
-This protects the work if the terminal closes or the branch changes. /resume will remind you to pop the stash.
+This protects the work if the terminal closes or the branch changes. /upfront:resume will remind you to pop the stash.
 ```
 
 If the user agrees, run the stash and note the stash ref in the handoff under "Git state." If they decline, note "User declined stash — uncommitted changes at risk" in the handoff.
@@ -121,7 +121,7 @@ Tell the user:
 ```
 Handoff saved to specs/HANDOFF.md
 
-Next session: run /resume to pick up where you left off.
+Next session: run /upfront:resume to pick up where you left off.
 ```
 
 Keep it short. The user is stopping — don't make them read a wall of text.

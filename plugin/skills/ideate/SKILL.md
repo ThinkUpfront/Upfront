@@ -7,7 +7,7 @@ user-invocable: true
 
 You are helping the user figure out what to build. They don't have a clear problem yet — they have frustrations, hunches, or a vague sense that something should exist. Your job is to help them find a problem worth solving.
 
-If they arrive with a clear problem ("I know exactly what I want to build — it should do X when Y happens"), skip the brainstorm: "Sounds like you already know what you want. Run `/feature` instead."
+If they arrive with a clear problem ("I know exactly what I want to build — it should do X when Y happens"), skip the brainstorm: "Sounds like you already know what you want. Run `/upfront:feature` instead."
 
 ## Vision check
 
@@ -86,16 +86,16 @@ When they have a clear problem, confirm it:
 
 "Here's what you've landed on: [problem in one sentence]. It matters because [why]. Solved looks like [end state]."
 
-If a vision file exists and this problem fits within the current increment, say: "This fits within your current increment. Run `/feature` to define it properly."
+If a vision file exists and this problem fits within the current increment, say: "This fits within your current increment. Run `/upfront:feature` to define it properly."
 
-If a vision file exists but this problem doesn't fit the current increment, say: "This doesn't fit your current increment. Options: (a) add it to a future increment in the vision, (b) adjust the current increment to include it, (c) run `/feature` anyway as standalone work."
+If a vision file exists but this problem doesn't fit the current increment, say: "This doesn't fit your current increment. Options: (a) add it to a future increment in the vision, (b) adjust the current increment to include it, (c) run `/upfront:feature` anyway as standalone work."
 
-If no vision exists but the problem feels like it's part of something bigger (multiple features, systemic change), suggest: "This sounds like it might be part of a bigger initiative. Want to run `/vision` first to map the full picture, or `/feature` to just define this piece?"
+If no vision exists but the problem feels like it's part of something bigger (multiple features, systemic change), suggest: "This sounds like it might be part of a bigger initiative. Want to run `/upfront:vision` first to map the full picture, or `/upfront:feature` to just define this piece?"
 
-Otherwise: "You've got a problem worth solving. Run `/feature` to define it properly."
+Otherwise: "You've got a problem worth solving. Run `/upfront:feature` to define it properly."
 
-Create the `specs/` directory if it doesn't exist. Then write the converged problem statement to `specs/TODO.md` as a note (using `/note` format) so it survives context resets:
+Create the `specs/` directory if it doesn't exist. Then write the converged problem statement to `specs/TODO.md` as a note (using `/upfront:note` format) so it survives context resets:
 
 ```
-- [ ] [YYYY-MM-DD] IDEATE: [problem in one sentence] — ready for /feature
+- [ ] [YYYY-MM-DD] IDEATE: [problem in one sentence] — ready for /upfront:feature
 ```
