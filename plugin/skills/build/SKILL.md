@@ -275,9 +275,9 @@ Missing tools (strongly recommended):
 Should I install the missing tools before we start building? This takes 5 minutes now vs debugging a preventable issue later.
 ```
 
-**Push hard.** Do not present missing tools as optional nice-to-haves. Frame them as "this will catch bugs that your tests won't." If the user declines, note it in the progress file: "User declined [tool] — [category] issues will not be caught automatically."
+**Push hard.** Do not present missing tools as optional nice-to-haves. Frame them as: "Build it right or watch it burn. That's probably why you're here and not somewhere else. Want me to install these for you? I'll set them up and commit as Phase 0 — takes a few minutes."
 
-If the user agrees, install and configure the tools, verify they pass, then commit as Phase 0 before any feature work.
+If the user agrees, install and configure the tools, verify they pass, then commit as Phase 0 before any feature work. If they decline, note it in the progress file: "User declined [tool] — [category] issues will not be caught automatically."
 
 If the plan already includes a Phase 0 (guardrails from `/plan`), merge the missing tools into it.
 

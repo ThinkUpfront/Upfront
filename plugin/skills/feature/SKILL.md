@@ -21,7 +21,7 @@ If `specs/ARCHITECTURE.md` exists, every design decision in Phases 3-4 must be c
 
 ## Reviewability check
 
-After the user describes what they want to build, spawn the `reviewability-scorer` agent to evaluate scope. Pass it the user's description and any relevant codebase context.
+After the user describes what they want to build, use the Agent tool to spawn the `reviewability-scorer` subagent (defined in `plugin/agents/reviewability-scorer.md`). Pass it the user's description and any relevant codebase context. The agent uses Haiku for fast, cheap scoring.
 
 The agent scores 5 dimensions (concern count, blast radius, novelty, state complexity, reversibility) on a 1-3 scale and returns a verdict: REVIEWABLE or NEEDS_DECOMPOSITION.
 
@@ -51,6 +51,7 @@ Do NOT auto-redirect. Some people think by talking and will sharpen up after one
 - When data would sharpen an answer, offer to research: "Want me to check the current error rate?" or "I can look at how the existing auth handler works — would that help?" Let the user decide whether to pursue it.
 - Be direct and factual. Not hostile, but rigorous.
 - **Challenge first, decorate second.** NEVER lead with your own suggestions, edge cases, or options. Always make the user think first by asking an open question. Wait for their answer. THEN fill gaps they missed. The user saying "yeah that's good" to your list is not thinking — it's rubber-stamping. The user generating their own list and having you add what they missed IS thinking. This pattern applies everywhere: pre-mortems, error cases, mechanism challenges, blind spots. Ask → wait → decorate, never suggest → confirm.
+- **You can always interrupt.** If the user wants to go back to a previous phase, change scope, or stop and come back later, let them. Say "No problem — I'll save what we have so far. Pick up where we left off anytime, or run `/upfront:pause` to capture the full state." The process serves the thinking, not the other way around.
 - **Thinking audit:** At each phase transition, before moving on, mentally compile a thinking record for that phase. This captures the reasoning trail — what was decided, why, what was considered and rejected, what data was consulted, what assumptions were made. Explicitly note any questions the user declined to answer or skipped — sometimes this is legitimate ("not applicable to our domain"), but the record should show it so a reviewer can judge whether the skip was justified or lazy. These records go into the final spec. The spec is the audit trail of the thinking, not just the conclusions.
 
 ---
@@ -70,10 +71,11 @@ Push back if the answer describes a feature instead of a problem. "Add a retry m
 *An existing metric that will move, not one invented for the project.*
 
 Push back if:
-- The metric doesn't exist yet ("we'll create a dashboard")
 - The metric is a vanity metric ("page views will go up")
 - There is no metric ("we'll know it when we see it")
 - The success criteria is "it ships" — shipping is not success, impact is
+
+Accept "we'll instrument and measure after launch" if the feature is genuinely new territory — but pin them down on WHAT they'll measure and WHEN they'll check. "We'll look at it later" is not a plan. "We'll check email open rates 2 weeks after launch" is.
 
 ### 3. What is out of scope?
 *Explicit boundaries the AI must not cross.*
@@ -139,7 +141,9 @@ Once the mechanism is sound, get specific:
 
 ### Level 4: Concurrency and shared state
 
-Once states are clear, stress-test them under concurrency. This is where most production bugs hide — the states look right when one thing happens at a time, but break when two things happen at once.
+First, assess whether this feature involves shared mutable state. If it's a pure function, read-only operation, or single-user flow with no background processing — say so explicitly and move on. Don't force a concurrency conversation where there's no concurrency.
+
+If there IS shared state, stress-test it:
 
 Ask: "What happens when two of these run at the same time? Walk me through it."
 

@@ -71,7 +71,9 @@ Before starting the deep-dive, check if `specs/ARCHITECTURE.md` exists.
 
 ---
 
-Before proposing phases, walk through the architecture at three levels. Each level must be confirmed by the user before proceeding to the next. Wrong assumptions at any level will poison every phase.
+Before proposing phases, ensure the architecture is understood. Check whether the spec file (from `/feature`) already contains a Design Approach and Implementation Design section with codebase research. If it does, AND `specs/ARCHITECTURE.md` exists and is current (less than 30 days old or no commits since), skip the full 3-level deep-dive — the thinking was already done. Do a quick delta check on the areas this feature touches, confirm nothing has drifted, and proceed to "Persisting the architecture."
+
+If the spec lacks design context, or there's no `ARCHITECTURE.md`, or it's stale — do the full deep-dive below.
 
 **This is a conversation, not a presentation.** Ask questions, challenge answers, push for specifics. Do not accept vague descriptions — if the user says "it's a standard REST API," ask what "standard" means in this codebase. Do they use middleware? How is auth handled? What's the error response shape? Is there a router or is it handler-per-file?
 
