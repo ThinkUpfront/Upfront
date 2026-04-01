@@ -261,9 +261,13 @@ Ask: "What seems simple about this problem but is actually complex? What's the c
 
 Wait for the user's answer. Let them think about it.
 
-If they say "I don't know" or "I can't think of anything" — offer to research it: "Want me to dig into this area of the codebase and look for complexity that isn't obvious? I'll check for tricky patterns, subtle invariants, and things that have historically caused problems in similar systems."
+If they say "I don't know" or "I can't think of anything" — offer to research it. Tailor the offer to the context:
 
-If they accept, research the relevant code, dependencies, and patterns. Present what you found: edge cases, implicit assumptions, ordering dependencies, failure modes that aren't handled. Discuss each one — don't just list them.
+- **Brownfield** (existing codebase): "Want me to dig into this area of the codebase and look for hidden complexity? I'll check for tricky patterns, subtle invariants, and things that have historically caused problems."
+- **Greenfield** (new project): "Want me to research this domain? I'll look at how others have solved this, common pitfalls, patterns that look right but fail at scale, and regulatory or compliance traps you might not be thinking about."
+- **Both** (new feature in existing codebase in an unfamiliar domain): Offer both — codebase research AND domain research.
+
+If they accept, do the research. Present what you found: traps, implicit assumptions, failure modes, domain rules that contradict intuition. Discuss each one — don't just list them.
 
 After the user has answered (or after research), fill gaps they missed from this list — but only what's relevant:
 - **Domain traps**: business rules that contradict intuition, implicit ordering requirements, state transitions that look valid but aren't
