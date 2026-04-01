@@ -36,6 +36,23 @@ From the files above, identify:
 - Build system
 - CI/CD
 
+## Step 2b: Load stack-specific references
+
+Based on the detected stack, read the matching reference file(s) from the plugin's `references/` directory. These contain curated do/don't examples from the best style guides (Uber Go, Google Style Guides, Bulletproof React, Rust API Guidelines, Effective Java, etc.).
+
+| Stack detected | Reference file |
+|---|---|
+| React, Vite, Next.js | `references/react-vite.md` |
+| TypeScript (any project) | `references/typescript.md` |
+| Go | `references/golang.md` |
+| Python | `references/python.md` |
+| Java, Spring, Gradle, Maven | `references/java.md` |
+| Rust | `references/rust.md` |
+
+Load ALL that match (e.g., a React+TypeScript project loads both `react-vite.md` and `typescript.md`). Use the examples from these files when generating stack-specific suggestions in Steps 4-5 — they're better than generic examples.
+
+The reference files live at: `~/.claude/plugins/marketplaces/thinkupfront/plugin/references/`
+
 ## Step 3: Audit against the six core areas
 
 Score the existing file (or note "missing" if no file exists) against these areas. Research from 2,500+ repositories shows these are the areas that separate files that work from files that don't.
@@ -190,9 +207,10 @@ Don't dump everything at once. Present the audit summary, then ask: "Want me to 
 
 For each area the user wants to improve:
 
-1. Show the specific addition with stack-appropriate examples
-2. Explain WHY it matters (one sentence)
-3. Ask if they want to add it
+1. Pull concrete examples from the loaded reference files — use their do/don't patterns directly rather than inventing generic ones
+2. Adapt the examples to the project's actual types, function names, and patterns where possible
+3. Explain WHY it matters (one sentence)
+4. Ask if they want to add it
 
 Write the improvements directly to the file. Don't create a separate file — improve what exists or create the file if it doesn't exist.
 
