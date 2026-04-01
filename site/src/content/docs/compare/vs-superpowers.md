@@ -21,6 +21,9 @@ Both Upfront and [Superpowers](https://github.com/obra/superpowers) are Claude C
 | **Strategic planning** | `/upfront:vision` for multi-feature ambitions, `/upfront:increment` for retros | Not addressed — operates at feature level |
 | **Audit trail** | JSONL thinking records with remote flush to observability tools | None |
 | **Config protection** | Blocks AI from weakening linter/formatter rules | None |
+| **AI instruction quality** | `/upfront:enlighten` audits CLAUDE.md/AGENTS.md, generates stack-specific conventions from curated references (8 stacks) | Not addressed — assumes your instruction files are already good |
+| **Stack conventions** | Bundled do/don't examples from Uber Go Guide, Bulletproof React, Google Style Guides, Rust API Guidelines, Effective Java, Laravel, Kotlin, .NET | None |
+| **Tooling health** | `/upfront:upgrade` checks plugin version, guardrails, linter/formatter, pre-commit hooks, instruction file quality | None |
 | **License** | AGPL-3.0 | MIT |
 
 ## Where Superpowers is stronger
@@ -39,6 +42,8 @@ Both Upfront and [Superpowers](https://github.com/obra/superpowers) are Claude C
 - **Audit trail** — every phase produces a thinking record captured as structured events. Flushable to Langfuse, Arize Phoenix, or any observability tool. Managers can see adoption, depth, and effectiveness without reading specs.
 - **Security guardrails** — `/upfront:plan` audits the project for missing security tooling (linters, type checkers, vulnerability scanners, secret detection, slopsquatting protection) and pushes hard for installation as Phase 0 before any feature code. The config protection hook blocks the AI from weakening rules after they're installed.
 - **Architecture as a living document** — `/upfront:plan` checks if `ARCHITECTURE.md` is stale (>30 days with commits), actively compares it to the codebase, and updates it before planning. `/upfront:architect` does full structural reviews. The architecture is revisited regularly, not written once and forgotten.
+- **AI instruction quality** — `/upfront:enlighten` audits your CLAUDE.md or AGENTS.md against six research-backed dimensions (commands, structure, code style, testing, git workflow, boundaries). It detects your tech stack and pulls curated do/don't examples from the best style guides in the ecosystem — Uber Go Guide, Bulletproof React, Google Style Guides, Rust API Guidelines, Effective Java, Laravel conventions, Kotlin idioms, .NET patterns. Every downstream skill benefits because the agent knows the project's conventions before it writes a single line. Superpowers has no equivalent — it assumes your instruction files are already good.
+- **Tooling health checks** — `/upfront:upgrade` audits your entire setup: plugin version, security guardrails (sloppy-joe, gitleaks), test runner, linter/formatter, pre-commit hooks, and instruction file quality. It offers to fix what's missing. Superpowers has no setup verification.
 
 ## They're complementary
 

@@ -47,7 +47,10 @@ Based on the detected stack, read the matching reference file(s) from the plugin
 | Go | `references/golang.md` |
 | Python | `references/python.md` |
 | Java, Spring, Gradle, Maven | `references/java.md` |
+| Kotlin, Android | `references/kotlin.md` |
 | Rust | `references/rust.md` |
+| C#, .NET, ASP.NET | `references/dotnet.md` |
+| PHP, Laravel | `references/php.md` |
 
 Load ALL that match (e.g., a React+TypeScript project loads both `react-vite.md` and `typescript.md`). Use the examples from these files when generating stack-specific suggestions in Steps 4-5 — they're better than generic examples.
 
