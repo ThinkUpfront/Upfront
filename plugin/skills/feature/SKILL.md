@@ -265,6 +265,7 @@ If they say "I don't know" or "I can't think of anything" — offer to research 
 
 - **Brownfield** (existing codebase): "Want me to dig into this area of the codebase and look for hidden complexity? I'll check for tricky patterns, subtle invariants, and things that have historically caused problems."
 - **Greenfield** (new project): "Want me to research this domain? I'll look at how others have solved this, common pitfalls, patterns that look right but fail at scale, and regulatory or compliance traps you might not be thinking about."
+- **Unfamiliar domain in existing codebase**: Offer both — "Want me to dig into the codebase AND research this domain? You know the code but this domain has its own traps."
 
 If they accept, do the research. Present what you found: traps, implicit assumptions, failure modes, domain rules that contradict intuition. Discuss each one — don't just list them.
 
