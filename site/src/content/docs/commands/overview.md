@@ -20,6 +20,7 @@ Vision → Feature → Plan → Build
 | Specific concern, risk, or tradeoff | `/upfront:assess` | Interactive problem-solving |
 | Don't know what to build | `/upfront:ideate` | Conversation only |
 | Need to understand a codebase | `/upfront:explore` | Produces ARCHITECTURE.md |
+| Improve your AI instruction files | `/upfront:enlighten` | Audits CLAUDE.md/AGENTS.md, adds stack-specific examples |
 | Need to understand a codebase you forgot | `/upfront:teach` | Walkthrough + optional quiz |
 | Know the problem, need to define it | `/upfront:feature` | 4-phase forced thinking |
 | Need to revise a spec | `/upfront:refine` | Challenge-based iteration |

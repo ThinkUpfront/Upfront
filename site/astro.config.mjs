@@ -55,6 +55,7 @@ export default defineConfig({
 						{ label: '/upfront:assess', slug: 'commands/assess' },
 						{ label: '/upfront:ideate', slug: 'commands/ideate' },
 						{ label: '/upfront:explore', slug: 'commands/explore' },
+						{ label: '/upfront:enlighten', slug: 'commands/enlighten' },
 						{ label: '/upfront:feature', slug: 'commands/feature' },
 						{ label: '/upfront:refine', slug: 'commands/refine' },
 						{ label: '/upfront:plan', slug: 'commands/plan' },

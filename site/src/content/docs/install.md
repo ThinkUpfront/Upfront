@@ -12,7 +12,7 @@ claude plugin marketplace add ThinkUpfront/Upfront
 claude plugin install upfront
 ```
 
-Restart Claude Code. All 21 `/upfront:*` skills will be available in every project.
+Restart Claude Code. All 22 `/upfront:*` skills will be available in every project.
 
 ## Verify
 
@@ -38,6 +38,7 @@ In Claude Code, type `/upfront:` and you should see all skills in autocomplete. 
 | `/upfront:quick` | Small changes without full ceremony |
 | `/upfront:patch` | Bug fixes from issues or problem statements |
 | `/upfront:explore` | Document codebase and operational context |
+| `/upfront:enlighten` | Audit and improve CLAUDE.md/AGENTS.md with stack-specific examples |
 | `/upfront:refine` | Iterate on a spec with challenge |
 | `/upfront:debug` | Scientific method debugging with persistent state |
 | `/upfront:teach` | Walk through codebase with comprehension checks |

@@ -287,6 +287,8 @@ Then tell the user:
 - That future `/upfront:plan` runs will review and update this document
 - That `/upfront:feature` and `/upfront:build` will append to `DECISIONS.md` and `LEARNINGS.md` over time
 
+Also check if `CLAUDE.md` or `AGENTS.md` exists and is well-structured (has build/test commands, boundaries, stack-specific examples). If it's missing or thin, suggest: "Your instruction file could use some work — run `/upfront:enlighten` to audit it and add stack-specific examples. Better instructions = better AI output everywhere."
+
 ---
 
 ## Rules
