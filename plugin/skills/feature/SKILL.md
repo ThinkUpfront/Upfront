@@ -119,11 +119,17 @@ Work through a funnel from broad to specific. Each level only proceeds when the 
 
 ### Level 1: Stories
 
-Ground everything in the intent from Phase 1.
+Ground everything in the intent from Phase 1. Adapt your questions based on whether this is an enhancement to something that exists or a net-new capability:
 
+**If enhancing something that exists** (there's a current workflow, existing UI, or behavior to improve):
 - "Walk me through what the user experiences today when this problem happens."
 - "Now walk me through what you want them to experience instead."
+- "What changes from the user's perspective? What stays the same?"
+
+**If building something new** (no existing workflow — greenfield feature or new product):
+- "Walk me through the experience you imagine. The user opens the app — then what?"
 - "What does the user do? What do they see? What do they get back?"
+- "What's the simplest version of this that would still solve the problem?"
 
 Push back if the story doesn't connect to the stated problem. If the intent says "reduce checkout timeout errors" and the story describes a new dashboard, something is wrong.
 

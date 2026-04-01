@@ -15,8 +15,8 @@ Check the latest Upfront release:
 curl -sf --max-time 5 https://api.github.com/repos/ThinkUpfront/Upfront/releases/latest | grep tag_name
 ```
 
-Compare with the installed version (currently `0.3.5`). Report:
-- Current: `0.3.5`
+Compare with the installed version (currently `0.3.6`). Report:
+- Current: `0.3.6`
 - Latest: `v[X.Y.Z]`
 - Status: UP TO DATE or UPDATE AVAILABLE
 
@@ -74,7 +74,7 @@ Present a clean report:
 Upfront Health Check
 ====================
 
-Plugin:        0.3.5 ✓ (latest)
+Plugin:        0.3.6 ✓ (latest)
 sloppy-joe:    installed ✓
 gitleaks:      MISSING — brew install gitleaks
 Test runner:   npm test ✓ (passing)
