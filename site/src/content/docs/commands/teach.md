@@ -1,5 +1,5 @@
 ---
-title: /teach
+title: /upfront:teach
 description: Rebuild your understanding of a codebase.
 ---
 

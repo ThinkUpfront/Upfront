@@ -1,5 +1,5 @@
 ---
-title: /explore
+title: /upfront:explore
 description: Document the codebase and its ecosystem.
 ---
 
@@ -9,7 +9,7 @@ Five-phase investigation that produces `specs/ARCHITECTURE.md`.
 
 - Starting on a new codebase
 - Architecture doc is missing or stale
-- Before `/plan` on a brownfield project
+- Before `/upfront:plan` on a brownfield project
 
 ## What it does
 
@@ -21,12 +21,12 @@ Five-phase investigation that produces `specs/ARCHITECTURE.md`.
 
 Each phase asks questions — it doesn't just read code and present findings. Challenge-first, decorate-second.
 
-Greenfield projects get a fast exit: detects empty repos, creates minimal scaffolding, sends you to `/feature`.
+Greenfield projects get a fast exit: detects empty repos, creates minimal scaffolding, sends you to `/upfront:feature`.
 
 ## Output
 
-`specs/ARCHITECTURE.md` — the shared reference document that every other command reads.
+`specs/ARCHITECTURE.md` — the shared reference document that every other skill reads.
 
 ## Next step
 
-`/feature` to define a feature, or `/plan` if you already have a spec.
+`/upfront:feature` to define a feature, or `/upfront:plan` if you already have a spec.

@@ -1,7 +1,12 @@
 package format
 
 import (
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
+	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -12,6 +17,7 @@ const DefaultPhasesTotal = 4
 // trace format from the Delivery-Gap-Toolkit.
 type Event struct {
 	SessionID        string   `json:"session_id"`
+	ProjectID        string   `json:"project_id"`
 	Timestamp        string   `json:"timestamp"`
 	AgentID          string   `json:"agent_id"`
 	ActionType       string   `json:"action_type"`
@@ -28,11 +34,27 @@ type Event struct {
 	ErrorMessage     string   `json:"error_message,omitempty"`
 }
 
+// ProjectID returns a stable hash derived from the git remote origin URL.
+// Falls back to a hash of the working directory if not in a git repo.
+func ProjectID(cwd string) string {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, "git", "-C", cwd, "remote", "get-url", "origin") //nolint:gosec // args are fixed strings, cwd is from hook stdin
+	out, err := cmd.Output()
+	source := cwd
+	if err == nil {
+		source = strings.TrimSpace(string(out))
+	}
+	h := sha256.Sum256([]byte(source))
+	return hex.EncodeToString(h[:8])
+}
+
 // NewEvent creates an Event with default values for agent_id, action_type,
 // phases_total, result, and an empty skipped_questions slice.
-func NewEvent(sessionID string, phase int, phaseName, thinkingSummary, target, featureName string) Event {
+func NewEvent(sessionID, projectID string, phase int, phaseName, thinkingSummary, target, featureName string) Event {
 	return Event{
 		SessionID:        sessionID,
+		ProjectID:        projectID,
 		Timestamp:        time.Now().UTC().Format(time.RFC3339),
 		AgentID:          "upfront",
 		ActionType:       "upfront_phase_complete",

@@ -1,9 +1,9 @@
 ---
-title: /feature
+title: /upfront:feature
 description: Define a feature through four phases of forced thinking.
 ---
 
-The core command. Four phases, each with a different AI role.
+The core skill. Four phases, each with a different AI role.
 
 ## When to use
 
@@ -60,4 +60,4 @@ Every phase transition produces a thinking record — what was decided, why, wha
 
 ## Next step
 
-`/plan` to break it into buildable phases.
+`/upfront:plan` to break it into buildable phases.

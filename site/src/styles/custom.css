@@ -118,6 +118,11 @@ nav.sidebar .top-level > li > a {
 	overflow: hidden;
 }
 
+.sl-markdown-content th,
+.sl-markdown-content td {
+	padding: 0.6rem 1rem;
+}
+
 .sl-markdown-content th {
 	font-family: 'JetBrains Mono', monospace;
 	font-size: 0.75rem;

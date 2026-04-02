@@ -22,7 +22,7 @@ If the AI can't talk you out of your approach, your approach is probably sound. 
 
 ## How it works
 
-Upfront is a set of slash commands for [Claude Code](https://claude.ai/claude-code) that cover the full development lifecycle. Each command is a markdown file in `.claude/commands/` — no dependencies, no build step, no SaaS. Copy the commands into any project and they work.
+Upfront is a set of skills for [Claude Code](https://claude.ai/claude-code) that cover the full development lifecycle. Install as a plugin — two commands in your terminal, no dependencies, no build step, no SaaS.
 
 The commands follow a natural flow:
 
@@ -198,64 +198,18 @@ These files accumulate project knowledge across features and sessions:
 
 ## Install
 
-### Claude Code plugin (recommended)
-
-Install the skills, hooks, and audit trail as a Claude Code plugin:
-
-```
-/plugin marketplace add brennhill/Upfront
-/plugin install upfront@upfront
-```
-
-This gives you all 16 slash commands and the PostToolUse audit hook. If you also want the audit binary for `upfront log`, `upfront status`, etc.:
+Run these in your terminal:
 
 ```bash
-brew install brennhill/tap/upfront
+claude plugin marketplace add ThinkUpfront/Upfront
+claude plugin install upfront
 ```
 
-### Audit binary only
+Restart Claude Code. All 20 `/upfront:*` skills will be available in every project.
 
-If you manage skills separately and just want the audit binary:
+### Telemetry
 
-**Homebrew (macOS / Linux):**
-```bash
-brew install brennhill/tap/upfront
-```
-
-**Quick install (macOS / Linux):**
-```bash
-curl -fsSL https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.sh | bash
-```
-
-**Windows (PowerShell):**
-```powershell
-irm https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.ps1 | iex
-```
-
-**From source:**
-```bash
-git clone https://github.com/brennhill/upfront.git
-cd upfront
-go build -o upfront ./cmd/upfront/
-./install.sh
-```
-
-### Manual install (no plugin system)
-
-Copy the skills directly into any project:
-
-```bash
-git clone https://github.com/brennhill/upfront.git
-cp -r upfront/.claude/commands/ your-project/.claude/commands/
-```
-
-Or install globally:
-
-```bash
-cp -r upfront/.claude/commands/ ~/.claude/commands/
-```
-
-The commands are markdown files that Claude Code reads as instructions — no dependencies, no build step, no API keys.
+Upfront sends anonymous usage events to help prioritize development: plugin version, skill name, and a hashed project identifier (derived from your git remote URL). No personally identifiable information is collected — no IP addresses, repo names, file paths, or code. The telemetry implementation is in [`plugin/hooks/hooks.json`](plugin/hooks/hooks.json) — it's open source, you can verify exactly what's sent. Set `DO_NOT_TRACK=1` to disable.
 
 ---
 
@@ -302,7 +256,7 @@ Upfront events are structured JSON, compatible with any tool that accepts HTTP P
 - **[Portkey](https://portkey.ai/)** — AI gateway with observability
 - **Custom webhooks** — any endpoint that accepts `POST` with `Content-Type: application/json`
 
-The event format extends the agent-monitoring trace schema from the [Delivery-Gap-Toolkit](https://github.com/brennhill/ai-augmented-dev), which aligns with OpenTelemetry span conventions. Each event contains session, timestamp, phase, feature name, and the full thinking record summary.
+The event format extends the agent-monitoring trace schema from the [Delivery-Gap-Toolkit](https://github.com/brennhill/Delivery-Gap-Toolkit), which aligns with OpenTelemetry span conventions. Each event contains session, timestamp, phase, feature name, and the full thinking record summary.
 
 ### What managers see
 
@@ -382,6 +336,6 @@ Inspired by [Superhuman](https://github.com/nicholasgriffintn/claude-code-flow),
 
 ## Related
 
-- [The Delivery Gap](https://thedeliverygap.com) — the book this toolkit accompanies
+- [The Delivery Gap](https://leanpub.com/thedeliverygap) — the book this toolkit accompanies
 - [Delivery Gap Toolkit](https://github.com/brennhill/Delivery-Gap-Toolkit) — verification infrastructure (gates, policies, measurement)
 - [sloppy-joe](https://github.com/brennhill/sloppy-joe) — slopsquatting protection for AI-generated package names

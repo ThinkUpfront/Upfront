@@ -6,8 +6,10 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Upfront — Force thinking before code</title>
-	<meta name="description" content="AI-assisted development that keeps humans strong. Force thinking before code with challenge-first commands for Claude Code." />
+	<meta name="description" content="AI-assisted development that keeps humans strong. Force thinking before code with challenge-first skills for Claude Code." />
 	<link rel="canonical" href="https://thinkupfront.dev" />
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-EBNJWXFM9Z"></script>
+	<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-EBNJWXFM9Z',{storage:'none',anonymize_ip:true});</script>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -18,7 +20,7 @@
 		<div class="nav-links">
 			<a href="/why/">Why</a>
 			<a href="/human-first/">Human-First</a>
-			<a href="/commands/overview/">Commands</a>
+			<a href="/commands/overview/">Skills</a>
 			<a href="/research/">Research</a>
 			<a href="/install/" class="nav-cta">Install</a>
 		</div>
@@ -28,7 +30,7 @@
 		<div class="hero-inner">
 			<p class="hero-kicker">For teams using AI to build software</p>
 			<h1 class="hero-title">Force thinking<br/><em>before</em> code.</h1>
-			<p class="hero-sub">AI makes writing code effortless. That's the problem. Upfront is a set of slash commands for Claude Code that make the thinking process explicit, challenging, and auditable. Every command forces humans to engage — not rubber-stamp.</p>
+			<p class="hero-sub">AI makes writing code effortless. That's the problem. Upfront is a set of skills for Claude Code that make the thinking process explicit, challenging, and auditable. Every skill forces humans to engage — not rubber-stamp.</p>
 			<div class="hero-actions">
 				<a href="/why/" class="btn btn-primary">Why this matters</a>
 				<a href="/install/" class="btn btn-ghost">Get started</a>
@@ -38,7 +40,7 @@
 			<div class="terminal">
 				<div class="terminal-bar"><span></span><span></span><span></span></div>
 				<div class="terminal-body">
-					<p><span class="t-prompt">$</span> <span class="t-cmd">/feature</span> checkout-timeout-fix</p>
+					<p><span class="t-prompt">$</span> <span class="t-cmd">/upfront:feature</span> checkout-timeout-fix</p>
 					<p class="t-dim"></p>
 					<p class="t-accent">Phase 1: Intent</p>
 					<p class="t-output">What problem does this solve?</p>
@@ -83,35 +85,31 @@
 			<p class="section-sub">Every step forces thinking. Every transition produces an artifact.</p>
 			<div class="pipeline">
 				<div class="pipe-stage">
-					<span class="pipe-cmd">/ideate</span>
-					<span class="pipe-label">Think</span>
+					<span class="pipe-cmd">/upfront:vision</span>
+					<span class="pipe-label">Clarify</span>
 				</div>
 				<span class="pipe-arrow">&rarr;</span>
 				<div class="pipe-stage">
-					<span class="pipe-cmd">/feature</span>
+					<span class="pipe-cmd">/upfront:spike</span>
+					<span class="pipe-label">Test</span>
+				</div>
+				<span class="pipe-arrow">or</span>
+				<div class="pipe-stage">
+					<span class="pipe-cmd">/upfront:feature</span>
 					<span class="pipe-label">Define</span>
 				</div>
 				<span class="pipe-arrow">&rarr;</span>
 				<div class="pipe-stage">
-					<span class="pipe-cmd">/plan</span>
+					<span class="pipe-cmd">/upfront:plan</span>
 					<span class="pipe-label">Plan</span>
 				</div>
 				<span class="pipe-arrow">&rarr;</span>
 				<div class="pipe-stage">
-					<span class="pipe-cmd">/build</span>
+					<span class="pipe-cmd">/upfront:build</span>
 					<span class="pipe-label">Build</span>
 				</div>
-				<span class="pipe-arrow">&rarr;</span>
-				<div class="pipe-stage">
-					<span class="pipe-cmd">/ship</span>
-					<span class="pipe-label">Ship</span>
-				</div>
-				<span class="pipe-arrow">&rarr;</span>
-				<div class="pipe-stage">
-					<span class="pipe-cmd">/retro</span>
-					<span class="pipe-label">Learn</span>
-				</div>
 			</div>
+			<p class="section-sub" style="margin-top: 1rem; font-size: 0.85rem; opacity: 0.7;">Not sure yet? /spike builds a throwaway prototype. If it validates, it feeds into /feature. Debt is tracked either way.</p>
 		</div>
 	</section>
 
@@ -140,7 +138,7 @@
 			</div>
 			<div class="feature-card feature-card--wide">
 				<h3>Zero dependencies</h3>
-				<p>Markdown files in <code>.claude/commands/</code>. Copy them into any project. No build step, no SaaS, no API keys, no lock-in. The commands are instructions, not software.</p>
+				<p>Two commands in your terminal. No build step, no SaaS, no API keys, no lock-in. The skills are markdown instructions distributed as a Claude Code plugin.</p>
 				<a href="/install/">Install in 30 seconds &rarr;</a>
 			</div>
 		</div>
@@ -154,7 +152,7 @@
 			<p class="closer-text">Code is generated, reviewed, tested, and eventually deleted. What survives is the team's understanding of their systems. Upfront exists to protect that understanding.</p>
 			<div class="hero-actions">
 				<a href="/why/" class="btn btn-primary">Read the manifesto</a>
-				<a href="/commands/overview/" class="btn btn-ghost">Browse commands</a>
+				<a href="/commands/overview/" class="btn btn-ghost">Browse skills</a>
 			</div>
 		</div>
 	</section>
@@ -169,25 +167,27 @@
 				<p class="footer-heading">Docs</p>
 				<a href="/why/">Why Upfront</a>
 				<a href="/human-first/">Human-First</a>
-				<a href="/commands/overview/">Commands</a>
+				<a href="/commands/overview/">Skills</a>
 				<a href="/research/">Research</a>
 				<a href="/install/">Install</a>
 			</div>
 			<div class="footer-col">
 				<p class="footer-heading">Project</p>
-				<a href="https://github.com/brennhill/upfront">GitHub</a>
+				<a href="https://github.com/ThinkUpfront/Upfront">GitHub</a>
 				<a href="https://github.com/brennhill/Delivery-Gap-Toolkit">Delivery Gap Toolkit</a>
+				<a href="/compare/vs-superpowers/">vs Superpowers</a>
+				<a href="/compare/vs-gsd/">vs GSD</a>
 			</div>
 			<div class="footer-col">
 				<p class="footer-heading">Brenn Hill</p>
-				<a href="https://thedeliverygap.com">The Delivery Gap (book)</a>
+				<a href="https://leanpub.com/thedeliverygap">The Delivery Gap (book)</a>
 				<a href="https://brennhill.substack.com">Substack</a>
 				<a href="https://www.linkedin.com/in/brennhill/">LinkedIn</a>
 				<a href="https://github.com/brennhill">GitHub</a>
 			</div>
 		</div>
 		<div class="footer-bottom">
-			<p>AGPL-3.0 &middot; <a href="#" class="email-protect" data-user="comms" data-domain="thinkupfront.dev">Commercial licensing</a></p>
+			<p>AGPL-3.0 &middot; <a href="#" class="email-protect" data-user="comms" data-domain="thinkupfront.dev">Commercial licensing</a> &middot; <a href="/install/#telemetry">Analytics &amp; privacy</a></p>
 		</div>
 	</footer>
 <script>
@@ -271,7 +271,7 @@
 	.nav-logo {
 		font-family: var(--font-display);
 		font-weight: 700;
-		font-size: 1.3rem;
+		font-size: 1.8rem;
 		color: var(--text);
 		letter-spacing: -0.02em;
 	}

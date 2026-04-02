@@ -1,5 +1,5 @@
 ---
-title: /patch
+title: /upfront:patch
 description: Fix a bug or small feature from a GitHub issue — more structure than /quick, less than /feature.
 ---
 
@@ -24,13 +24,13 @@ For well-understood problems that need some rigor but not the full ceremony.
 
 ## Auto mode
 
-`/patch --auto #42` — runs without pausing for confirmation. Still stops for scope overflow, unclear root cause, or constitutional violations.
+`/upfront:patch --auto #42` — runs without pausing for confirmation. Still stops for scope overflow, unclear root cause, or constitutional violations.
 
 ## Scope gates
 
-- Under ~50 lines? Redirects to `/quick`
-- Over ~300 lines? Redirects to `/feature` + `/plan` + `/build`
-- Root cause unclear? Suggests `/debug` instead
+- Under ~50 lines? Redirects to `/upfront:quick`
+- Over ~300 lines? Redirects to `/upfront:feature` + `/upfront:plan` + `/upfront:build`
+- Root cause unclear? Suggests `/upfront:debug` instead
 
 ## Output
 

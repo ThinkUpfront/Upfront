@@ -1,5 +1,5 @@
 ---
-title: /quick
+title: /upfront:quick
 description: Small changes without ceremony — under 50 lines.
 ---
 
@@ -18,13 +18,13 @@ For well-understood changes that don't need the full workflow.
 3. TDD if testable
 4. Make the change
 5. Run all checks
-6. Scope re-check — if it grew past 50 lines, stash and redirect to `/feature`
+6. Scope re-check — if it grew past 50 lines, stash and redirect to `/upfront:feature`
 7. Self-review
 8. Commit
 
 ## Scope gate
 
-If the change grows beyond ~50 lines during implementation, `/quick` stops, stashes the partial work, and tells you to run `/feature` instead.
+If the change grows beyond ~50 lines during implementation, `/upfront:quick` stops, stashes the partial work, and tells you to run `/upfront:feature` instead.
 
 ## Output
 

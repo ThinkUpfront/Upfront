@@ -1,5 +1,5 @@
 ---
-title: /plan
+title: /upfront:plan
 description: Break a spec into ~400 LOC implementation phases.
 ---
 
@@ -7,8 +7,8 @@ Starts with a three-level architectural deep-dive, then breaks the spec into bui
 
 ## When to use
 
-- You have an approved spec from `/feature`
-- Before running `/build`
+- You have an approved spec from `/upfront:feature`
+- Before running `/upfront:build`
 
 ## What it does
 
@@ -34,7 +34,7 @@ Formulates 2-3 implementation approaches varying by invasion depth, reversibilit
 
 Breaks into ~400 LOC phases, each independently verifiable and committable. Identifies clarity debt (code that confused the AI during research) and assigns fixes to the phases that touch that code.
 
-### Human-writes mode (`/plan --human`)
+### Human-writes mode (`/upfront:plan --human`)
 
 Identifies which phases should be human-implemented: concurrency, security, core business logic, invariant enforcement.
 
@@ -44,4 +44,4 @@ Identifies which phases should be human-implemented: concurrency, security, core
 
 ## Next step
 
-`/build specs/[feature-name]-plan.md` to implement.
+`/upfront:build specs/[feature-name]-plan.md` to implement.

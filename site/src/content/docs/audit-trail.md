@@ -3,11 +3,11 @@ title: Audit Trail
 description: Durable JSONL log of thinking records for team visibility.
 ---
 
-The `upfront` binary captures every thinking record produced during `/feature` runs and writes structured events to a local JSONL queue.
+The `upfront` binary captures every thinking record produced during `/upfront:feature` runs and writes structured events to a local JSONL queue.
 
 ## How it works
 
-A PostToolUse hook fires after every `/feature` skill invocation. The hook:
+A PostToolUse hook fires after every `/upfront:feature` skill invocation. The hook:
 
 1. Parses the thinking record from the tool response
 2. Writes a structured event to `.upfront/audit.jsonl`
@@ -44,7 +44,7 @@ Compatible with Langfuse, Arize Phoenix, Helicone, Portkey, or any endpoint that
 
 Three metrics without reading a single spec:
 
-1. **Adoption** — percentage of features that went through `/feature`
+1. **Adoption** — percentage of features that went through `/upfront:feature`
 2. **Depth** — how many phases were completed (all 4 = thorough, 1-2 = bailed early)
 3. **Effectiveness** — rework rate difference between spec'd and unspec'd features
 

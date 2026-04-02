@@ -1,5 +1,5 @@
 ---
-title: /debug
+title: /upfront:debug
 description: Scientific method debugging with persistent state.
 ---
 

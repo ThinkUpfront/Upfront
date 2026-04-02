@@ -31,14 +31,14 @@ Nobody notices until something breaks and no one on the team understands the sys
 
 ## What Upfront does
 
-Upfront makes the thinking process explicit, challenging, and auditable. Every command is designed to force humans to engage — not fill out templates, not click "yes" to AI suggestions, but actually think through what they're building and why.
+Upfront makes the thinking process explicit, challenging, and auditable. Every skill is designed to force humans to engage — not fill out templates, not click "yes" to AI suggestions, but actually think through what they're building and why.
 
 **Challenge first, decorate second.** The AI never leads with suggestions. It asks an open question, waits for your answer, and then adds what you missed. The difference between "do you approve this?" (rubber stamp) and "walk me through what happens when two of these run at the same time" (forcing function).
 
-**Thinking records.** Every phase of `/feature` produces a record of what was decided, why, what was rejected, and what was skipped. The spec is the audit trail of the thinking, not just the conclusions. A reviewer can tell in 30 seconds whether real thinking happened.
+**Thinking records.** Every phase of `/upfront:feature` produces a record of what was decided, why, what was rejected, and what was skipped. The spec is the audit trail of the thinking, not just the conclusions. A reviewer can tell in 30 seconds whether real thinking happened.
 
 **Human-writes mode.** For critical code — concurrency, security, core business logic — the AI writes the tests and the human writes the implementation. You cannot ship code you don't understand. [Read more](/human-first/)
 
-**Constitutional governance.** Project-level invariants that gate every command. If a change would violate a constitutional principle, the system flags it. You can override, but you can't accidentally violate.
+**Constitutional governance.** Project-level invariants that gate every skill. If a change would violate a constitutional principle, the system flags it. You can override, but you can't accidentally violate.
 
-**Closed feedback loop.** `/retro` goes back to the spec's predictions and checks them against production reality. Did it actually work? Where were we wrong? Lessons feed forward into future specs.
+**Closed feedback loop.** `/upfront:retro` goes back to the spec's predictions and checks them against production reality. Did it actually work? Where were we wrong? Lessons feed forward into future specs.

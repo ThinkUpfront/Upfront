@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # install-upfront.sh — Download and install the upfront binary.
-# Usage: curl -fsSL https://raw.githubusercontent.com/brennhill/upfront/main/install-upfront.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/ThinkUpfront/Upfront/main/install-upfront.sh | bash
 
-REPO="brennhill/upfront"
+REPO="ThinkUpfront/Upfront"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
 
 info()  { printf '\033[1;34m==>\033[0m %s\n' "$1"; }

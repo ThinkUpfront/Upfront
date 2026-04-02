@@ -1,3 +1,3 @@
-module github.com/brennhill/upfront
+module github.com/ThinkUpfront/Upfront
 
 go 1.26.1

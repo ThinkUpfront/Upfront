@@ -1,9 +1,9 @@
 ---
-title: /refine
+title: /upfront:refine
 description: Iterate on a spec with inline corrections and challenge.
 ---
 
-Targeted revision without re-running `/feature`.
+Targeted revision without re-running `/upfront:feature`.
 
 ## When to use
 
@@ -20,7 +20,7 @@ Rework rate drops by 20% for spec'd features.
 // too specific — we don't have a baseline yet
 ```
 
-Then run `/refine specs/[name].md`. The AI:
+Then run `/upfront:refine specs/[name].md`. The AI:
 
 1. Collects all `//` comments as agenda items
 2. **Challenges each change** — is this making the spec better or backing away from a hard commitment?

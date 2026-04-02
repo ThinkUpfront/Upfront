@@ -1,5 +1,5 @@
 ---
-title: /retro
+title: /upfront:retro
 description: Check spec predictions against production reality.
 ---
 
@@ -19,7 +19,7 @@ Goes back to the spec's "how will we know it worked?" and checks:
 - Extracts generalizable lessons
 - Pushes for numbers: "I think it improved" gets challenged with "do you have the actual number?"
 
-Feeds forward: suggests changes to `/feature`, `/plan`, or `/build` if the retro reveals a pattern.
+Feeds forward: suggests changes to `/upfront:feature`, `/upfront:plan`, or `/upfront:build` if the retro reveals a pattern.
 
 ## Output
 
