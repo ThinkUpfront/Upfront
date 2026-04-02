@@ -262,6 +262,18 @@ See `specs/ARCHITECTURE.md` (reviewed [date]).
 
 ### Phase 2: [descriptive name]
 ...
+
+---
+
+### End-to-end verification (if feature touches UI)
+
+After all phases, Playwright tests verify the critical user journeys in a real browser.
+
+**Tests:** `tests/e2e/[feature-name].spec.ts`
+**Critical paths:**
+- [ ] [user story 1 — navigate to X, click Y, assert Z is visible]
+- [ ] [user story 2 — fill form, submit, assert confirmation]
+- [ ] [error path — trigger error, assert error message shown]
 ```
 
 Then tell the user:

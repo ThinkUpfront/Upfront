@@ -502,9 +502,7 @@ If found and the feature touches UI (check the plan for frontend files — `.tsx
 2. Note the URL (usually `http://localhost:3000` or similar)
 3. Tell the user: "Dev server running at [URL] for visual verification during the build."
 
-The dev server stays running throughout the build. It's used in two places:
-- **After each phase that touches UI files:** Use Gasoline (browser devtools MCP) to screenshot the affected pages and verify they render correctly. Use `observe(what="screenshot")` to capture the state. If something looks broken (layout errors, blank pages, console errors), flag it before proceeding.
-- **During the red team:** The red team agent gets browser access to click through the feature and verify it actually works end-to-end (see "Try to break visually" below).
+The dev server stays running throughout the build for manual verification and Playwright e2e tests after integration sweep.
 
 If the project has no dev server or the feature is backend-only, skip this entirely.
 
@@ -639,19 +637,7 @@ If the actual output doesn't match the expected output, investigate. It could me
 
 Do not show the expected output to the sub-agent when re-spawning — only describe *what's wrong*, not *what the right answer looks like*.
 
-#### 5. Visual verification (UI phases only)
-
-If this phase touched UI files AND browser devtools MCP tools are available AND the dev server is running, verify visually:
-
-1. Use Gasoline MCP: `observe(what="screenshot")` on the affected pages
-2. Check for: blank pages, layout breaks, missing elements, console errors (`observe(what="error_bundles")`)
-3. Compare against the spec's expected behavior
-
-If visual issues are found, fix them before proceeding to code review. If Gasoline is not available, add visual checks to the manual verification list instead.
-
-Skip this step entirely for backend-only phases.
-
-#### 6. Post-phase code review
+#### 5. Post-phase code review
 
 After automated verification passes, spawn a **review agent** to audit the phase.
 
@@ -793,7 +779,55 @@ Then:
 
 If the sweep finds issues, fix them (spawn another sub-agent if needed) and re-run.
 
-### After integration sweep: Red team
+### After integration sweep: Playwright e2e (UI features only)
+
+If the feature touches user-facing UI (check the plan for `.tsx`, `.vue`, `.svelte`, `.html`, template, or CSS files) AND the dev server is running, write and run Playwright end-to-end tests for the feature's critical user journeys.
+
+**Why here, not per-phase:** Mid-build Playwright tests verify half-finished UI — meaningless. The full feature is wired up now. This is the first point where e2e verification makes sense.
+
+#### Step 1: Check if Playwright is available
+
+```bash
+npx playwright --version
+```
+
+If not installed, offer: "This feature has UI. Playwright e2e tests would verify the critical paths in a real browser. Install? `npm init playwright@latest`"
+
+If the user declines, skip this section and note in progress: "Playwright e2e skipped — not installed."
+
+#### Step 2: Write e2e tests from the plan
+
+The plan's **End-to-end verification** section (if present) defines the critical paths. If the plan doesn't have one, derive them from the spec's user stories — each story is a test.
+
+Create `tests/e2e/[feature-name].spec.ts` (or the project's equivalent):
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('[story 1 — one-line description]', async ({ page }) => {
+  await page.goto('/[starting-page]');
+  // Navigate through the happy path
+  // Assert: visible text, URL, element state
+});
+
+test('[story 2 — one-line description]', async ({ page }) => {
+  // ...
+});
+```
+
+Keep tests focused on **user-visible behavior**: navigate, click, type, assert visible text or URL. Don't test implementation details through the browser.
+
+#### Step 3: Run and verify
+
+```bash
+cd <WORKTREE_DIR> && npx playwright test tests/e2e/[feature-name].spec.ts
+```
+
+If tests fail, fix the code (not the tests — the tests describe correct behavior from the spec). Re-run until green.
+
+Commit: `test([feature-name]): e2e verification of critical user journeys`
+
+### After e2e: Red team
 
 Spawn a **red team agent** with clean context. This agent's job is to break things. It is adversarial — it assumes the code is wrong until proven otherwise.
 
@@ -832,17 +866,6 @@ Read:
 - Are there code paths with no test coverage?
 - Do the tests test behavior or implementation details? (Tests that break on refactor are bad tests.)
 - Are there tests that always pass regardless of the code? (Tautological tests.)
-
-### Try to break visually (if browser devtools MCP tools are available AND dev server is running)
-If the feature has UI and browser devtools MCP tools are available AND the dev server is running, use Gasoline MCP to actually interact with the feature:
-- Navigate to the affected pages using `interact(what="navigate", url="...")`
-- Click through the feature's user flows using `interact(what="click", ...)` and `interact(what="type", ...)`
-- Screenshot each state using `observe(what="screenshot")`
-- Check for: broken layouts, missing elements, wrong text, unresponsive buttons, console errors (`observe(what="error_bundles")`)
-- Try edge cases visually: empty states, error states, rapid clicking, browser back/forward
-- If something looks wrong, report it with the screenshot as evidence
-
-This is not a substitute for automated tests — it's a supplement. Tests verify logic; this verifies the user actually sees what they're supposed to see.
 
 ### Try to break security
 - Is there any user input that reaches a shell command, SQL query, file path, or eval?
@@ -953,6 +976,30 @@ Summary:
 
 Next: run /upfront:ship to create a PR, or push manually.
 ```
+
+### Build complete notification
+
+After merge-back, fire a notification so the user knows the build is done (especially useful for autonomous/long-running builds):
+
+1. **Terminal notification:**
+   ```bash
+   osascript -e 'display notification "Feature merged to [BASE_BRANCH]. All phases complete, integration sweep passed, red team done." with title "Upfront Build Complete" sound name "Glass"' 2>/dev/null || true
+   ```
+   (macOS only — falls back silently on other platforms)
+
+2. **Custom hook:** Check if `.upfront/hooks/build-complete.sh` exists in the project root or `~/.upfront/hooks/build-complete.sh` in the user's home. If it does, execute it with the feature name and status as arguments:
+   ```bash
+   bash [hook-path]/build-complete.sh "[feature-name]" "success" "[phases-completed]" "[base-branch]"
+   ```
+
+   This lets users wire up their own notifications — Slack webhook, email, SMS, whatever:
+   ```bash
+   #!/bin/bash
+   # Example: .upfront/hooks/build-complete.sh
+   curl -X POST "$SLACK_WEBHOOK" -d "{\"text\":\"Build complete: $1 ($3 phases) merged to $4\"}"
+   ```
+
+3. **Telemetry event:** If `DO_NOT_TRACK` is not set, fire a `build_complete` event with phase count and duration (no code content).
 
 ## Resuming
 
