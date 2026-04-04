@@ -1,11 +1,13 @@
 ---
-description: Use when the user needs to test an idea fast — "just build it", "let me see it", "spike this", "prototype", "I need to try something", "quick and dirty", "throwaway". Rapid prototype with compressed thinking and automatic debt tracking.
+description: Use when the user needs to test an idea fast — "just build it", "let me see it", "spike this", "prototype", "I need to try something", "quick and dirty", "throwaway". The primary path for unvalidated ideas — hypothesize, build, learn.
 user-invocable: true
 ---
 
 # Spike
 
-You are building a rapid prototype to test an idea. Speed over quality. The goal is a clickable/runnable thing the user can react to — not production code.
+You are running an experiment. The user has a hypothesis — your job is to build the fastest possible thing that tests it. This is the scientific method applied to software: build the minimum, observe the result, learn.
+
+This is not a shortcut or a guilty pleasure. This is how good software gets built — test the idea before you invest in it.
 
 ## Step 1: One question
 
@@ -45,18 +47,18 @@ Does this look right? I'll start as soon as you say go.
 
 If they correct something, update and re-confirm. Keep this to one round — don't iterate endlessly on a prototype spec.
 
-## Step 3: Acknowledge the debt
+## Step 3: Name what's deferred
 
-Before building, be explicit about what's being deferred:
+Be explicit about what you're skipping — not as guilt, but as a checklist for later if the experiment succeeds:
 
 ```
-Debt we're taking on:
-- No spec (will need /upfront:feature if this idea survives)
-- No tests (will need to add before this goes to production)
-- No architecture review (may need restructuring to fit the codebase)
+Deferred (expected for a spike):
+- No spec — if this works, solidify with /upfront:feature
+- No tests — add before production
+- No architecture review — may need restructuring
 - [anything else specific — no auth, no validation, hardcoded config, etc.]
 
-This is a prototype. If the idea works, we'll do it right. Let's go.
+Let's go find out if this idea works.
 ```
 
 ## Step 4: Build the minimum
@@ -89,44 +91,44 @@ Try:
 2. [second thing to click/do]
 3. [third thing to click/do]
 
-What do you think? Three options:
-  a) This is the right idea — let's spec it properly (/upfront:feature)
-  b) Close but needs changes — tell me what's wrong and I'll update the spike
-  c) Wrong direction — kill it
+What did you learn? Three paths:
+  a) The idea works — let's solidify it (/upfront:feature → /plan → /build)
+  b) Close but wrong — tell me what's off and I'll adjust the experiment
+  c) Dead end — kill it and save the lesson
 ```
 
-If they choose (a), immediately launch `/upfront:feature` with the spike as context — the prototype answers most of the Phase 1 and Phase 2 questions already. Pass the spike description and what was learned. The feature spec should note: "Originated from spike on [date]. Prototype validated [what worked]. Spike code will be replaced by production implementation."
+If they choose (a): the experiment succeeded. Immediately launch `/upfront:feature` with the spike as context. The prototype answers most of the Phase 1 and Phase 2 questions already. The feature spec captures what was validated and builds it properly — real tests, real architecture, real error handling.
 
-If they choose (b), iterate on the spike. Keep it fast — don't gold-plate. After 2-3 iterations, nudge toward (a) or (c): "We've iterated a few times. Is the idea validated enough to spec properly, or should we kill it?"
+If they choose (b): iterate on the spike. Keep it fast. After 2-3 iterations, nudge: "We've learned enough — is the idea validated or should we kill it?"
 
-If they choose (c), offer to revert: "Want me to `git checkout .` to remove the spike code, or keep it around for reference?"
+If they choose (c): the experiment failed, which is a success — you learned something without wasting weeks. Offer to revert: "Want me to `git checkout .` to clean up, or keep it for reference?"
 
-## Step 6: Log the debt
+## Step 6: Log the experiment
 
 After the spike is done (regardless of outcome), append to `specs/DEBT.md` (create if it doesn't exist):
 
 ```markdown
 ## [date] — Spike: [one-line description]
 
-**Status:** [kept — proceeding to /feature | killed — code reverted | killed — code kept for reference]
+**Status:** [validated — proceeding to /feature | killed — code reverted | killed — code kept for reference]
+**What we learned:** [the actual insight — this is the most important line]
 **Files touched:** [list]
-**Debt items:**
-- [ ] No spec — needs /upfront:feature if shipping
-- [ ] No tests — needs test coverage before production
-- [ ] No architecture review — may conflict with existing patterns
+**Deferred items (resolve during solidification):**
+- [ ] No spec — needs /upfront:feature
+- [ ] No tests — needs test coverage
+- [ ] No architecture review — may need restructuring
 - [ ] [specific items — hardcoded config, fake auth, mock data, etc.]
-**Severity:** [1 = cosmetic, 2 = needs fixing before production, 3 = structural risk]
 **Created by:** spike
 **Feature:** [name or "exploratory"]
 ```
 
-If the user proceeds to `/upfront:feature`, the spec should reference the spike: "This feature was prototyped in a spike on [date]. The prototype validated [what was learned]. Debt items from the spike are tracked in `specs/DEBT.md`."
+If the user proceeds to `/upfront:feature`, the spec should reference the spike: "Validated by spike on [date]. The experiment confirmed [what was learned]. Deferred items tracked in `specs/DEBT.md` — resolve during solidification."
 
 ## Rules
 
 - **Speed is the point.** If you're spending more than 2 minutes on any decision, pick the simpler option and move on.
 - **Fake everything you can.** Real backend work in a spike is wasted effort 90% of the time.
-- **Don't refactor.** Don't clean up. Don't add comments. Don't follow conventions. This code is disposable.
-- **Do track the debt.** The fast part is building. The responsible part is logging what you skipped. Never skip the debt log.
-- **Stop if the idea is dead.** If you realize mid-build that the idea fundamentally won't work (not "it's hard" but "it's impossible given the constraints"), stop immediately and tell the user why. Don't finish a prototype of a dead idea.
-- **One spike at a time.** Don't let spikes accumulate. If there's already an open spike in `specs/DEBT.md` (status: kept, no corresponding feature spec), flag it: "You have an open spike from [date]. Want to resolve that first or add another?"
+- **Don't refactor.** Don't clean up. Don't add comments. Don't follow conventions. This code is disposable — the solidification phase builds it right.
+- **Log what you learned.** The experiment log is not about guilt — it's about capturing the insight so the solidification phase has a head start.
+- **Stop if the idea is dead.** If you realize mid-build that the idea fundamentally won't work, stop immediately and tell the user why. A killed experiment is a successful experiment — you learned something.
+- **One spike at a time.** Don't let spikes accumulate. If there's already an open spike in `specs/DEBT.md` (status: validated, no corresponding feature spec), flag it: "You have a validated spike from [date] that hasn't been solidified. Want to solidify that first or start a new experiment?"

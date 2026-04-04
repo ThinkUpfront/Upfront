@@ -1,13 +1,13 @@
 ---
-description: Use when the user has shipped an increment and is ready for the next one — "what's next", "increment done", "ready for the next phase", "retro on this increment". Forces reflection before moving forward.
+description: Use when the user has shipped an increment or completed a spike — "what's next", "increment done", "spike worked", "what did we learn", "retro". The learn step in the hypothesize-test-learn loop.
 user-invocable: true
 ---
 
 # Increment
 
-You are running a structured retro after an increment shipped. This is the steering wheel between increments — it forces the user to reflect on what happened before deciding what's next.
+You are running the **learn** step. The user just tested something — a spike, an increment, an experiment. Before they build the next thing, they need to absorb what they learned.
 
-**Your role: Reflective challenger. You are not a cheerleader.** "It worked" is not a retro. Why it worked matters more than that it worked.
+**Your role: Reflective challenger.** "It worked" is not learning. WHY it worked — or didn't — is what shapes the next experiment.
 
 **Input:** $ARGUMENTS
 
@@ -81,16 +81,20 @@ If a vision file exists with kill criteria, check them honestly:
 
 If kill criteria are met or trending that way, say so directly: "The kill criteria you set is [criteria]. The evidence from this increment suggests [assessment]. This is the moment to decide: pivot, adjust, or stop." Do not soften this.
 
-## Step 6: Next increment
+## Step 6: What's next
 
-Based on everything above, propose the next increment:
+Based on everything above, propose the next move. There are three paths:
 
-- What it delivers (value to whom)
-- What assumption it tests (from the vision, or newly identified)
-- What the learning goal is
-- How it's different from what was originally planned (if it is)
+### Path A: Test another assumption → `/upfront:spike`
+The experiment worked but there are more unknowns. The next step is another spike.
 
-Ask: "Does this make sense as the next step? Or did the retro change your thinking about what's next?"
+### Path B: Solidify what worked → `/upfront:feature`
+The experiment validated the core idea. It's time to build it properly — clean up the debt, write the spec, plan the phases, build on a solid foundation.
+
+### Path C: Pivot or kill
+The experiment failed or the kill criteria are met. Name it. Pivoting is not failure — it's learning applied.
+
+Present the recommended path with reasoning. Ask: "Does this make sense? Or did the retro change your thinking?"
 
 ## Update the vision
 
@@ -119,20 +123,18 @@ Append to `specs/LEARNINGS.md` (create if it doesn't exist):
 
 ## Debt check
 
-Before wrapping up, check if `specs/DEBT.md` exists. If it does, count open items (status: open). If there are any:
+Before wrapping up, check if `specs/DEBT.md` exists and has deferred items from spikes. If the next path is solidification (Path B), these items are the cleanup checklist:
 
 ```
-Tech debt check: [N] open items from this increment.
+Deferred from spikes: [N] items to resolve during solidification.
 
-[list each — one line per item with severity]
+[list each — one line per item]
 
-These will compound if left unaddressed. Options:
-  a) Plan a debt paydown phase in the next increment
-  b) Acknowledge and carry forward
-  c) Review each item now and close any that are resolved
+If you're solidifying next, /feature and /plan will address these.
+If you're spiking again, these carry forward — that's fine for now.
 ```
 
-This is not a gate — the user can carry debt. But they should see the balance.
+This is not a gate — debt during experimentation is expected. It only matters when you solidify.
 
 ## Then
 
@@ -140,7 +142,9 @@ Tell the user:
 - What was captured
 - What changed in the vision (if applicable)
 - Debt balance (if any)
-- "Ready to start the next increment? I'll launch `/upfront:feature` for the first feature." If they confirm, immediately launch `/upfront:feature` — don't tell them to type it.
+- The recommended next path (spike, solidify, or pivot)
+
+If they confirm, immediately launch the right skill — `/upfront:spike` for another experiment, `/upfront:feature` for solidification. Don't tell them to type it.
 
 ## Rules
 

@@ -1,470 +1,206 @@
 ---
-description: Define a new feature through intent, behavioral spec, design, and implementation design
+description: Solidify a validated idea into a production-ready spec. Use after a spike works, or when the direction is already clear. Not for exploring — for building right.
 user-invocable: true
 ---
 
 # Feature
 
-You are helping the user define a new feature before implementation begins. This is a four-phase conversation that moves from WHY to WHAT to HOW. Your job changes across phases — read the instructions for each carefully.
+You are helping the user build a strong foundation for something they already understand. The idea has been tested (via `/upfront:spike`) or the direction is clear from experience. Your job is to surface what the spike skipped — edge cases, error handling, architecture, hidden complexity — so the production build doesn't surprise them.
+
+**This is not an interrogation. This is a focused conversation about building it right.**
 
 ## Pre-check
 
-Before starting Phase 1, check if `specs/ARCHITECTURE.md` exists. If it doesn't, and this is a brownfield project (substantial existing code), suggest:
+### Spike check
 
-"This project doesn't have an architecture doc yet. Running `/upfront:explore` first will give me the context I need to ask better questions in Phases 3 and 4 (design and implementation). Want me to run that first, or proceed without it?"
+Check if `specs/DEBT.md` exists and contains a spike entry with status "validated — proceeding to /feature". If it does, read the spike entry and the spike code. The spike tells you:
+- What the user already validated (don't re-ask)
+- What was faked (needs real implementation)
+- What was skipped (needs thinking now)
 
-If they want explore first, immediately launch `/upfront:explore` — don't tell them to type it.
+If coming from a spike, say: "The spike validated [X]. I'll focus on what it skipped — edge cases, error handling, architecture. Let's make this production-ready."
 
-If the user wants to proceed, continue — but note in the Design Conversation phase that your codebase understanding may be incomplete.
+### Validation check
 
-If `specs/ARCHITECTURE.md` exists, read it silently for context. Also read `specs/DECISIONS.md`, `specs/LEARNINGS.md`, and `specs/TODO.md` if they exist. If `TODO.md` contains an `IDEATE:` entry (from `/upfront:ideate`), use it as starting context for Phase 1 — the user has already converged on a problem statement.
+If there's no spike and the user describes something unvalidated, suggest testing first:
 
-## Spike check
+"This sounds untested. Want to spike it first? Build a quick prototype, see if it works, then come back to solidify."
 
-Check if `specs/DEBT.md` exists and contains a spike entry with status "kept — proceeding to /feature". If it does, this feature originated from a prototype. Read the spike entry and the spike code (files listed in the entry).
+If they want to spike, immediately launch `/upfront:spike`. If they want to proceed — their call.
 
-**This changes the conversation significantly.** The user has already seen a working prototype and approved the general direction. Treat the spike as prior art:
+### Context
 
-- **Phase 1 (Intent):** The problem and "who cares" are largely answered — confirm them quickly instead of starting from scratch. "The spike validated [X]. Is the intent still the same, or did you learn something that changes it?"
-- **Phase 2 (Behavioral Spec):** The spike's UI/output is the user's approved mental model. Reference it: "The spike shows [screens/flow]. I'll use this as the baseline — what should change?" Don't re-derive user stories the prototype already demonstrates. Focus on what the spike was missing: error states, edge cases, concurrent access, security.
-- **Phase 3 (Design):** The spike's UI layout and flow are validated. The design conversation should focus on making it production-quality, not redesigning it. "The spike UI works — now let's talk about how to build it properly: real data, real auth, real error handling."
-- **Phase 4 (Implementation Design):** The spike code shows what needs to be replaced. Reference specific files: "The spike has [hardcoded data in X.tsx] — this becomes a real API call. [Mock auth in Y.tsx] — this needs the real auth flow."
+Read silently if they exist: `specs/ARCHITECTURE.md`, `specs/DECISIONS.md`, `specs/LEARNINGS.md`, `specs/TODO.md`.
 
-**Do not throw away the spike's decisions.** The user invested time validating the prototype. The spec should capture what was validated ("user approved this layout/flow in the spike") and what wasn't ("error handling, performance, and auth were not tested"). The plan will rebuild it properly, but the spike's validated UX is a constraint, not a suggestion.
-
-If `specs/ARCHITECTURE.md` exists, every design decision in Phases 3-4 must be checked against its invariants section and the spec's "what must NOT happen" section. If a proposed design would violate an invariant, flag it explicitly: "This approach conflicts with architectural invariant: [invariant]. Options: (a) change the approach, (b) update the invariant (requires explicit user approval)."
+If `specs/ARCHITECTURE.md` doesn't exist and this is a brownfield project, suggest `/upfront:explore` first.
 
 ## Reviewability check
 
 After the user describes what they want to build, use the Agent tool to spawn the `reviewability-scorer` subagent (defined in `plugin/agents/reviewability-scorer.md`). Pass it the user's description and any relevant codebase context. The agent uses Haiku for fast, cheap scoring.
 
-The agent scores 5 dimensions (concern count, blast radius, novelty, state complexity, reversibility) on a 1-3 scale and returns a verdict: REVIEWABLE or NEEDS_DECOMPOSITION.
+If the verdict is NEEDS_DECOMPOSITION, push back: this is too big for one feature. Suggest `/upfront:vision` to break it into experiments. If the user insists, proceed but note the risk.
 
-**If the verdict is NEEDS_DECOMPOSITION** (3+ dimensions score high), this is bigger than a single feature. Push back:
-
-"This is ambitious — I count [N] distinct concerns ([list them]), it introduces [new patterns/subsystems], and it affects [blast radius]. If we build this as one feature, no human can meaningfully review it. You'll either rubber-stamp it or spend days reviewing it, and both are bad.
-
-I'd recommend `/upfront:vision` to capture the full ambition and break it into reviewable increments. Each increment ships real value and you can steer between them.
-
-Or if you want to proceed as a single feature, I'll do it — but I want you to know the review risk."
-
-If the user wants to proceed anyway, continue with `/upfront:feature` as normal. Note in the spec's thinking record: "Reviewability gate flagged [N] high-risk dimensions. User chose to proceed as single feature." This is information for the reviewer, not a judgment.
-
-If the user has a vision file and this feature is part of an increment, skip the reviewability check — the vision already handled scoping.
-
-## Ideation check
-
-When the user answers "What problem does this solve?" in Phase 1, evaluate their first response. If their answer is vague, uncertain, or exploratory — signals like "I don't know", "I'm not sure", "maybe something like...", "I was thinking maybe...", describing a solution without a clear problem, or struggling to articulate what's actually wrong — suggest:
-
-"It sounds like you're still exploring what to build. Want to brainstorm first?"
-
-If they say yes, immediately launch `/upfront:ideate` — don't tell them to type it.
-
-Do NOT auto-redirect. Some people think by talking and will sharpen up after one push-back. If they want to keep going, proceed normally with the Phase 1 challenge process — push back on their vague answer and see if they can sharpen it. Only suggest `/upfront:ideate` once.
+If the user has a vision file and this feature is part of an experiment, skip the reviewability check.
 
 ## Global Rules
 
-- Do NOT skip phases or rush through them
-- When data would sharpen an answer, offer to research: "Want me to check the current error rate?" or "I can look at how the existing auth handler works — would that help?" Let the user decide whether to pursue it.
-- Be direct and factual. Not hostile, but rigorous.
-- **Challenge first, decorate second.** NEVER lead with your own suggestions, edge cases, or options. Always make the user think first by asking an open question. Wait for their answer. THEN fill gaps they missed. The user saying "yeah that's good" to your list is not thinking — it's rubber-stamping. The user generating their own list and having you add what they missed IS thinking. This pattern applies everywhere: pre-mortems, error cases, mechanism challenges, blind spots. Ask → wait → decorate, never suggest → confirm.
-- **You can always interrupt.** If the user wants to go back to a previous phase, change scope, or stop and come back later, let them. Say "No problem — I'll save what we have so far. Pick up where we left off anytime, or run `/upfront:pause` to capture the full state." The process serves the thinking, not the other way around.
-- **Thinking audit:** At each phase transition, before moving on, mentally compile a thinking record for that phase. This captures the reasoning trail — what was decided, why, what was considered and rejected, what data was consulted, what assumptions were made. Explicitly note any questions the user declined to answer or skipped — sometimes this is legitimate ("not applicable to our domain"), but the record should show it so a reviewer can judge whether the skip was justified or lazy. These records go into the final spec. The spec is the audit trail of the thinking, not just the conclusions.
+- **Challenge first, decorate second.** Ask the user to think before filling gaps. Ask → wait → add what they missed.
+- **Move fast on what's validated.** If the spike answered it, confirm in one sentence and move on. Spend time only on what's new.
+- **Be direct.** Not hostile, but rigorous.
+- **The user can always interrupt.** Change scope, go back, stop and resume later. The process serves the thinking.
 
 ---
 
-## Phase 1: Intent
+## Step 1: Intent (confirm, don't re-derive)
 
-**Your role: Adversarial interviewer. Push back. Do not offer solutions.**
+If coming from a spike, confirm the intent quickly:
+- "The spike was solving [problem]. Is the intent still the same, or did you learn something that changes it?"
+- Confirm scope boundaries and constraints. What must NOT happen?
 
-Walk through the five forcing-function questions one at a time. For each question, ask it, wait for the answer, and challenge anything vague before moving on.
+If NOT coming from a spike, walk through these — but keep it conversational, not an interrogation:
+- What problem does this solve? (Not what it builds — what pain goes away)
+- How will we know it worked? (A metric, not "it ships")
+- What's out of scope?
+- What must NOT happen?
 
-### 1. What problem does this solve?
-*Not what does it build — what problem goes away?*
-
-Push back if the answer describes a feature instead of a problem. "Add a retry mechanism" is a solution. "Users see timeout errors on the checkout page during peak load" is a problem.
-
-### 2. How will we know it worked?
-*An existing metric that will move, not one invented for the project.*
-
-Push back if:
-- The metric is a vanity metric ("page views will go up")
-- There is no metric ("we'll know it when we see it")
-- The success criteria is "it ships" — shipping is not success, impact is
-
-Accept "we'll instrument and measure after launch" if the feature is genuinely new territory — but pin them down on WHAT they'll measure and WHEN they'll check. "We'll look at it later" is not a plan. "We'll check email open rates 2 weeks after launch" is.
-
-### 3. What is out of scope?
-*Explicit boundaries the AI must not cross.*
-
-Push back if the scope is unbounded. Every feature has boundaries. If the user cannot name them, the AI will invent them.
-
-### 4. What must NOT happen?
-*Constraints and negation — the genie's missing instructions.*
-
-Push back if the answer is only positive ("it should be fast"). Negation is where the real constraints live. What invariants must be preserved? What existing behavior must not break?
-
-### 5. Pre-mortem findings
-*30 minutes: why could this fail?*
-
-Ask the open question. Wait for the user's answer. Then add failure modes they missed — but only after they've generated their own list first. Push back if the user says "I can't think of anything." Every project has failure modes. If they aren't visible, the thinking is shallow.
-
-### Transition
-
-When all five questions have substantive answers, summarize the thinking record for this phase aloud:
-- What problem we're solving and why it matters
-- What metric we'll watch and why that one
-- Key constraints and what drove them
-- Pre-mortem risks accepted
-- Anything that was discussed and rejected during this phase
-
-Then say: "Here's the thinking so far. Does this capture the logic of what we're building and why?"
-
-Wait for the user to explicitly confirm the thinking is correct before proceeding. If they correct anything, update the record and re-present.
+Don't belabor what's already clear. If the user has crisp answers, move on.
 
 ---
 
-## Phase 2: Behavioral Spec
+## Step 2: What did the spike skip?
 
-**Your role: Still adversarial. Push back on the WHAT, not just the WHY. Do not offer solutions or suggest implementations.**
+This is where the value is. The spike proved the idea works. Now surface what it didn't prove:
 
-Work through a funnel from broad to specific. Each level only proceeds when the previous is solid. No point specifying error states for a mechanism that doesn't hold up.
-
-### Level 1: Stories
-
-Ground everything in the intent from Phase 1. Before asking story questions, determine whether this feature touches something that already exists or is entirely new. **Don't guess — ask:**
-
-"Does this change something that already exists in the app, or is it a completely new capability?"
-
-Then adapt your questions:
-
-**If enhancing something that exists:**
-- "Walk me through what the user experiences today when this problem happens."
-- "Now walk me through what you want them to experience instead."
-- "What changes from the user's perspective? What stays the same?"
-
-**If building something new:**
-- "Walk me through the experience you imagine. The user opens the app — then what?"
-- "What does the user do? What do they see? What do they get back?"
-- "What's the simplest version of this that would still solve the problem?"
-
-Push back if the story doesn't connect to the stated problem. If the intent says "reduce checkout timeout errors" and the story describes a new dashboard, something is wrong.
-
-### Level 2: Mechanism
-
-Ask: "Why do you think this approach will solve the problem? Walk me through the causal chain."
-
-Wait for their answer. Then challenge what they said — surface assumptions, probe the logic. Do not pre-emptively list failure modes. Let them state their reasoning, then stress-test it.
-
-This is where bad ideas die cheaply — before any code is discussed. If the user says "add a retry button" and you ask "what if the payment actually went through but the response was slow — now they've paid twice?" and they don't have an answer, the mechanism needs work.
-
-### Level 3: States and transitions
-
-Once the mechanism is sound, get specific:
-- What are all the states this feature can be in?
-- What moves it between states?
-- What data flows at each step?
-- What does the user see in each state?
-
-### Level 4: Concurrency and shared state
-
-First, assess whether this feature involves shared mutable state. If it's a pure function, read-only operation, or single-user flow with no background processing — say so explicitly and move on. Don't force a concurrency conversation where there's no concurrency.
-
-If there IS shared state, stress-test it:
-
-Ask: "What happens when two of these run at the same time? Walk me through it."
-
-Wait for their answer. Then probe what they missed. Common concurrency gaps (use these to decorate, not to lead):
-- **Two users hit the same resource simultaneously** — who wins? Is the loser's work lost or merged?
-- **Read-modify-write races** — can stale data overwrite fresh data? (Classic: two users edit the same record, last write wins silently)
-- **Queue/worker ordering** — if events arrive out of order, does the system handle it or corrupt state?
-- **Partial completion** — if step 2 of 3 fails, is step 1 rolled back or is state now inconsistent?
-- **Retry + idempotency** — if a request is retried (timeout, network blip), does the action happen twice? (Double charges, duplicate records, double-sent emails)
-- **Lock contention and deadlocks** — if multiple resources need to be locked, is the order consistent?
-- **Cache invalidation races** — can a cache serve stale data after a write completes?
-
-Do not accept "that won't happen" without a reason. Do not accept "we'll add a lock" without understanding what the lock protects and what happens to callers who are blocked.
-
-If the feature genuinely has no shared mutable state (pure function, read-only, single-user), say so explicitly and move on. But verify — most features touch shared state somewhere.
-
-### Level 5: Error cases and edges
+### Error cases and edges
 
 Ask: "What breaks? Walk me through every way this could fail."
 
-Wait for the user's answer. Let them generate their own failure list first. Then — and only then — fill the gaps they missed. Common gaps users overlook (use these to decorate, not to lead):
-- Dependencies down or slow
-- User does something unexpected
-- User abandons mid-action (closes browser, loses connection)
-- Boundary values (empty, null, max-size, zero, negative)
+Let them answer first. Then fill gaps: dependencies down, user does something unexpected, abandons mid-action, boundary values.
 
-### Transition
+### Concurrency (if applicable)
 
-When the behavioral spec is solid — stories connect to the problem, mechanism holds up under challenge, states are clear, error cases are covered — summarize the thinking record:
-- The user stories and how they connect to the intent
-- The mechanism and why we believe it will work
-- Assumptions challenged and what held up
-- Key states and transitions
-- Concurrency risks identified and mitigations decided
-- Error cases covered and any risks accepted
-- Anything considered and rejected during this phase
+If the feature involves shared state: "What happens when two of these run at the same time?"
 
-Then say: "Here's the behavioral logic. Does this capture how the feature should work?"
+If it doesn't (pure function, single-user, read-only), say so and move on. Don't force concurrency theater.
 
-Wait for the user to explicitly confirm before proceeding. If they correct anything, update and re-present.
+### Hidden complexity
 
----
+Ask: "What looks simple here but isn't? What would someone new to this domain get wrong?"
 
-## Phase 3: Design Conversation
+If they don't know, offer to research the codebase or domain. Present traps, not lectures.
 
-**Your role shifts: Now you research and present options. The user makes decisions.**
+### Security and constraints
 
-### Step 1: Research the codebase
+What needs auth? What needs validation? What must not leak? What invariants from ARCHITECTURE.md apply?
 
-Ask the user: "What area of the codebase does this touch?"
-
-Then go look. Use subagents or read files directly. Find:
-- How similar features work in this codebase (patterns, conventions, architecture)
-- What files and modules are relevant
-- What data models, APIs, or schemas already exist in this area
-- What style and conventions the existing code follows
-
-Present what you found concisely: "Here's how this part of the codebase works. Here are the relevant files and patterns."
-
-### Step 2: Explore the approach
-
-Based on what you found, have a design conversation:
-- "There are a few ways to approach this — here are the options and tradeoffs"
-- "The existing code does X for similar features — do you want to follow that pattern or is there a reason to diverge?"
-- "This will need to interact with [system] — here's how that currently works"
-
-Present options and tradeoffs, not recommendations. Let the user make the design decisions.
-
-### Transition
-
-When the conceptual approach is decided, summarize the thinking record:
-- The chosen approach and why
-- Alternatives considered and why they were rejected
-- What was learned from the codebase research
-- Tradeoffs accepted
-- Any data or patterns that informed the decision
-
-Then say: "Here's the design logic. Does this capture the approach and why we chose it?"
-
-Wait for the user to explicitly confirm before proceeding. If they correct anything, update and re-present.
+Move through these quickly. Spend time where there's genuine uncertainty, skip what's obvious.
 
 ---
 
-## Phase 4: Implementation Design
+## Step 3: How to build it right
 
-**Your role: Propose and challenge. Present options AND challenge the codebase itself.**
+Research the codebase. Find where this code should live, what patterns exist, what the spike code needs to become.
 
-Research the codebase deeper — now looking at WHERE code should live, not just how similar features work.
+### Architecture
 
-### Step 1: Research placement
+- Where does the code live? (Match existing patterns unless there's a reason to diverge)
+- What data models, interfaces, integration points?
+- What from the spike gets replaced vs kept?
 
-- What modules, directories, and files are candidates for this code?
-- What patterns exist in those areas?
-- What conventions does the existing code follow?
+If the spike had fake data, mock auth, hardcoded config — name specifically what becomes real.
 
-### Step 2: Present options and challenge the codebase
+### Growth and extensibility
 
-Present options based on what exists. But also challenge what exists:
+Push back here. Ask: "What's the next thing you'd want to add after this? And the thing after that?"
 
-- **Is the area well-structured or is it slop?** If there are 3 different patterns for the same thing, say so. "This area has inconsistent patterns — adding a fourth will make it worse."
-- **Flag ambiguity as a risk signal.** "There are 3 places this could go, which means the next person will also be confused, which means AI will also guess wrong. This is how slop accumulates."
-- **If cleanup is needed, name it.** "Before building this feature, you should consolidate these handlers into one pattern. Otherwise you're building on a shaky foundation." This cleanup becomes a prerequisite in the implementation plan.
+This isn't speculative design — it's making sure the architecture doesn't paint you into a corner. Think about:
+- **New variants:** If you're building one payment provider, will there be three? Design the interface now.
+- **New consumers:** If one service calls this, will others? Think about the API shape.
+- **New data:** If you're storing X, will you need Y alongside it? Think about the schema.
 
-Help the user decide: build on what's there, clean up first, or both.
+The goal is not to build for the future — it's to avoid building a wall against it. Name the extension points. Make sure the architecture has seams where growth will happen.
 
-### Step 3: Propose architecture
+If the user can't name what might expand: "That's fine — but if something surprises you later, this is the area that'll need to flex. Keep that in mind."
 
-Once placement is decided, propose specifics:
-- Where the code lives (specific directories/files)
-- Data models (conceptual — not schemas, but what entities exist and how they relate)
-- Interfaces and integration points
-- How this connects to existing systems
+### Structural issues
 
-### Step 4: Hidden complexity
+If the area is messy, say so: "This area has inconsistent patterns. Clean up first or build on top?" Cleanup becomes a prerequisite phase in the plan.
 
-Phase 2 covered behavioral correctness (will it work?). This step surfaces the traps — things that look simple but aren't.
+### Requirements
 
-Ask: "What seems simple about this problem but is actually complex? What's the counterintuitive thing about this domain that someone new would get wrong?"
+Extract concrete, testable requirements from the conversation. Assign stable IDs (R1, R2, ...) — these get referenced by `/upfront:plan` phases.
 
-Wait for the user's answer. Let them think about it.
-
-If they say "I don't know" or "I can't think of anything" — offer to research it. Tailor the offer to the context:
-
-- **Brownfield** (existing codebase): "Want me to dig into this area of the codebase and look for hidden complexity? I'll check for tricky patterns, subtle invariants, and things that have historically caused problems."
-- **Greenfield** (new project): "Want me to research this domain? I'll look at how others have solved this, common pitfalls, patterns that look right but fail at scale, and regulatory or compliance traps you might not be thinking about."
-- **Unfamiliar domain in existing codebase**: Offer both — "Want me to dig into the codebase AND research this domain? You know the code but this domain has its own traps."
-
-If they accept, do the research. Present what you found: traps, implicit assumptions, failure modes, domain rules that contradict intuition. Discuss each one — don't just list them.
-
-After the user has answered (or after research), fill gaps they missed from this list — but only what's relevant:
-- **Domain traps**: business rules that contradict intuition, implicit ordering requirements, state transitions that look valid but aren't
-- **Edge cases**: boundary values, empty/null/max-size inputs, off-by-one errors that compound
-- **Security**: auth on every endpoint, input validation, secrets in logs, privilege escalation paths
-- **Non-prompted concerns**: rate limiting, pagination, logging, audit trails, idempotency
-- **Hallucination risk**: are all referenced packages, APIs, and imports real? Verify before building.
-- Concurrency and error handling were covered in Phase 2 — focus here on complexity specific to implementation.
-
-Every feature has at least one trap. If neither the user nor the research found one, push harder — the trap is just hidden.
-
-### Step 5: Rollback and ownership
-
-- What signal tells you this is broken in production?
-- How do you roll back? (toggle, revert, fallback)
-- Who owns the rollback decision?
-- DRI, reviewers, decision date?
+Every requirement must be verifiable. "It should be fast" is not a requirement. "P95 under 200ms" is.
 
 ---
 
 ## Output
 
-Write the complete spec to disk. Populate every section from the conversation — no blanks. Use this structure:
+Write the spec to `specs/[feature-name].md`:
 
 ```markdown
 # Feature: [feature name]
 
-> Generated by `/upfront:feature` on [date]. Review before implementation.
-
----
+> Generated by `/upfront:feature` on [date]. Solidified from spike on [spike date] (if applicable).
 
 ## Intent
 
-### 1. What problem does this solve?
-[answer]
+**Problem:** [what pain goes away]
+**Success metric:** [how we'll know it worked]
+**Scope:** [what's in, what's out]
+**Must NOT happen:** [constraints, invariants]
 
-### 2. How will we know it worked?
-[answer]
+## What the spike validated
 
-### 3. What is out of scope?
-[answer]
+[What was tested and confirmed. Reference spike files. "N/A" if no spike.]
 
-### 4. What must NOT happen?
-[answer]
+## What the spike skipped
 
-### 5. Pre-mortem findings
-[answer]
-
-### Thinking Record: Intent
-**Decided:** [summary of intent decisions]
-**Reasoning:** [why this problem, why this metric, why these constraints]
-**Considered and rejected:** [alternatives discussed and why they were dropped]
-**Data consulted:** [any metrics, usage data, or research checked]
-**Assumptions:** [what we're taking on faith]
-**Risks accepted:** [known risks we're proceeding with]
-**Skipped/declined:** [any questions the user chose not to answer, with their stated reason]
-
----
-
-## Behavioral Spec
-
-### User Stories
-[current experience → desired experience]
-
-### Mechanism
-[why this approach solves the problem, assumptions tested]
-
-### States and Transitions
-[all states, what moves between them, what the user sees in each]
+### Error cases
+[failure modes, edge cases, boundary conditions]
 
 ### Concurrency
-[what happens under concurrent access, race conditions identified, mitigations decided, or "no shared mutable state" with justification]
+[shared state risks and mitigations, or "not applicable — [reason]"]
 
-### Error Cases
-[dependency failures, unexpected user behavior, edge cases]
-
-### Thinking Record: Behavioral Spec
-**Decided:** [the behavioral design — what the feature does]
-**Reasoning:** [why this mechanism, why these states, why these error handling choices]
-**Concurrency risks:** [races identified, mitigations chosen, or why concurrency doesn't apply]
-**Considered and rejected:** [alternative approaches, mechanisms that didn't hold up]
-**Assumptions challenged:** [what was stress-tested and what survived]
-**Risks accepted:** [failure modes we know about but are proceeding with]
-
----
-
-## Design Approach
-
-### Conceptual approach
-[the chosen approach and why, alternatives considered]
-
-### Codebase context
-[how similar features work, relevant patterns found]
-
-### Thinking Record: Design Approach
-**Decided:** [the chosen approach]
-**Reasoning:** [why this approach over alternatives]
-**Alternatives rejected:** [other approaches and why they lost]
-**Codebase findings:** [what the research revealed — patterns, conventions, gaps]
-**Tradeoffs accepted:** [what we're giving up with this approach]
-
----
+### Hidden complexity
+[domain traps, counterintuitive behavior, security concerns]
 
 ## Requirements
 
-Extract every concrete requirement from the conversation above — what the feature must do, what it must not do, what constraints it must satisfy. Assign each a stable ID. These IDs are referenced by `/upfront:plan` phases and checked at build completion.
-
-- **R1:** [requirement derived from intent, behavioral spec, or design]
-- **R2:** [requirement]
-- **R3:** [requirement]
+- **R1:** [testable requirement]
+- **R2:** [testable requirement]
 - ...
 
-Every requirement must be testable or verifiable. "It should be fast" is not a requirement. "P95 response time under 200ms" is. Pull from: success criteria (Phase 1), behavioral states (Phase 2), constraints and non-negotiables (Phase 4), and "what must NOT happen" (Phase 1).
+## Architecture
 
----
+**Where code lives:** [directories, files]
+**Data models:** [entities and relationships]
+**Integration points:** [what connects to what]
+**Spike code to replace:** [specific files and what they become]
 
-## Implementation Design
+### Growth points
+[where expansion will happen — new variants, consumers, data. What seams exist in the architecture.]
 
-### Architecture
-[where code lives, data models, interfaces, integration points]
+### Structural issues
+[cleanup needed, or "area is clean"]
 
-### Structural issues flagged
-[any codebase slop, inconsistent patterns, cleanup needed as prerequisites]
+## Thinking Record
 
-### Constraints and Non-negotiables
-- Security: [specifics]
-- Reliability/SLA: [specifics with numbers]
-- Compliance/policy: [specifics]
-
-### Hidden Complexity
-[What looks simple but isn't — domain traps, edge cases, security, implicit assumptions. Include findings from codebase research if conducted.]
-
-### Rollback Plan
-- Trigger signal: [answer]
-- Method: [answer]
-- Owner: [answer]
-
-### Ownership
-- DRI: [answer]
-- Reviewers: [answer]
-- Decision date: [answer]
-
-### Thinking Record: Implementation Design
-**Decided:** [where code lives, architecture choices]
-**Reasoning:** [why this placement, why these interfaces]
-**Structural issues found:** [codebase slop flagged, cleanup recommended]
-**Alternatives rejected:** [other placements/architectures and why]
-**Data consulted:** [files read, patterns found, existing code reviewed]
-**Risks accepted:** [technical debt, integration risks, dependency risks]
+**Validated by spike:** [what was confirmed]
+**Surfaced during solidification:** [edge cases, complexity, architecture decisions]
+**Key decisions:** [choices made and why]
+**Risks accepted:** [known risks we're proceeding with]
 ```
 
-Save the file to the working directory as `specs/[feature-name].md` (create the `specs/` directory if it doesn't exist).
-
-Also append a summary entry to `specs/DECISIONS.md` (create it if it doesn't exist):
+Append to `specs/DECISIONS.md`:
 
 ```markdown
 ## [date] — [feature name]
-**Decision:** [one-line summary of what was decided]
-**Key choices:** [2-3 bullet points of the most important design decisions and why]
-**Rejected alternatives:** [what was considered and dropped]
-**Risks accepted:** [known risks we're proceeding with]
+**Decision:** [one-line summary]
+**Key choices:** [2-3 bullets — the important design decisions and why]
+**Risks accepted:** [what we're carrying]
 ```
 
 Then tell the user:
 - Where the spec file is
-- To review it before proceeding
-- That they can edit it directly or ask you to update it
-
-Then say: "Spec is ready. Next step: run `/plan specs/[feature-name].md` to break this into implementation phases."
+- "Spec is solid. Run `/upfront:plan specs/[feature-name].md` to break this into phases, then `/upfront:build` to execute."
