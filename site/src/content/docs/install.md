@@ -3,38 +3,47 @@ title: Install
 description: Get Upfront running in your project.
 ---
 
-## Plugin install (recommended)
-
-Install via the Claude Code plugin system. Run these in your terminal:
+## Install
 
 ```bash
-claude plugin marketplace add ThinkUpfront/Upfront
-claude plugin install upfront
+brew install brennhill/tap/upfront
+upfront update
 ```
 
-Restart Claude Code. All 23 `/upfront:*` skills will be available in every project.
+That's it. `brew install` gets the CLI. `upfront update` installs the Claude Code plugin (skills, hooks, agents). Restart Claude Code afterward.
+
+## Update
+
+```bash
+brew upgrade upfront
+upfront update
+```
+
+`upfront update` clones the latest plugin from GitHub, nukes the old cache, and installs fresh. Run it whenever you want the latest skills.
 
 ## Verify
 
 In Claude Code, type `/upfront:` and you should see all skills in autocomplete. Try:
 
 ```
-/upfront:up
+/upfront:start
 ```
 
 ## What you get
 
 | Skill | Purpose |
 |-------|---------|
-| `/upfront:vision` | Strategic clarity for big ambitions (Rumelt's kernel) |
-| `/upfront:increment` | Structured retro between increments |
-| `/upfront:feature` | Define a feature through intent, spec, and design |
+| `/upfront:start` | Entry point — reads project state, routes you to the right skill |
+| `/upfront:vision` | Capture the hypothesis, get to the first experiment fast |
+| `/upfront:spike` | Build the minimum to test an idea — the scientific method |
+| `/upfront:increment` | Learn step — retro after an experiment, decide what's next |
+| `/upfront:feature` | Solidify a validated idea into a production-ready spec |
 | `/upfront:plan` | Break a spec into ~400 LOC implementation phases |
 | `/upfront:build` | Execute phases with strict TDD and review |
 | `/upfront:ship` | Create a PR with spec-derived context |
 | `/upfront:retro` | Check spec predictions against reality |
 | `/upfront:assess` | Interactive problem-solving for a specific concern or tradeoff |
-| `/upfront:ideate` | Divergent brainstorming before `/upfront:feature` |
+| `/upfront:ideate` | Divergent brainstorming when you don't know what to build yet |
 | `/upfront:quick` | Small changes without full ceremony |
 | `/upfront:patch` | Bug fixes from issues or problem statements |
 | `/upfront:explore` | Document codebase and operational context |
@@ -48,7 +57,6 @@ In Claude Code, type `/upfront:` and you should see all skills in autocomplete. 
 | `/upfront:architect` | Architecture review with evolution plan |
 | `/upfront:re-architect` | Execute an architecture evolution phase by phase |
 | `/upfront:upgrade` | Check plugin version, guardrails, and instruction file health |
-| `/upfront:up` | Smart router — figures out what you need |
 
 ## Telemetry
 
@@ -62,12 +70,14 @@ export DO_NOT_TRACK=1
 
 ## Uninstall
 
-Edit `~/.claude/settings.json` and remove `"upfront@thinkupfront": true` from `enabledPlugins`. Optionally remove the `"thinkupfront"` entry from `extraKnownMarketplaces`.
-
-Or use the clean script from the repo:
-
 ```bash
-git clone https://github.com/ThinkUpfront/Upfront.git
-bash Upfront/scripts/clean-plugin.sh
+brew uninstall upfront
 ```
 
+To also remove the Claude Code plugin:
+
+```bash
+rm -rf ~/.claude/plugins/cache/thinkupfront
+```
+
+Then edit `~/.claude/settings.json` and remove `"upfront@thinkupfront": true` from `enabledPlugins`.

@@ -15,15 +15,21 @@ Check the latest Upfront release:
 curl -sf --max-time 5 https://api.github.com/repos/ThinkUpfront/Upfront/releases/latest | grep tag_name
 ```
 
-Compare with the installed version (currently `0.3.7`). Report:
-- Current: `0.3.7`
+Compare with the installed version. Read the installed version from the plugin.json in the plugin cache:
+
+```bash
+cat ~/.claude/plugins/cache/thinkupfront/upfront/*/.claude-plugin/plugin.json 2>/dev/null | grep version
+```
+
+Report:
+- Current: `[installed version]`
 - Latest: `v[X.Y.Z]`
 - Status: UP TO DATE or UPDATE AVAILABLE
 
 If an update is available, tell the user:
 ```
 Run this in your terminal to update:
-  claude plugin marketplace update thinkupfront
+  upfront update
 Then restart Claude Code.
 ```
 

@@ -9,6 +9,25 @@ You are the front door. Figure out where the user is and get them moving fast.
 
 **Input:** $ARGUMENTS
 
+## Step 0: Version check
+
+Silently check if a newer version is available:
+
+```bash
+curl -sf --max-time 3 https://api.github.com/repos/ThinkUpfront/Upfront/releases/latest | grep -o '"tag_name":"[^"]*"'
+```
+
+Compare with the installed version from:
+```bash
+cat ~/.claude/plugins/cache/thinkupfront/upfront/*/.claude-plugin/plugin.json 2>/dev/null
+```
+
+If a newer version exists, mention it briefly before routing — don't block:
+
+"Update available: Upfront [current] → [latest]. Run `upfront update` in your terminal when you get a chance."
+
+If the check fails or times out, skip silently. Never block the user for a version check.
+
 ## Step 1: Read the room
 
 Silently check what exists:

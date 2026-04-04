@@ -27,6 +27,7 @@ https://github.com/ThinkUpfront/Upfront
 Usage: upfront <command> [options]
 
 Commands:
+  update    Install or update the Upfront plugin for Claude Code
   hook      Process Claude Code PostToolUse hook input from stdin
   flush     Flush queued events to remote endpoint
   log       Print audit events (--feature, --phase, --limit)
@@ -54,6 +55,8 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	case "help", "--help", "-h":
 		fmt.Fprint(stdout, usage)
 		return 0
+	case "update":
+		return cmdUpdate(stdout, stderr)
 	case "hook":
 		return cmdHook(stdin, stdout, stderr)
 	case "flush":
